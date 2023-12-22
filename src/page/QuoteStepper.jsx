@@ -40,7 +40,7 @@ export default function QuoteCalculation({
   products,
   ZOHO,
 }) {
-  const { control, handleSubmit, register, watch, getValues } = useForm({
+  const { control, handleSubmit, register, watch, getValues, setValue } = useForm({
     defaultValues: {
       labor: [
         {
@@ -109,6 +109,7 @@ export default function QuoteCalculation({
               control={control}
               watch={watch}
               getValues={getValues}
+              setValue={setValue}
               register={register}
             />
           )}

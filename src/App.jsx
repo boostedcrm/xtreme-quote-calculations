@@ -4,6 +4,7 @@ import logo from "../public/logo.png";
 import CloseIcon from "@mui/icons-material/Close";
 import QuoteCalculation from "./page/QuoteCalculation";
 import QuoteStepper from "./page/QuoteStepper";
+import Rayhan from "./components/Rayhan";
 
 const ZOHO = window.ZOHO;
 
@@ -15,7 +16,7 @@ function App() {
   const [honingItems, setHoningItems] = useState([]);
   const [coatingItems, setCoatingItems] = useState([]);
   const [dealData, setDealData] = useState(null);
-  const [products, setProducts] = useState([])
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
     ZOHO.embeddedApp.on("PageLoad", function (data) {
@@ -46,14 +47,15 @@ function App() {
         }).then(function (data) {
           setDealData(data?.data[0]);
         });
+
         ZOHO.CRM.API.getAllRecords({
           Entity: "Products",
           sort_order: "asc",
           per_page: 200,
           page: 1,
         }).then(function (data) {
-          // console.log({products:});
-          setProducts(data.data)
+          console.log({products});
+          setProducts(data.data);
         });
       }
     }
@@ -113,6 +115,7 @@ function App() {
           ZOHO={ZOHO}
         />
       )}
+      {/* <Rayhan products={products} /> */}
     </Box>
   );
 }
