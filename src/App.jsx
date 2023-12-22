@@ -94,7 +94,7 @@ function App() {
       >
         <img src={logo} alt="logo" height={100} />
         <Typography variant="h4" align="center" fontWeight="bold">
-          Calculate Quote
+          Calculate Quote Rayhan Widget
         </Typography>
         <Box>
           <CloseIcon
