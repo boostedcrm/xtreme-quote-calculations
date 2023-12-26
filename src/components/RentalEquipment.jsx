@@ -19,7 +19,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
-const RentalEquipment = ({ control, watch, getValues, register }) => {
+const RentalEquipment = ({ control, watch, getValues, register, setValue }) => {
   // const { control, handleSubmit, register, getValues } = useForm({
   //   defaultValues: {
   //     materials: [
@@ -27,9 +27,9 @@ const RentalEquipment = ({ control, watch, getValues, register }) => {
   //     ],
   //   },
   // });
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, update } = useFieldArray({
     control,
-    name: "materials",
+    name: "rentalequipment",
   });
 
   // const onSubmit = (data) => {
@@ -62,20 +62,68 @@ const RentalEquipment = ({ control, watch, getValues, register }) => {
             <TableRow key={item.id}>
               <TableCell>
                 {renderTextField(
-                  `labor[${index}].equipmentName`,
+                  `rentalequipment[${index}].equipmentName`,
                   "Equipment Name",
                   "",
                   control
                 )}
               </TableCell>
               <TableCell>
-                {renderTextField(`labor[${index}].rate`, "Rate", "", control)}
+                <Controller
+                  name={`rentalequipment[${index}].rate`}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label={""}
+                      variant="outlined"
+                      size="small"
+                      margin="normal"
+                      fullWidth
+                      type="number"
+                      onChange={(e) => {
+                        let rate = Number(e.target.value || 0);
+                        let tax = rate * 0.06;
+
+                        let rentalEquipmentSubtotal = rate + tax;
+
+                        setValue(`rentalequipment[${index}].tax`, tax);
+                        setValue(
+                          `rentalequipment[${index}].rentalEquipmentSubtotal`,
+                          rentalEquipmentSubtotal
+                        );
+
+                        let totalrentalEquipmenCost = fields.reduce(
+                          (acc, field, index) => {
+                            const amount = getValues(
+                              `rentalequipment[${index}].rentalEquipmentSubtotal`
+                            );
+                            return acc + (amount || 0);
+                          },
+                          0
+                        );
+
+                        setValue(
+                          `totalrentalEquipmenCost`,
+                          totalrentalEquipmenCost
+                        );
+
+                        field.onChange(e.target.value);
+                      }}
+                    />
+                  )}
+                />
               </TableCell>
               <TableCell>
-                {renderTextField(`labor[${index}].tax`, "", "", control)}
+                {renderTextField(`rentalequipment[${index}].tax`, "", "", control)}
               </TableCell>
               <TableCell>
-                {renderTextField(`labor[${index}].total`, "", "", control)}
+                {renderTextField(
+                  `rentalequipment[${index}].rentalEquipmentSubtotal`,
+                  "",
+                  "",
+                  control
+                )}
               </TableCell>
               <TableCell>
                 <IconButton onClick={() => remove(index)}>
@@ -90,16 +138,34 @@ const RentalEquipment = ({ control, watch, getValues, register }) => {
         startIcon={<AddCircleOutlineIcon />}
         onClick={() =>
           append({
-            name: "",
-            size: "",
-            coverage: "",
-            amount: "",
-            pricePer: "",
+            equipmentName: "",
+            rate: "",
+            tax: "",
+            rentalEquipmentSubtotal: "",
           })
         }
       >
         Add New
       </Button>
+      <Box>
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            {" "}
+            <TextField
+              label="Total Rental Equipmen Cost"
+              {...register("totalrentalEquipmenCost")}
+              size="small"
+              fullWidth
+              margin="normal"
+              type="number"
+              InputProps={{
+                readOnly: true,
+                startAdornment: <Typography>$</Typography>,
+              }}
+            />
+          </Grid>
+        </Grid>
+      </Box>
     </Box>
   );
 };
