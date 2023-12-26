@@ -19,7 +19,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
-const Lodging = ({control,watch, getValues, register}) => {
+const Lodging = ({ control, watch, getValues, register, setValue }) => {
   // const { control, handleSubmit, register, getValues } = useForm({
   //   defaultValues: {
   //     materials: [
@@ -29,7 +29,7 @@ const Lodging = ({control,watch, getValues, register}) => {
   // });
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "materials",
+    name: "lodging",
   });
 
   // const onSubmit = (data) => {
@@ -48,72 +48,227 @@ const Lodging = ({control,watch, getValues, register}) => {
       </Typography>
       <hr />
       <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ fontWeight: "bold" }}>Crew Size</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Days</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Cost Per Room</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Number of Rooms</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Total</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Action</TableCell>
+        <TableHead>
+          <TableRow>
+            <TableCell sx={{ fontWeight: "bold" }}>Crew Size</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Days</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Cost Per Room</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Number of Rooms</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Total</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Action</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {fields.map((item, index) => (
+            <TableRow key={item.id}>
+              <TableCell>
+                <Controller
+                  name={`lodging[${index}].crewSize`}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label={""}
+                      variant="outlined"
+                      size="small"
+                      margin="normal"
+                      fullWidth
+                      type="number"
+                      onChange={(e) => {
+                        let numberOfRooms = Math.ceil(
+                          Number(e.target.value || 0) / 2
+                        );
+                        setValue(
+                          `lodging[${index}].numberOfRooms`,
+                          numberOfRooms
+                        );
+
+                        let days = Number(
+                          getValues(`lodging[${index}].days`) || 0
+                        );
+                        let costPerRoom = Number(
+                          getValues(`lodging[${index}].costPerRoom`) || 0
+                        );
+
+                        let lodgingSubTotal =
+                          numberOfRooms * days * costPerRoom;
+
+                        setValue(
+                          `lodging[${index}].lodgingSubTotal`,
+                          lodgingSubTotal
+                        );
+
+                        let totallodgingCost = fields.reduce(
+                          (acc, field, index) => {
+                            const amount = getValues(
+                              `lodging[${index}].lodgingSubTotal`
+                            );
+                            return acc + (amount || 0);
+                          },
+                          0
+                        );
+                        setValue(`totallodgingCost`, totallodgingCost);
+
+                        field.onChange(e.target.value);
+                      }}
+                    />
+                  )}
+                />
+              </TableCell>
+              <TableCell>
+                <Controller
+                  name={`lodging[${index}].days`}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label={""}
+                      variant="outlined"
+                      size="small"
+                      margin="normal"
+                      fullWidth
+                      type="number"
+                      onChange={(e) => {
+                        let days = Number(e.target.value || 0);
+                        let costPerRoom = Number(
+                          getValues(`lodging[${index}].costPerRoom`) || 0
+                        );
+
+                        let numberOfRooms = Number(
+                          getValues(`lodging[${index}].numberOfRooms`) || 0
+                        );
+
+                        let lodgingSubTotal =
+                          numberOfRooms * days * costPerRoom;
+
+                        setValue(
+                          `lodging[${index}].lodgingSubTotal`,
+                          lodgingSubTotal
+                        );
+
+                        let totallodgingCost = fields.reduce(
+                          (acc, field, index) => {
+                            const amount = getValues(
+                              `lodging[${index}].lodgingSubTotal`
+                            );
+                            return acc + (amount || 0);
+                          },
+                          0
+                        );
+                        setValue(`totallodgingCost`, totallodgingCost);
+
+                        field.onChange(e.target.value);
+                      }}
+                    />
+                  )}
+                />
+              </TableCell>
+              <TableCell>
+                <Controller
+                  name={`lodging[${index}].costPerRoom`}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label={""}
+                      variant="outlined"
+                      size="small"
+                      margin="normal"
+                      fullWidth
+                      type="number"
+                      onChange={(e) => {
+                        let costPerRoom = Number(e.target.value || 0);
+                        let days = Number(
+                          getValues(`lodging[${index}].days`) || 0
+                        );
+
+                        let numberOfRooms = Number(
+                          getValues(`lodging[${index}].numberOfRooms`) || 0
+                        );
+
+                        let lodgingSubTotal =
+                          numberOfRooms * days * costPerRoom;
+
+                        setValue(
+                          `lodging[${index}].lodgingSubTotal`,
+                          lodgingSubTotal
+                        );
+
+                        let totallodgingCost = fields.reduce(
+                          (acc, field, index) => {
+                            const amount = getValues(
+                              `lodging[${index}].lodgingSubTotal`
+                            );
+                            return acc + (amount || 0);
+                          },
+                          0
+                        );
+                        setValue(`totallodgingCost`, totallodgingCost);
+
+                        field.onChange(e.target.value);
+                      }}
+                    />
+                  )}
+                />
+              </TableCell>
+              <TableCell>
+                {renderTextField(
+                  `lodging[${index}].numberOfRooms`,
+                  "",
+                  "",
+                  control
+                )}
+              </TableCell>
+              <TableCell>
+                {renderTextField(
+                  `lodging[${index}].lodgingSubTotal`,
+                  "",
+                  "",
+                  control
+                )}
+              </TableCell>
+              <TableCell>
+                <IconButton onClick={() => remove(index)}>
+                  <DeleteIcon />
+                </IconButton>
+              </TableCell>
             </TableRow>
-          </TableHead>
-          <TableBody>
-            {fields.map((item, index) => (
-              <TableRow key={item.id}>
-                <TableCell>
-                  {renderTextField(`labor[${index}].crewSize`, "", "", control)}
-                </TableCell>
-                <TableCell>
-                  {renderTextField(
-                    `labor[${index}].timeFrame`,
-                    "days",
-                    "",
-                    control
-                  )}
-                </TableCell>
-                <TableCell>
-                  {renderTextField(
-                    `labor[${index}].costPerRoom`,
-                    "",
-                    "",
-                    control
-                  )}
-                </TableCell>
-                <TableCell>
-                  {renderTextField(
-                    `labor[${index}].numberOfRooms`,
-                    "",
-                    "",
-                    control
-                  )}
-                </TableCell>
-                <TableCell>
-                  {renderTextField(`labor[${index}].total`, "", "", control)}
-                </TableCell>
-                <TableCell>
-                  <IconButton onClick={() => remove(index)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        <Button
-          startIcon={<AddCircleOutlineIcon />}
-          onClick={() =>
-            append({
-              name: "",
-              size: "",
-              coverage: "",
-              amount: "",
-              pricePer: "",
-            })
-          }
-        >
-          Add New
-        </Button>
+          ))}
+        </TableBody>
+      </Table>
+      <Button
+        startIcon={<AddCircleOutlineIcon />}
+        onClick={() =>
+          append({
+            crewSize: 0,
+            days: 0,
+            costPerRoom: 160,
+            numberOfRooms: 0,
+            lodgingSubTotal: 0,
+          })
+        }
+      >
+        Add New
+      </Button>
+      <Box>
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            {" "}
+            <TextField
+              label="Total Loading Cost"
+              {...register("totallodgingCost")}
+              size="small"
+              fullWidth
+              margin="normal"
+              type="number"
+              InputProps={{
+                readOnly: true,
+                startAdornment: <Typography>$</Typography>,
+              }}
+            />
+          </Grid>
+        </Grid>
+      </Box>
     </Box>
   );
 };

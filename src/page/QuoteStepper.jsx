@@ -141,6 +141,7 @@ export default function QuoteCalculation({
               watch={watch}
               getValues={getValues}
               register={register}
+              setValue={setValue}
             />
           )}
           {activeStep === 5 && (
@@ -149,6 +150,7 @@ export default function QuoteCalculation({
               watch={watch}
               getValues={getValues}
               register={register}
+              setValue={setValue}
             />
           )}
           {activeStep === 6 && (
@@ -156,6 +158,7 @@ export default function QuoteCalculation({
               control={control}
               watch={watch}
               getValues={getValues}
+              setValue={setValue}
               register={register}
             />
           )}
@@ -165,6 +168,7 @@ export default function QuoteCalculation({
               watch={watch}
               getValues={getValues}
               register={register}
+              setValue={setValue}
             />
           )}
           {activeStep === 8 && (
@@ -172,6 +176,7 @@ export default function QuoteCalculation({
               ZOHO={ZOHO}
               control={control}
               watch={watch}
+              setValue={setValue}
               getValues={getValues}
               register={register}
             />
