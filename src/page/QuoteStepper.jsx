@@ -51,6 +51,7 @@ export default function QuoteCalculation({
             hoursPerDay: "",
             men: "",
             costPerHour: "",
+            rowTotal: 0
           },
         ],
       },
@@ -120,6 +121,7 @@ export default function QuoteCalculation({
               control={control}
               watch={watch}
               getValues={getValues}
+              setValue={setValue}
               register={register}
             />
           )}
@@ -129,6 +131,7 @@ export default function QuoteCalculation({
               control={control}
               watch={watch}
               getValues={getValues}
+              setValue={setValue}
               register={register}
             />
           )}

@@ -21,8 +21,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { useEffect, useState } from "react";
 
-const LaborCosts = ({ ZOHO, control, getValues, register }) => {
+const LaborCosts = ({ ZOHO, control, getValues, register, setValue }) => {
   const [labor, SetLabor] = useState([]);
+
   useEffect(() => {
     async function getData() {
       ZOHO.CRM.API.getAllRecords({
@@ -31,28 +32,14 @@ const LaborCosts = ({ ZOHO, control, getValues, register }) => {
         per_page: 200,
         page: 1,
       }).then(function (data) {
-        // console.log({products:});
+        console.log({ labour: data.data });
         SetLabor(data.data);
       });
     }
     getData();
   }, [ZOHO]);
-  console.log({ labor });
-  // const { control, handleSubmit, register, watch } = useForm({
-  //   defaultValues: {
-  //     labor: [
-  //       {
-  //         resourceTitle: "",
-  //         timeFrame: "",
-  //         days: "",
-  //         hoursPerDay: "",
-  //         men: "",
-  //         costPerHour: "",
-  //       },
-  //     ],
-  //   },
-  // });
-  const { fields, append, remove } = useFieldArray({
+
+  const { fields, append, remove, update } = useFieldArray({
     control,
     name: "labor",
   });
@@ -78,152 +65,360 @@ const LaborCosts = ({ ZOHO, control, getValues, register }) => {
 
   return (
     <Box>
-            <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ fontWeight: "bold" }}>Resource Title</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>
-                Time Frame (Day/Week Task)
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell sx={{ fontWeight: "bold" }}>Resource Title</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>
+              Time Frame (Day/Week Task)
+            </TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Days</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Hours Per Day</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Men</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Cost Per Hour</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Labor Cost</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Actions</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {fields.map((item, index) => (
+            <TableRow key={item.id}>
+              <TableCell sx={{ width: "150px" }}>
+                <Controller
+                  name={`labor[${index}].resourceTitle`}
+                  control={control}
+                  render={({ field }) => (
+                    <Autocomplete
+                      {...field}
+                      options={labor}
+                      getOptionLabel={(option) => option?.Name}
+                      isOptionEqualToValue={(option, value) =>
+                        option.id === value.id
+                      }
+                      renderInput={(params) => (
+                        <TextField {...params} label="" size="small" />
+                      )}
+                      onChange={(_, data) => {
+                        update(index, {
+                          ...fields[index],
+                          timeFrame: 0,
+                          days: 0,
+                          hoursPerDay: 0,
+                          men: 0,
+                          costPerHour: data?.Rate,
+                          rowTotal: 0,
+                        });
+                        return field.onChange(data);
+                      }}
+                    />
+                  )}
+                />
               </TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Days</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Hours Per Day</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Men</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Cost Per Hour</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Labor Cost</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Actions</TableCell>
+              <TableCell>
+                <Controller
+                  name={`labor[${index}].timeFrame`}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label={""}
+                      variant="outlined"
+                      size="small"
+                      margin="normal"
+                      fullWidth
+                      type="number"
+                      onChange={(e) => {
+                        let rowTotal =
+                          Number(e.target.value || 0) *
+                          Number(getValues(`labor[${index}].days`) || 0) *
+                          Number(
+                            getValues(`labor[${index}].hoursPerDay`) || 0
+                          ) *
+                          Number(getValues(`labor[${index}].men`) || 0) *
+                          Number(getValues(`labor[${index}].costPerHour`) || 0);
+
+                        setValue(`labor[${index}].rowTotal`, rowTotal);
+
+                        let laborTotal = fields.reduce((acc, field, index) => {
+                          const amount = getValues(`labor[${index}].rowTotal`);
+                          return acc + (amount || 0);
+                        }, 0);
+                        setValue(`totalLaborCost`, laborTotal);
+
+                        field.onChange(e.target.value);
+                      }}
+                    />
+                  )}
+                />
+              </TableCell>
+              <TableCell>
+                <Controller
+                  name={`labor[${index}].days`}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label={""}
+                      variant="outlined"
+                      size="small"
+                      margin="normal"
+                      fullWidth
+                      type="number"
+                      onChange={(e) => {
+                        let rowTotal =
+                          Number(e.target.value || 0) *
+                          Number(getValues(`labor[${index}].timeFrame`) || 0) *
+                          Number(
+                            getValues(`labor[${index}].hoursPerDay`) || 0
+                          ) *
+                          Number(getValues(`labor[${index}].men`) || 0) *
+                          Number(getValues(`labor[${index}].costPerHour`) || 0);
+
+                        setValue(`labor[${index}].rowTotal`, rowTotal);
+
+                        let totalManHours = 0;
+
+                        fields.forEach((element, i) => {
+                          let men = Number(getValues(`labor[${i}].men`) || 0);
+
+                          let days = Number(getValues(`labor[${i}].days`) || 0);
+                          let hoursPerDay = Number(
+                            getValues(`labor[${i}].hoursPerDay`) || 0
+                          );
+                          if (i === index) {
+                            days = Number(e.target.value || 0);
+                          }
+                          totalManHours =
+                            totalManHours + men * days * hoursPerDay;
+                        });
+
+                        setValue(`totalManHours`, totalManHours);
+
+                        let laborTotal = fields.reduce((acc, field, index) => {
+                          const amount = getValues(`labor[${index}].rowTotal`);
+                          return acc + (amount || 0);
+                        }, 0);
+                        setValue(`totalLaborCost`, laborTotal);
+
+                        field.onChange(e.target.value);
+                      }}
+                    />
+                  )}
+                />
+              </TableCell>
+              <TableCell>
+                <Controller
+                  name={`labor[${index}].hoursPerDay`}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label={""}
+                      variant="outlined"
+                      size="small"
+                      margin="normal"
+                      fullWidth
+                      type="number"
+                      onChange={(e) => {
+                        let rowTotal =
+                          Number(e.target.value || 0) *
+                          Number(getValues(`labor[${index}].timeFrame`) || 0) *
+                          Number(getValues(`labor[${index}].days`) || 0) *
+                          Number(getValues(`labor[${index}].men`) || 0) *
+                          Number(getValues(`labor[${index}].costPerHour`) || 0);
+
+                        setValue(`labor[${index}].rowTotal`, rowTotal);
+
+                        let totalManHours = 0;
+
+                        fields.forEach((element, i) => {
+                          let men = Number(getValues(`labor[${i}].men`) || 0);
+
+                          let days = Number(getValues(`labor[${i}].days`) || 0);
+                          let hoursPerDay = Number(
+                            getValues(`labor[${i}].hoursPerDay`) || 0
+                          );
+                          if (i === index) {
+                            hoursPerDay = Number(e.target.value || 0);
+                          }
+                          totalManHours =
+                            totalManHours + men * days * hoursPerDay;
+                        });
+
+                        setValue(`totalManHours`, totalManHours);
+
+                        let laborTotal = fields.reduce((acc, field, index) => {
+                          const amount = getValues(`labor[${index}].rowTotal`);
+                          return acc + (amount || 0);
+                        }, 0);
+                        setValue(`totalLaborCost`, laborTotal);
+
+                        field.onChange(e.target.value);
+                      }}
+                    />
+                  )}
+                />
+              </TableCell>
+              <TableCell>
+                <Controller
+                  name={`labor[${index}].men`}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label={""}
+                      variant="outlined"
+                      size="small"
+                      margin="normal"
+                      fullWidth
+                      type="number"
+                      onChange={(e) => {
+                        let rowTotal =
+                          Number(e.target.value || 0) *
+                          Number(getValues(`labor[${index}].timeFrame`) || 0) *
+                          Number(getValues(`labor[${index}].days`) || 0) *
+                          Number(
+                            getValues(`labor[${index}].hoursPerDay`) || 0
+                          ) *
+                          Number(getValues(`labor[${index}].costPerHour`) || 0);
+
+                        setValue(`labor[${index}].rowTotal`, rowTotal);
+
+                        let totalManHours = 0;
+
+                        fields.forEach((element, i) => {
+                          let men = Number(getValues(`labor[${i}].men`) || 0);
+                          if (i === index) {
+                            men = Number(e.target.value || 0);
+                          }
+                          let days = Number(getValues(`labor[${i}].days`) || 0);
+                          let hoursPerDay = Number(
+                            getValues(`labor[${i}].hoursPerDay`) || 0
+                          );
+                          totalManHours =
+                            totalManHours + men * days * hoursPerDay;
+                        });
+
+                        setValue(`totalManHours`, totalManHours);
+
+                        let laborTotal = fields.reduce((acc, field, index) => {
+                          const amount = getValues(`labor[${index}].rowTotal`);
+                          return acc + (amount || 0);
+                        }, 0);
+                        setValue(`totalLaborCost`, laborTotal);
+
+                        field.onChange(e.target.value);
+                      }}
+                    />
+                  )}
+                />
+              </TableCell>
+              <TableCell>
+                <Controller
+                  name={`labor[${index}].costPerHour`}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label={""}
+                      variant="outlined"
+                      size="small"
+                      margin="normal"
+                      fullWidth
+                      type="number"
+                      onChange={(e) => {
+                        let rowTotal =
+                          Number(e.target.value || 0) *
+                          Number(getValues(`labor[${index}].timeFrame`) || 0) *
+                          Number(getValues(`labor[${index}].days`) || 0) *
+                          Number(
+                            getValues(`labor[${index}].hoursPerDay`) || 0
+                          ) *
+                          Number(getValues(`labor[${index}].men`) || 0);
+
+                        setValue(`labor[${index}].rowTotal`, rowTotal);
+
+                        let laborTotal = fields.reduce((acc, field, index) => {
+                          const amount = getValues(`labor[${index}].rowTotal`);
+                          return acc + (amount || 0);
+                        }, 0);
+                        setValue(`totalLaborCost`, laborTotal);
+
+                        field.onChange(e.target.value);
+                      }}
+                    />
+                  )}
+                />
+              </TableCell>
+              <TableCell>
+                <TextField
+                  {...register(`labor[${index}].rowTotal`)}
+                  size="small"
+                  fullWidth
+                  type="number"
+                />
+              </TableCell>
+              <TableCell>
+                <IconButton onClick={() => remove(index)}>
+                  <DeleteIcon />
+                </IconButton>
+              </TableCell>
             </TableRow>
-          </TableHead>
-          <TableBody>
-            {fields.map((item, index) => (
-              <TableRow key={item.id}>
-                <TableCell sx={{ width: "150px" }}>
-                  <Controller
-                    name={`materials[${index}].product`}
-                    control={control}
-                    render={({ field }) => (
-                      <Autocomplete
-                        {...field}
-                        options={labor}
-                        getOptionLabel={(option) => option?.Name}
-                        isOptionEqualToValue={(option, value) =>
-                          option.id === value.id
-                        }
-                        renderInput={(params) => (
-                          <TextField {...params} label="" size="small" />
-                        )}
-                        onChange={(_, data) => field.onChange(data)}
-                      />
-                    )}
-                  />
-                </TableCell>
-                <TableCell>
-                  <TextField
-                    {...register(`labor[${index}].timeFrame`)}
-                    size="small"
-                    fullWidth
-                  />
-                </TableCell>
-                <TableCell>
-                  <TextField
-                    {...register(`labor[${index}].days`)}
-                    size="small"
-                    fullWidth
-                    type="number"
-                  />
-                </TableCell>
-                <TableCell>
-                  <TextField
-                    {...register(`labor[${index}].hoursPerDay`)}
-                    size="small"
-                    fullWidth
-                    type="number"
-                  />
-                </TableCell>
-                <TableCell>
-                  <TextField
-                    {...register(`labor[${index}].men`)}
-                    size="small"
-                    fullWidth
-                    type="number"
-                  />
-                </TableCell>
-                <TableCell>
-                  <TextField
-                    {...register(`labor[${index}].costPerHour`)}
-                    size="small"
-                    fullWidth
-                    type="number"
-                  />
-                </TableCell>
-                <TableCell>
-                  <TextField
-                    size="small"
-                    fullWidth
-                    value={calculateLaborCost(index)}
-                    InputProps={{ readOnly: true }}
-                  />
-                </TableCell>
-                <TableCell>
-                  <IconButton onClick={() => remove(index)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        <Button
-          startIcon={<AddCircleOutlineIcon />}
-          onClick={() =>
-            append({
-              resourceTitle: "",
-              timeFrame: "",
-              days: "",
-              hoursPerDay: "",
-              men: "",
-              costPerHour: "",
-            })
-          }
-        >
-          Add New
-        </Button>
-        <Box>
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              {" "}
-              <TextField
-                label="Total Man Hours"
-                {...register("totalManHours")}
-                size="small"
-                fullWidth
-                margin="normal"
-                type="number"
-                InputProps={{
-                  readOnly: true,
-                }}
-                // value={totalManHours}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              {" "}
-              <TextField
-                label="Labor Cost"
-                size="small"
-                fullWidth
-                margin="normal"
-                InputProps={{
-                  readOnly: true,
-                  startAdornment: <Typography>$</Typography>,
-                }}
-                value={calculateLaborCost()}
-              />
-            </Grid>
+          ))}
+        </TableBody>
+      </Table>
+      <Button
+        startIcon={<AddCircleOutlineIcon />}
+        onClick={() =>
+          append({
+            resourceTitle: "",
+            timeFrame: 0,
+            days: 0,
+            hoursPerDay: 0,
+            men: 0,
+            costPerHour: 0,
+            rowTotal: 0,
+          })
+        }
+      >
+        Add New
+      </Button>
+      <Box>
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            {" "}
+            <TextField
+              label="Total Man Hours"
+              {...register("totalManHours")}
+              size="small"
+              fullWidth
+              margin="normal"
+              type="number"
+              InputProps={{
+                readOnly: true,
+                startAdornment: <Typography></Typography>,
+              }}
+
+              // value={totalManHours}
+            />
           </Grid>
-          <FormControlLabel
-            control={<Checkbox {...register("performCalculations")} />}
-            label="Perform calculations."
-          />
-        </Box>
+          <Grid item xs={6}>
+            {" "}
+            <TextField
+              label="Total Man Hours"
+              {...register("totalLaborCost")}
+              size="small"
+              fullWidth
+              margin="normal"
+              type="number"
+              InputProps={{
+                readOnly: true,
+                startAdornment: <Typography></Typography>,
+              }}
+            />
+          </Grid>
+        </Grid>
+      </Box>
     </Box>
   );
 };

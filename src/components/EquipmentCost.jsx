@@ -21,9 +21,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { useEffect, useState } from "react";
 
-const ExquipmentCost = ({ZOHO,control,watch, getValues, register}) => {
-
-  const [equipments, setEquipments] = useState(null);
+const ExquipmentCost = ({ ZOHO, control, watch, getValues, register }) => {
+  const [equipments, setEquipments] = useState([]);
   useEffect(() => {
     async function getData() {
       ZOHO.CRM.API.getAllRecords({
@@ -39,195 +38,156 @@ const ExquipmentCost = ({ZOHO,control,watch, getValues, register}) => {
     getData();
   }, [ZOHO]);
 
-  // const { control, handleSubmit, register, watch } = useForm({
-  //   defaultValues: {
-  //     labor: [
-  //       {
-  //         resourceTitle: "",
-  //         timeFrame: "",
-  //         days: "",
-  //         hoursPerDay: "",
-  //         men: "",
-  //         costPerHour: "",
-  //       },
-  //     ],
-  //   },
-  // });
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, update } = useFieldArray({
     control,
-    name: "labor",
+    name: "equipment",
   });
-
-  // const totalManHours = watch("totalManHours");
-  // const performCalculations = watch("performCalculations");
-
-
-
-  // const calculateLaborCost = () => {
-  //   if (!performCalculations) return 0;
-  //   return fields
-  //     .reduce((total, field) => {
-  //       const days = field.days || 0;
-  //       const hoursPerDay = field.hoursPerDay || 0;
-  //       const men = field.men || 0;
-  //       const costPerHour = field.costPerHour || 0;
-  //       return total + days * hoursPerDay * men * costPerHour;
-  //     }, 0)
-  //     .toFixed(2);
-  // };
 
   return (
     <Box>
-      {/* {" "}
-      <Typography
-        variant="h5"
-        sx={{
-          padding: "25px 10px 5px 10px",
-        }}
-      >
-        Equipment Costs
-      </Typography>
-      <hr /> */}
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ fontWeight: "bold" }}>Equipment Name</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Quantity</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Days</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Hours Per Day</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>
-                Direct Cost Per Hour
-              </TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>
-                Total Equipment Cost
-              </TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {fields.map((item, index) => (
-              <TableRow key={item.id}>
-                <TableCell sx={{ width: "150px" }}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell sx={{ fontWeight: "bold" }}>Equipment Name</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Quantity</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Days</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Hours Per Day</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>
+              Direct Cost Per Hour
+            </TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>
+              Total Equipment Cost
+            </TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Action</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {fields.map((item, index) => (
+            <TableRow key={item.id}>
+              <TableCell sx={{ width: "150px" }}>
                 <Controller
-                    name={`materials[${index}].product`}
-                    control={control}
-                    render={({ field }) => (
-                      <Autocomplete
-                        {...field}
-                        options={equipments}
-                        getOptionLabel={(option) => option?.Name}
-                        isOptionEqualToValue={(option, value) =>
-                          option.id === value.id
-                        }
-                        renderInput={(params) => (
-                          <TextField {...params} label="" size="small" />
-                        )}
-                        onChange={(_, data) => field.onChange(data)}
-                      />
-                    )}
-                  />
-                </TableCell>
-                <TableCell>
-                  {renderTextField(
-                    `labor[${index}].timeFrame`,
-                    "T&G SQFT",
-                    "",
-                    control
+                  name={`equipment[${index}].name`}
+                  control={control}
+                  render={({ field }) => (
+                    <Autocomplete
+                      {...field}
+                      options={equipments}
+                      getOptionLabel={(option) => option?.Name}
+                      isOptionEqualToValue={(option, value) =>
+                        option.id === value.id
+                      }
+                      renderInput={(params) => (
+                        <TextField {...params} label="" size="small" />
+                      )}
+                      onChange={(_, data) => {
+                        field.onChange(data);
+                      }}
+                    />
                   )}
-                </TableCell>
-                <TableCell>
-                  <TextField
-                    {...register(`labor[${index}].days`)}
-                    size="small"
-                    fullWidth
-                    type="number"
-                  />
-                </TableCell>
-                <TableCell>
-                  <TextField
-                    {...register(`labor[${index}].hoursPerDay`)}
-                    size="small"
-                    fullWidth
-                    type="number"
-                  />
-                </TableCell>
-                <TableCell>
-                  <TextField
-                    {...register(`labor[${index}].men`)}
-                    size="small"
-                    fullWidth
-                    type="number"
-                  />
-                </TableCell>
-                <TableCell>
-                  <TextField
-                    {...register(`labor[${index}].costPerHour`)}
-                    size="small"
-                    fullWidth
-                    type="number"
-                  />
-                </TableCell>
-                <TableCell>
-                  <IconButton onClick={() => remove(index)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        <Button
-          startIcon={<AddCircleOutlineIcon />}
-          onClick={() =>
-            append({
-              resourceTitle: "",
-              timeFrame: "",
-              days: "",
-              hoursPerDay: "",
-              men: "",
-              costPerHour: "",
-            })
-          }
-        >
-          Add New
-        </Button>
-        <Box>
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              {" "}
-              <TextField
-                label="Total Exquipment Hours"
-                {...register("totalEquipmentHours")}
-                size="small"
-                fullWidth
-                margin="normal"
-                type="number"
-                InputProps={{
-                  readOnly: true,
-                }}
-                // value={totalManHours}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              {" "}
-              <TextField
-                label="Equipment Cost"
-                size="small"
-                fullWidth
-                margin="normal"
-                InputProps={{
-                  readOnly: true,
-                  startAdornment: <Typography>$ </Typography>,
-                }}
-                // value={calculateLaborCost()}
-              />
-            </Grid>
+                />
+              </TableCell>
+              <TableCell>
+                <TextField
+                  {...register(`equipment[${index}].quantity`)}
+                  size="small"
+                  fullWidth
+                  type="number"
+                />
+              </TableCell>
+              <TableCell>
+                <TextField
+                  {...register(`equipment[${index}].days`)}
+                  size="small"
+                  fullWidth
+                  type="number"
+                />
+              </TableCell>
+              <TableCell>
+                <TextField
+                  {...register(`equipment[${index}].hoursPerDay`)}
+                  size="small"
+                  fullWidth
+                  type="number"
+                />
+              </TableCell>
+              <TableCell>
+                <TextField
+                  {...register(`equipment[${index}].directCostPerHour`)}
+                  defaultValue={5}
+                  size="small"
+                  fullWidth
+                  type="number"
+                />
+              </TableCell>
+              <TableCell>
+                <TextField
+                  {...register(`equipment[${index}].equipmentSubTotal`)}
+                  size="small"
+                  fullWidth
+                  type="number"
+                />
+              </TableCell>
+              <TableCell>
+                <IconButton onClick={() => remove(index)}>
+                  <DeleteIcon />
+                </IconButton>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      <Button
+        startIcon={<AddCircleOutlineIcon />}
+        onClick={() =>
+          append({
+            name: {},
+            quantity: 0,
+            days: 0,
+            hoursPerDay: 0,
+            directCostPerHour: 0,
+            equipmentSubTotal: 0,
+          })
+        }
+      >
+        Add New
+      </Button>
+      <Box>
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            {" "}
+            <TextField
+              label="Total Exquipment Hours"
+              {...register("totalEquipmentHours")}
+              size="small"
+              fullWidth
+              margin="normal"
+              type="number"
+              InputProps={{
+                readOnly: true,
+              }}
+              // value={totalManHours}
+            />
           </Grid>
-          <FormControlLabel
-            control={<Checkbox {...register("performCalculations")} />}
-            label="Perform calculations."
-          />
-        </Box>
+          <Grid item xs={6}>
+            {" "}
+            <TextField
+              label="Equipment Cost"
+              size="small"
+              fullWidth
+              margin="normal"
+              InputProps={{
+                readOnly: true,
+                startAdornment: <Typography>$ </Typography>,
+              }}
+              // value={calculateLaborCost()}
+            />
+          </Grid>
+        </Grid>
+        <FormControlLabel
+          control={<Checkbox {...register("performCalculations")} />}
+          label="Perform calculations."
+        />
+      </Box>
     </Box>
   );
 };
