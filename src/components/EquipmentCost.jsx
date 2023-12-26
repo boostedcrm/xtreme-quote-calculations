@@ -21,7 +21,14 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { useEffect, useState } from "react";
 
-const ExquipmentCost = ({ ZOHO, control, watch, getValues, register }) => {
+const ExquipmentCost = ({
+  ZOHO,
+  control,
+  watch,
+  getValues,
+  register,
+  setValue,
+}) => {
   const [equipments, setEquipments] = useState([]);
   useEffect(() => {
     async function getData() {
@@ -80,6 +87,14 @@ const ExquipmentCost = ({ ZOHO, control, watch, getValues, register }) => {
                         <TextField {...params} label="" size="small" />
                       )}
                       onChange={(_, data) => {
+                        update(index, {
+                          ...fields[index],
+                          quantity: 1,
+                          days: 0,
+                          hoursPerDay: 0,
+                          directCostPerHour: 5,
+                          equipmentSubTotal: 0,
+                        });
                         field.onChange(data);
                       }}
                     />
@@ -87,36 +102,233 @@ const ExquipmentCost = ({ ZOHO, control, watch, getValues, register }) => {
                 />
               </TableCell>
               <TableCell>
-                <TextField
-                  {...register(`equipment[${index}].quantity`)}
-                  size="small"
-                  fullWidth
-                  type="number"
+                <Controller
+                  name={`equipment[${index}].quantity`}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label={""}
+                      variant="outlined"
+                      size="small"
+                      margin="normal"
+                      fullWidth
+                      type="number"
+                      onChange={(e) => {
+                        let equipmentSubTotal =
+                          Number(e.target.value || 0) *
+                          Number(getValues(`equipment[${index}].days`) || 0) *
+                          Number(
+                            getValues(`equipment[${index}].hoursPerDay`) || 0
+                          ) *
+                          Number(
+                            getValues(
+                              `equipment[${index}].directCostPerHour`
+                            ) || 0
+                          );
+
+                        setValue(
+                          `equipment[${index}].equipmentSubTotal`,
+                          equipmentSubTotal
+                        );
+
+                        let equipmentTotal = fields.reduce(
+                          (acc, field, index) => {
+                            const amount = getValues(
+                              `equipment[${index}].equipmentSubTotal`
+                            );
+                            return acc + (amount || 0);
+                          },
+                          0
+                        );
+                        setValue(`equipmentTotal`, equipmentTotal);
+
+                        field.onChange(e.target.value);
+                      }}
+                    />
+                  )}
                 />
               </TableCell>
               <TableCell>
-                <TextField
-                  {...register(`equipment[${index}].days`)}
-                  size="small"
-                  fullWidth
-                  type="number"
+                <Controller
+                  name={`equipment[${index}].days`}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label={""}
+                      variant="outlined"
+                      size="small"
+                      margin="normal"
+                      fullWidth
+                      type="number"
+                      onChange={(e) => {
+                        let equipmentSubTotal =
+                          Number(e.target.value || 0) *
+                          Number(
+                            getValues(`equipment[${index}].quantity`) || 0
+                          ) *
+                          Number(
+                            getValues(`equipment[${index}].hoursPerDay`) || 0
+                          ) *
+                          Number(
+                            getValues(
+                              `equipment[${index}].directCostPerHour`
+                            ) || 0
+                          );
+
+                        setValue(
+                          `equipment[${index}].equipmentSubTotal`,
+                          equipmentSubTotal
+                        );
+
+                        let totalEquipmentHours = 0;
+
+                        fields.forEach((element, i) => {
+                          let days = Number(
+                            getValues(`equipment[${i}].days`) || 0
+                          );
+                          let hoursPerDay = Number(
+                            getValues(`equipment[${i}].hoursPerDay`) || 0
+                          );
+                          if (i === index) {
+                            days = Number(e.target.value || 0);
+                          }
+                          totalEquipmentHours =
+                            totalEquipmentHours + days * hoursPerDay;
+                        });
+
+                        setValue(`totalEquipmentHours`, totalEquipmentHours);
+
+                        let equipmentTotal = fields.reduce(
+                          (acc, field, index) => {
+                            const amount = getValues(
+                              `equipment[${index}].equipmentSubTotal`
+                            );
+                            return acc + (amount || 0);
+                          },
+                          0
+                        );
+                        setValue(`equipmentTotal`, equipmentTotal);
+
+                        field.onChange(e.target.value);
+                      }}
+                    />
+                  )}
                 />
               </TableCell>
               <TableCell>
-                <TextField
-                  {...register(`equipment[${index}].hoursPerDay`)}
-                  size="small"
-                  fullWidth
-                  type="number"
+                <Controller
+                  name={`equipment[${index}].hoursPerDay`}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label={""}
+                      variant="outlined"
+                      size="small"
+                      margin="normal"
+                      fullWidth
+                      type="number"
+                      onChange={(e) => {
+                        let equipmentSubTotal =
+                          Number(e.target.value || 0) *
+                          Number(
+                            getValues(`equipment[${index}].quantity`) || 0
+                          ) *
+                          Number(getValues(`equipment[${index}].days`) || 0) *
+                          Number(
+                            getValues(
+                              `equipment[${index}].directCostPerHour`
+                            ) || 0
+                          );
+
+                        setValue(
+                          `equipment[${index}].equipmentSubTotal`,
+                          equipmentSubTotal
+                        );
+
+                        let totalEquipmentHours = 0;
+
+                        fields.forEach((element, i) => {
+                          let days = Number(
+                            getValues(`equipment[${i}].days`) || 0
+                          );
+                          let hoursPerDay = Number(
+                            getValues(`equipment[${i}].hoursPerDay`) || 0
+                          );
+                          if (i === index) {
+                            hoursPerDay = Number(e.target.value || 0);
+                          }
+                          totalEquipmentHours =
+                            totalEquipmentHours + days * hoursPerDay;
+                        });
+
+                        setValue(`totalEquipmentHours`, totalEquipmentHours);
+
+                        let equipmentTotal = fields.reduce(
+                          (acc, field, index) => {
+                            const amount = getValues(
+                              `equipment[${index}].equipmentSubTotal`
+                            );
+                            return acc + (amount || 0);
+                          },
+                          0
+                        );
+                        setValue(`equipmentTotal`, equipmentTotal);
+
+                        field.onChange(e.target.value);
+                      }}
+                    />
+                  )}
                 />
               </TableCell>
               <TableCell>
-                <TextField
-                  {...register(`equipment[${index}].directCostPerHour`)}
-                  defaultValue={5}
-                  size="small"
-                  fullWidth
-                  type="number"
+                <Controller
+                  name={`equipment[${index}].directCostPerHour`}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label={""}
+                      variant="outlined"
+                      size="small"
+                      margin="normal"
+                      fullWidth
+                      type="number"
+                      onChange={(e) => {
+                        let equipmentSubTotal =
+                          Number(e.target.value || 0) *
+                          Number(
+                            getValues(`equipment[${index}].quantity`) || 0
+                          ) *
+                          Number(getValues(`equipment[${index}].days`) || 0) *
+                          Number(
+                            getValues(`equipment[${index}].hoursPerDay`) || 0
+                          );
+
+                        setValue(
+                          `equipment[${index}].equipmentSubTotal`,
+                          equipmentSubTotal
+                        );
+
+                        let totalEquipmentHours = 0;
+
+                        let equipmentTotal = fields.reduce(
+                          (acc, field, index) => {
+                            const amount = getValues(
+                              `equipment[${index}].equipmentSubTotal`
+                            );
+                            return acc + (amount || 0);
+                          },
+                          0
+                        );
+                        setValue(`equipmentTotal`, equipmentTotal);
+
+                        field.onChange(e.target.value);
+                      }}
+                    />
+                  )}
                 />
               </TableCell>
               <TableCell>
@@ -125,6 +337,10 @@ const ExquipmentCost = ({ ZOHO, control, watch, getValues, register }) => {
                   size="small"
                   fullWidth
                   type="number"
+                  InputProps={{
+                    readOnly: true,
+                    startAdornment: <Typography>$</Typography>,
+                  }}
                 />
               </TableCell>
               <TableCell>
@@ -164,29 +380,29 @@ const ExquipmentCost = ({ ZOHO, control, watch, getValues, register }) => {
               type="number"
               InputProps={{
                 readOnly: true,
+                startAdornment: <Typography></Typography>,
               }}
               // value={totalManHours}
             />
           </Grid>
+
           <Grid item xs={6}>
             {" "}
             <TextField
-              label="Equipment Cost"
+              label="Total Exquipment Cost"
+              {...register("equipmentTotal")}
               size="small"
               fullWidth
               margin="normal"
+              type="number"
               InputProps={{
                 readOnly: true,
-                startAdornment: <Typography>$ </Typography>,
+                startAdornment: <Typography>$</Typography>,
               }}
-              // value={calculateLaborCost()}
+              // value={totalManHours}
             />
           </Grid>
         </Grid>
-        <FormControlLabel
-          control={<Checkbox {...register("performCalculations")} />}
-          label="Perform calculations."
-        />
       </Box>
     </Box>
   );
