@@ -63,11 +63,11 @@ const MaterialRow = ({
               onChange={(_, data) => {
                 update(index, {
                   ...fields[index],
-                  size: 5 + data?.Usage_Unit,
+                  size: data?.Size,
                   coverage: data?.Coverage_Rate_per_Gallon || 0,
                   pricePer: data?.Unit_Price || 0,
                   amount: 0,
-                  total: 0
+                  total: 0,
                 });
                 return field.onChange(data);
               }}
@@ -105,6 +105,7 @@ const MaterialRow = ({
                 variant="outlined"
                 size="small"
                 margin="normal"
+                type="number"
                 fullWidth
                 onChange={(e) => {
                   // console.log({data: e});
@@ -117,16 +118,51 @@ const MaterialRow = ({
 
                   setValue(
                     `materials[${index}].total`,
-                    Number(e.target.value) * Number(getValues(`materials[${index}].pricePer`) )
+                    Number(e.target.value) *
+                      Number(getValues(`materials[${index}].pricePer`))
                   );
-                  setValue(
-                    `materialsSubTotal`,
-                    fields.reduce((acc, field, index) => {
-                      const amount = getValues(`materials[${index}].total`);
-                      
-                      return acc + (amount || 0);
-                    }, 0)
-                  );
+                  // setValue(
+                  //   `materialsSubTotal`,
+                  //   fields.reduce((acc, field, index) => {
+                  //     const amount = getValues(`materials[${index}].total`);
+
+                  //     return acc + (amount || 0);
+                  //   }, 0)
+                  // );
+
+                  // setValue(
+                  //   `materialWasteShipCost`,
+                  //   fields.reduce((acc, field, index) => {
+                  //     const amount = getValues(`materials[${index}].total`);
+                  //     return (acc + (amount || 0)) * 0.16;
+                  //   }, 0)
+                  // );
+
+                  // setValue(
+                  //   `materialTax`,
+                  //   fields.reduce((acc, field, index) => {
+                  //     const amount = getValues(`materials[${index}].total`);
+                  //     return (acc + (amount || 0)) * 0.06;
+                  //   }, 0)
+                  // );
+
+                  let materialsSubTotal = fields.reduce((acc, field, index) => {
+                    const amount = getValues(`materials[${index}].total`);
+                    return acc + (amount || 0);
+                  }, 0);
+
+                  let materialTax = materialsSubTotal * 0.06;
+                  let materialWasteShipCost = materialsSubTotal * 0.16;
+                  let materialTotalCost =
+                    materialsSubTotal + materialWasteShipCost + materialTax;
+
+                  setValue(`materialsSubTotal`, materialsSubTotal);
+
+                  setValue(`materialWasteShipCost`, materialWasteShipCost);
+
+                  setValue(`materialTax`, materialTax);
+
+                  setValue(`materialTotalCost`, materialTotalCost);
 
                   field.onChange(e.target.value);
                 }}
@@ -143,7 +179,6 @@ const MaterialRow = ({
         )} */}
       </TableCell>
       <TableCell>
-        
         <Grid item xs={4}>
           <Controller
             name={`materials[${index}].pricePer`}
@@ -156,6 +191,11 @@ const MaterialRow = ({
                 size="small"
                 margin="normal"
                 fullWidth
+                type="number"
+                required
+                InputProps={{
+                  startAdornment: <Typography>$</Typography>,
+                }}
                 onChange={(e) => {
                   // console.log({data: e});
                   // e.preventDefault;
@@ -167,17 +207,27 @@ const MaterialRow = ({
 
                   setValue(
                     `materials[${index}].total`,
-                    Number(e.target.value) * Number(getValues(`materials[${index}].amount`))
+                    Number(e.target.value) *
+                      Number(getValues(`materials[${index}].amount`))
                   );
 
-                  setValue(
-                    `materialsSubTotal`,
-                    fields.reduce((acc, field, index) => {
-                      const amount = getValues(`materials[${index}].total`);
-                      
-                      return acc + (amount || 0);
-                    }, 0)
-                  );
+                  let materialsSubTotal = fields.reduce((acc, field, index) => {
+                    const amount = getValues(`materials[${index}].total`);
+                    return acc + (amount || 0);
+                  }, 0);
+
+                  let materialTax = materialsSubTotal * 0.06;
+                  let materialWasteShipCost = materialsSubTotal * 0.16;
+                  let materialTotalCost =
+                    materialsSubTotal + materialWasteShipCost + materialTax;
+
+                  setValue(`materialsSubTotal`, materialsSubTotal);
+
+                  setValue(`materialWasteShipCost`, materialWasteShipCost);
+
+                  setValue(`materialTax`, materialTax);
+
+                  setValue(`materialTotalCost`, materialTotalCost);
 
                   field.onChange(e.target.value);
                 }}
@@ -314,7 +364,7 @@ const MaterialCosts = ({
         </Grid>
         <Grid item xs={3}>
           {" "}
-          <TextField
+          {/* <TextField
             label="Waste and Ship Cost"
             size="small"
             fullWidth
@@ -323,24 +373,50 @@ const MaterialCosts = ({
               readOnly: true,
               startAdornment: <Typography>$</Typography>,
             }}
+          /> */}
+          <Controller
+            name={`materialWasteShipCost`}
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label={"Waste and Ship Cost"}
+                variant="outlined"
+                size="small"
+                margin="normal"
+                fullWidth
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: <Typography>$</Typography>,
+                }}
+              />
+            )}
           />
         </Grid>
         <Grid item xs={3}>
           {" "}
-          <TextField
-            label="Material Tax"
-            size="small"
-            fullWidth
-            margin="normal"
-            InputProps={{
-              readOnly: true,
-              startAdornment: <Typography>$</Typography>,
-            }}
+          <Controller
+            name={`materialTax`}
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label={"Material Tax"}
+                variant="outlined"
+                size="small"
+                margin="normal"
+                fullWidth
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: <Typography>$</Typography>,
+                }}
+              />
+            )}
           />
         </Grid>
         <Grid item xs={3}>
           {" "}
-          <TextField
+          {/* <TextField
             label="Material Cost"
             size="small"
             fullWidth
@@ -349,14 +425,32 @@ const MaterialCosts = ({
               readOnly: true,
               startAdornment: <Typography>$</Typography>,
             }}
+          /> */}
+          <Controller
+            name={`materialTotalCost`}
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label={"Material Cost"}
+                variant="outlined"
+                size="small"
+                margin="normal"
+                fullWidth
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: <Typography>$</Typography>,
+                }}
+              />
+            )}
           />
         </Grid>
-        <Box sx={{ padding: "5px 20px" }}>
+        {/* <Box sx={{ padding: "5px 20px" }}>
           <FormControlLabel
             control={<Checkbox {...register("performCalculations")} />}
             label="Perform calculations."
           />
-        </Box>
+        </Box> */}
       </Grid>
     </Box>
   );
@@ -369,18 +463,20 @@ const renderTextField = (
   label,
   defaultValue,
   control,
-  disable = false
+  readOnly = false
 ) => (
   <Grid item xs={4}>
     <Controller
       name={name}
       control={control}
       defaultValue={defaultValue}
-      disabled={disable}
       render={({ field }) => (
         <TextField
           {...field}
           label={label}
+          InputProps={{
+            readOnly: readOnly,
+          }}
           variant="outlined"
           size="small"
           margin="normal"

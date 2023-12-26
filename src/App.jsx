@@ -54,7 +54,7 @@ function App() {
           per_page: 200,
           page: 1,
         }).then(function (data) {
-          console.log({products});
+          console.log({products: data.data});
           setProducts(data.data);
         });
       }
