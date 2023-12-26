@@ -15,11 +15,23 @@ import {
   FormControlLabel,
   Checkbox,
   Box,
+  Autocomplete,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-
-const PerDiem = ({control,watch, getValues, register}) => {
+let meals = [
+  {
+    id: 1,
+    Name: "75+ Miles",
+    costPerDay: 12,
+  },
+  {
+    id: 2,
+    Name: "Overnight",
+    costPerDay: 25,
+  },
+];
+const PerDiem = ({ control, watch, getValues, register, setValue }) => {
   // const { control, handleSubmit, register, getValues } = useForm({
   //   defaultValues: {
   //     materials: [
@@ -27,9 +39,9 @@ const PerDiem = ({control,watch, getValues, register}) => {
   //     ],
   //   },
   // });
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, update } = useFieldArray({
     control,
-    name: "materials",
+    name: "perdiem",
   });
 
   return (
@@ -44,82 +56,208 @@ const PerDiem = ({control,watch, getValues, register}) => {
       </Typography>
       <hr />
       <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ fontWeight: "bold" }}>Meal Type</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Crew Size</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Days</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Cost Per Day</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Total</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Action</TableCell>
+        <TableHead>
+          <TableRow>
+            <TableCell sx={{ fontWeight: "bold" }}>Meal Type</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Crew Size</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Days</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Cost Per Day</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Total</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Action</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {fields.map((item, index) => (
+            <TableRow key={item.id}>
+              <TableCell sx={{ width: "150px" }}>
+                <Controller
+                  name={`perdiem[${index}].name`}
+                  control={control}
+                  render={({ field }) => (
+                    <Autocomplete
+                      {...field}
+                      options={meals}
+                      getOptionLabel={(option) => option?.Name}
+                      isOptionEqualToValue={(option, value) =>
+                        option.id === value.id
+                      }
+                      renderInput={(params) => (
+                        <TextField {...params} label="" size="small" />
+                      )}
+                      onChange={(_, data) => {
+                        update(index, {
+                          ...fields[index],
+                          crewSize: 1,
+                          days: 0,
+                          costPerDay: data?.costPerDay,
+                          perdiemSubtotal: 0,
+                        });
+                        field.onChange(data);
+                      }}
+                    />
+                  )}
+                />
+              </TableCell>
+              <TableCell>
+                <Controller
+                  name={`perdiem[${index}].crewSize`}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label={""}
+                      variant="outlined"
+                      size="small"
+                      margin="normal"
+                      fullWidth
+                      type="number"
+                      onChange={(e) => {
+                        let crewSize = Number(e.target.value || 0);
+                        let days = Number(
+                          getValues(`perdiem[${index}].days`) || 0
+                        );
+                        let costPerDay = Number(
+                          getValues(`perdiem[${index}].costPerDay`) || 0
+                        );
+
+                        let perdiemSubtotal = crewSize * days * costPerDay;
+
+                        setValue(
+                          `perdiem[${index}].perdiemSubtotal`,
+                          perdiemSubtotal
+                        );
+
+                        let totalperdiemCost = fields.reduce(
+                          (acc, field, i) => {
+                            const amount = getValues(
+                              `perdiem[${i}].perdiemSubtotal`
+                            );
+                            return acc + (amount || 0);
+                          },
+                          0
+                        );
+                        setValue(`totalperdiemCost`, totalperdiemCost);
+
+                        field.onChange(e.target.value);
+                      }}
+                    />
+                  )}
+                />
+              </TableCell>
+              <TableCell>
+                <Controller
+                  name={`perdiem[${index}].days`}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label={""}
+                      variant="outlined"
+                      size="small"
+                      margin="normal"
+                      fullWidth
+                      type="number"
+                      onChange={(e) => {
+                        let days = Number(e.target.value || 0);
+                        let crewSize = Number(
+                          getValues(`perdiem[${index}].crewSize`) || 0
+                        );
+                        let costPerDay = Number(
+                          getValues(`perdiem[${index}].costPerDay`) || 0
+                        );
+
+                        let perdiemSubtotal = crewSize * days * costPerDay;
+
+                        setValue(
+                          `perdiem[${index}].perdiemSubtotal`,
+                          perdiemSubtotal
+                        );
+
+                        let totalperdiemCost = fields.reduce(
+                          (acc, field, i) => {
+                            const amount = getValues(
+                              `perdiem[${i}].perdiemSubtotal`
+                            );
+                            return acc + (amount || 0);
+                          },
+                          0
+                        );
+                        setValue(`totalperdiemCost`, totalperdiemCost);
+
+                        field.onChange(e.target.value);
+                      }}
+                    />
+                  )}
+                />
+              </TableCell>
+              <TableCell>
+                <Controller
+                  name={`perdiem[${index}].costPerDay`}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      label=""
+                      variant="outlined"
+                      {...field}
+                      size={"small"}
+                      InputProps={{
+                        readOnly: true,
+                        startAdornment: <Typography>$</Typography>,
+                      }}
+                    />
+                  )}
+                />
+              </TableCell>
+              <TableCell>
+                {renderTextField(
+                  `perdiem[${index}].perdiemSubtotal`,
+                  "",
+                  "",
+                  control
+                )}
+              </TableCell>
+              <TableCell>
+                <IconButton onClick={() => remove(index)}>
+                  <DeleteIcon />
+                </IconButton>
+              </TableCell>
             </TableRow>
-          </TableHead>
-          <TableBody>
-            {fields.map((item, index) => (
-              <TableRow key={item.id}>
-                <TableCell sx={{ width: "150px" }}>
-                  <Controller
-                    name={`materials[${index}].name`}
-                    control={control}
-                    render={({ field }) => (
-                      <Select {...field} fullWidth size="small">
-                        <MenuItem value="75+ Miles">75+ Miles</MenuItem>
-                        <MenuItem value="Overnight">Overnight</MenuItem>
-                        {/* Add your other options here */}
-                      </Select>
-                    )}
-                  />
-                </TableCell>
-                <TableCell>
-                  {renderTextField(
-                    `labor[${index}].crewSize`,
-                    "days",
-                    "",
-                    control
-                  )}
-                </TableCell>
-                <TableCell>
-                  {renderTextField(
-                    `labor[${index}].costPerRoom`,
-                    "",
-                    "",
-                    control
-                  )}
-                </TableCell>
-                <TableCell>
-                  {renderTextField(
-                    `labor[${index}].numberOfRooms`,
-                    "",
-                    "",
-                    control
-                  )}
-                </TableCell>
-                <TableCell>
-                  {renderTextField(`labor[${index}].total`, "", "", control)}
-                </TableCell>
-                <TableCell>
-                  <IconButton onClick={() => remove(index)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        <Button
-          startIcon={<AddCircleOutlineIcon />}
-          onClick={() =>
-            append({
-              name: "",
-              size: "",
-              coverage: "",
-              amount: "",
-              pricePer: "",
-            })
-          }
-        >
-          Add New
-        </Button>
+          ))}
+        </TableBody>
+      </Table>
+      <Button
+        startIcon={<AddCircleOutlineIcon />}
+        onClick={() =>
+          append({
+            name: "",
+            size: "",
+            coverage: "",
+            amount: "",
+            pricePer: "",
+          })
+        }
+      >
+        Add New
+      </Button>
+      <Box>
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            {" "}
+            <TextField
+              label="Total Per Diem Cost"
+              {...register("totalperdiemCost")}
+              size="small"
+              fullWidth
+              margin="normal"
+              type="number"
+              InputProps={{
+                readOnly: true,
+                startAdornment: <Typography>$</Typography>,
+              }}
+            />
+          </Grid>
+        </Grid>
+      </Box>
     </Box>
   );
 };
