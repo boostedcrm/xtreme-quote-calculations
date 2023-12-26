@@ -40,20 +40,21 @@ export default function QuoteCalculation({
   products,
   ZOHO,
 }) {
-  const { control, handleSubmit, register, watch, getValues, setValue } = useForm({
-    defaultValues: {
-      labor: [
-        {
-          resourceTitle: "",
-          timeFrame: "",
-          days: "",
-          hoursPerDay: "",
-          men: "",
-          costPerHour: "",
-        },
-      ],
-    },
-  });
+  const { control, handleSubmit, register, watch, getValues, setValue } =
+    useForm({
+      defaultValues: {
+        labor: [
+          {
+            resourceTitle: "",
+            timeFrame: "",
+            days: "",
+            hoursPerDay: "",
+            men: "",
+            costPerHour: "",
+          },
+        ],
+      },
+    });
 
   const [activeStep, setActiveStep] = useState(0);
   const steps = getSteps();
@@ -77,7 +78,7 @@ export default function QuoteCalculation({
   };
 
   const onSubmit = (data) => {
-    console.log(data);
+    console.log({onSubmit: data});
   };
 
   return (
@@ -165,7 +166,7 @@ export default function QuoteCalculation({
           )}
           {activeStep === 8 && (
             <Calculation
-            ZOHO={ZOHO}
+              ZOHO={ZOHO}
               control={control}
               watch={watch}
               getValues={getValues}
@@ -181,6 +182,9 @@ export default function QuoteCalculation({
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleClose} variant="contained" color="success">
             Save
+          </Button>
+          <Button variant="contained" type="submit">
+            Calculate
           </Button>
           {activeStep === steps.length - 1 ? (
             <Button variant="contained" type="submit">

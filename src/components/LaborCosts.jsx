@@ -22,7 +22,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { useEffect, useState } from "react";
 
 const LaborCosts = ({ ZOHO, control, getValues, register }) => {
-  const [labor, SetLabor] = useState(null);
+  const [labor, SetLabor] = useState([]);
   useEffect(() => {
     async function getData() {
       ZOHO.CRM.API.getAllRecords({
