@@ -19,7 +19,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
-const VehicleExpense = ({control, watch, getValues, register}) => {
+const VehicleExpense = ({ control, watch, getValues, register, setValue }) => {
   // const { control, handleSubmit, register, getValues } = useForm({
   //   defaultValues: {
   //     materials: [
@@ -27,11 +27,10 @@ const VehicleExpense = ({control, watch, getValues, register}) => {
   //     ],
   //   },
   // });
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, update } = useFieldArray({
     control,
-    name: "materials",
+    name: "vehicleexpense",
   });
-
 
   return (
     <Box>
@@ -45,59 +44,161 @@ const VehicleExpense = ({control, watch, getValues, register}) => {
       </Typography>
       <hr />
       <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ fontWeight: "bold" }}>Mileage</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Rate</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Total</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Action</TableCell>
+        <TableHead>
+          <TableRow>
+            <TableCell sx={{ fontWeight: "bold" }}>Mileage</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Rate</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Total</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Action</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {fields.map((item, index) => (
+            <TableRow key={item.id}>
+              <TableCell>
+                
+                <Controller
+                  name={`vehicleexpense[${index}].mileage`}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label={""}
+                      variant="outlined"
+                      size="small"
+                      margin="normal"
+                      fullWidth
+                      type="number"
+                      onChange={(e) => {
+                        let mileage = Number(e.target.value || 0);
+                        let rate = Number(
+                          getValues(`vehicleexpense[${index}].rate`) || 0
+                        );
+
+                        let vehicleExpenseSubtotal = rate * mileage;
+
+                        setValue(
+                          `vehicleexpense[${index}].vehicleExpenseSubtotal`,
+                          vehicleExpenseSubtotal
+                        );
+
+                        let totalVehicleExpenseCost = fields.reduce(
+                          (acc, field, index) => {
+                            const amount = getValues(
+                              `vehicleexpense[${index}].vehicleExpenseSubtotal`
+                            );
+                            return acc + (amount || 0);
+                          },
+                          0
+                        );
+
+                        setValue(
+                          `totalVehicleExpenseCost`,
+                          totalVehicleExpenseCost
+                        );
+
+                        field.onChange(e.target.value);
+                      }}
+                    />
+                  )}
+                />
+              </TableCell>
+              <TableCell>
+                
+                <Controller
+                  name={`vehicleexpense[${index}].rate`}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label={""}
+                      variant="outlined"
+                      size="small"
+                      margin="normal"
+                      fullWidth
+                      type="number"
+                      onChange={(e) => {
+                        let rate = Number(e.target.value || 0);
+                        let mileage = Number(
+                          getValues(`vehicleexpense[${index}].mileage`) || 0
+                        );
+
+                        let vehicleExpenseSubtotal = rate * mileage;
+
+                        setValue(
+                          `vehicleexpense[${index}].vehicleExpenseSubtotal`,
+                          vehicleExpenseSubtotal
+                        );
+
+                        let totalVehicleExpenseCost = fields.reduce(
+                          (acc, field, index) => {
+                            const amount = getValues(
+                              `vehicleexpense[${index}].vehicleExpenseSubtotal`
+                            );
+                            return acc + (amount || 0);
+                          },
+                          0
+                        );
+
+                        setValue(
+                          `totalVehicleExpenseCost`,
+                          totalVehicleExpenseCost
+                        );
+
+                        field.onChange(e.target.value);
+                      }}
+                    />
+                  )}
+                />
+              </TableCell>
+              <TableCell>
+                {renderTextField(
+                  `vehicleexpense[${index}].vehicleExpenseSubtotal`,
+                  "total",
+                  "",
+                  control
+                )}
+              </TableCell>
+              <TableCell>
+                <IconButton onClick={() => remove(index)}>
+                  <DeleteIcon />
+                </IconButton>
+              </TableCell>
             </TableRow>
-          </TableHead>
-          <TableBody>
-            {fields.map((item, index) => (
-              <TableRow key={item.id}>
-                <TableCell>
-                  {renderTextField(
-                    `labor[${index}].mileage`,
-                    "mileage",
-                    0,
-                    control
-                  )}
-                </TableCell>
-                <TableCell>
-                  {renderTextField(`labor[${index}].rate`, "rate", 0.59, control)}
-                </TableCell>
-                <TableCell>
-                  {renderTextField(
-                    `labor[${index}].total`,
-                    "total",
-                    "",
-                    control
-                  )}
-                </TableCell>
-                <TableCell>
-                  <IconButton onClick={() => remove(index)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        <Button
-          startIcon={<AddCircleOutlineIcon />}
-          onClick={() =>
-            append({
-              name: "",
-              size: "",
-              coverage: "",
-              amount: "",
-              pricePer: "",
-            })
-          }
-        >
-          Add New
-        </Button>
+          ))}
+        </TableBody>
+      </Table>
+      <Button
+        startIcon={<AddCircleOutlineIcon />}
+        onClick={() =>
+          append({
+            mileage: 0,
+            rate: 0.59,
+            vehicleExpenseSubtotal: 0,
+          })
+        }
+      >
+        Add New
+      </Button>
+      <Box>
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            {" "}
+            <TextField
+              label="Total Vehicle Expense Cost"
+              {...register("totalVehicleExpenseCost")}
+              size="small"
+              fullWidth
+              margin="normal"
+              type="number"
+              InputProps={{
+                readOnly: true,
+                startAdornment: <Typography>$</Typography>,
+              }}
+            />
+          </Grid>
+        </Grid>
+      </Box>
     </Box>
   );
 };
