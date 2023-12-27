@@ -50,18 +50,28 @@ const LaborCosts = ({ ZOHO, control, getValues, register, setValue }) => {
     console.log(data);
   };
 
-  const calculateLaborCost = () => {
-    // if (!performCalculations) return 0;
-    // return fields
-    //   .reduce((total, field) => {
-    //     const days = field.days || 0;
-    //     const hoursPerDay = field.hoursPerDay || 0;
-    //     const men = field.men || 0;
-    //     const costPerHour = field.costPerHour || 0;
-    //     return total + days * hoursPerDay * men * costPerHour;
-    //   }, 0)
-    //   .toFixed(2);
-  };
+  function removeRow(fields) {
+    let totalManHours = 0;
+
+    fields.forEach((element, i) => {
+      let men = Number(getValues(`labor[${i}].men`) || 0);
+
+      let days = Number(getValues(`labor[${i}].days`) || 0);
+      let hoursPerDay = Number(getValues(`labor[${i}].hoursPerDay`) || 0);
+      // if (i === index) {
+      //   days = Number(e.target.value || 0);
+      // }
+      totalManHours = totalManHours + men * days * hoursPerDay;
+    });
+
+    setValue(`totalManHours`, totalManHours);
+
+    let laborTotal = fields.reduce((acc, field, index) => {
+      const amount = getValues(`labor[${index}].rowTotal`);
+      return acc + (amount || 0);
+    }, 0);
+    setValue(`totalLaborCost`, laborTotal);
+  }
 
   return (
     <Box>
@@ -359,7 +369,10 @@ const LaborCosts = ({ ZOHO, control, getValues, register, setValue }) => {
                 />
               </TableCell>
               <TableCell>
-                <IconButton onClick={() => remove(index)}>
+                <IconButton onClick={() => {
+                  remove(index)
+                  removeRow(fields)
+                }}>
                   <DeleteIcon />
                 </IconButton>
               </TableCell>
