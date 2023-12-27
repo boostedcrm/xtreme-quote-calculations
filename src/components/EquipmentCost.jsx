@@ -50,25 +50,6 @@ const ExquipmentCost = ({
     name: "equipment",
   });
 
-  function calculateTotalEquipmentCost(fields) {
-    let totalEquipmentHours = 0;
-
-    fields.forEach((element, i) => {
-      let days = Number(getValues(`equipment[${i}].days`) || 0);
-      let hoursPerDay = Number(getValues(`equipment[${i}].hoursPerDay`) || 0);
-
-      totalEquipmentHours = totalEquipmentHours + days * hoursPerDay;
-    });
-
-    setValue(`totalEquipmentHours`, totalEquipmentHours);
-
-    let equipmentTotal = fields.reduce((acc, field, index) => {
-      const amount = getValues(`equipment[${index}].equipmentSubTotal`);
-      return acc + (amount || 0);
-    }, 0);
-    setValue(`equipmentTotal`, equipmentTotal);
-  }
-
   return (
     <Box>
       <Table>
@@ -106,43 +87,14 @@ const ExquipmentCost = ({
                         <TextField {...params} label="" size="small" />
                       )}
                       onChange={(_, data) => {
-                        if (data) {
-                          let quantity = Number(
-                            getValues(`equipment[${index}].quantity`) || 0
-                          );
-                          let days = Number(
-                            getValues(`equipment[${index}].days`) || 0
-                          );
-                          let hoursPerDay = Number(
-                            getValues(`equipment[${index}].hoursPerDay`) || 0
-                          );
-                          let directCostPerHour = Number(
-                            getValues(
-                              `equipment[${index}].directCostPerHour`
-                            ) || 5
-                          );
-
-                          update(index, {
-                            ...fields[index],
-                            quantity: quantity,
-                            days: days,
-                            hoursPerDay: hoursPerDay,
-                            directCostPerHour: directCostPerHour,
-                            equipmentSubTotal:
-                              quantity * days * hoursPerDay * directCostPerHour,
-                          });
-                        } else {
-                          update(index, {
-                            ...fields[index],
-                            quantity: 0,
-                            days: 0,
-                            hoursPerDay: 0,
-                            directCostPerHour: 0,
-                            equipmentSubTotal: 0,
-                          });
-                        }
-
-                        calculateTotalEquipmentCost(fields);
+                        update(index, {
+                          ...fields[index],
+                          quantity: 1,
+                          days: 0,
+                          hoursPerDay: 0,
+                          directCostPerHour: 5,
+                          equipmentSubTotal: 0,
+                        });
                         field.onChange(data);
                       }}
                     />
@@ -392,12 +344,7 @@ const ExquipmentCost = ({
                 />
               </TableCell>
               <TableCell>
-                <IconButton
-                  onClick={() => {
-                    remove(index);
-                    calculateTotalEquipmentCost(fields);
-                  }}
-                >
+                <IconButton onClick={() => remove(index)}>
                   <DeleteIcon />
                 </IconButton>
               </TableCell>

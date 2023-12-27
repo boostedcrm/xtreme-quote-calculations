@@ -32,13 +32,9 @@ const Lodging = ({ control, watch, getValues, register, setValue }) => {
     name: "lodging",
   });
 
-  function calculateTotalLoadingCost(fields) {
-    let totallodgingCost = fields.reduce((acc, field, index) => {
-      const amount = getValues(`lodging[${index}].lodgingSubTotal`);
-      return acc + (amount || 0);
-    }, 0);
-    setValue(`totallodgingCost`, totallodgingCost);
-  }
+  // const onSubmit = (data) => {
+  //   console.log(data);
+  // };
 
   return (
     <Box>
@@ -150,6 +146,17 @@ const Lodging = ({ control, watch, getValues, register, setValue }) => {
                           lodgingSubTotal
                         );
 
+                        let totallodgingCost = fields.reduce(
+                          (acc, field, index) => {
+                            const amount = getValues(
+                              `lodging[${index}].lodgingSubTotal`
+                            );
+                            return acc + (amount || 0);
+                          },
+                          0
+                        );
+                        setValue(`totallodgingCost`, totallodgingCost);
+
                         field.onChange(e.target.value);
                       }}
                     />
@@ -221,12 +228,7 @@ const Lodging = ({ control, watch, getValues, register, setValue }) => {
                 )}
               </TableCell>
               <TableCell>
-                <IconButton
-                  onClick={() => {
-                    remove(index);
-                    calculateTotalLoadingCost(fields);
-                  }}
-                >
+                <IconButton onClick={() => remove(index)}>
                   <DeleteIcon />
                 </IconButton>
               </TableCell>

@@ -44,7 +44,7 @@ const MaterialRow = ({
 }) => {
   const [product, setProduct] = useState(null);
 
-  function calculateTotalMaterialCost(fields) {
+  function setAllValue(fields) {
     let materialsSubTotal = fields.reduce((acc, field, index) => {
       const amount = getValues(`materials[${index}].total`);
       return acc + (amount || 0);
@@ -80,16 +80,14 @@ const MaterialRow = ({
                 <TextField {...params} label="Material" size="small" />
               )}
               onChange={(_, data) => {
-                let amount = Number(getValues(`materials[${index}].amount` || 0))
                 update(index, {
                   ...fields[index],
                   size: data?.Size,
                   coverage: data?.Coverage_Rate_per_Gallon || 0,
                   pricePer: data?.Unit_Price || 0,
-                  amount: amount,
-                  total: amount * (data?.Unit_Price || 0),
+                  amount: 0,
+                  total: 0,
                 });
-                calculateTotalMaterialCost(fields)
                 return field.onChange(data);
               }}
             />
@@ -134,7 +132,7 @@ const MaterialRow = ({
                     Number(e.target.value) *
                       Number(getValues(`materials[${index}].pricePer`))
                   );
-                  calculateTotalMaterialCost(fields);
+                  setAllValue(fields);
                   field.onChange(e.target.value);
                 }}
               />
@@ -166,7 +164,7 @@ const MaterialRow = ({
                     Number(e.target.value) *
                       Number(getValues(`materials[${index}].amount`))
                   );
-                  calculateTotalMaterialCost(fields);
+                  setAllValue(fields);
                   field.onChange(e.target.value);
                 }}
               />
@@ -181,7 +179,7 @@ const MaterialRow = ({
         <IconButton
           onClick={() => {
             remove(index);
-            calculateTotalMaterialCost(fields);
+            setAllValue(fields);
           }}
         >
           <DeleteIcon />

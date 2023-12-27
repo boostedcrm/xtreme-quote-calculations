@@ -13,13 +13,24 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
+import { useEffect, useState } from "react";
 
-const XtremeQuoteForm = ({ dealData }) => {
+const XtremeQuoteForm = ({ dealData,quoteDistributions,checklistData,quoteType }) => {
+  const [totalSqft, setTotalSqft] = useState(0)
   const { control, handleSubmit } = useForm();
 
   const onSubmit = (data) => {
     console.log(data);
   };
+
+  useEffect(() => {
+    if(quoteType != null){
+      const checklistType = quoteType.split(" ")[1];
+      if(checklistType === "Polish" && checklistData?.Polished_SQFT != null){
+        setTotalSqft(checklistData?.Polished_SQFT)
+      }
+    }
+  },[])
 
   // console.log({ dealData: dealData?.Sales_Person?.name });
 
@@ -63,7 +74,21 @@ const XtremeQuoteForm = ({ dealData }) => {
       </Grid>
       <Grid container spacing={2}>
         {renderTextField("Quote_Type", "Quote Type", dealData?.Quote_Type || "", control)}
-        {renderTextField("Total_Square_Feet", "Total Square Feet", "", control)}
+        {renderTextField("Total_Square_Feet", "Total Square Feet", totalSqft, control)}
+      </Grid>
+      <Grid container spacing={2}>
+      {renderDatePicker(
+          'EstimatedPerformDate', // name of the field
+          'Estimated Perform Date', // label
+          '', // Default value
+          control // control object from react-hook-form
+        )}
+               {renderDatePicker(
+          'QuoteDueDate', // name of the field
+          'Quote Due Date', // label
+          '', // Default value
+          control // control object from react-hook-form
+        )}
       </Grid>
       {/* <Button type="submit" variant="contained" color="primary" style={{ marginTop: 16 }}>
         Submit Quote
@@ -239,57 +264,6 @@ const renderMultiTextField = (
   </Grid>
 );
 
-const renderDatePicker = (name, label, defaultValue, control) => {
-  return (
-    <Grid item xs={6}>
-      <FormControlLabel
-        labelPlacement="start"
-        control={
-          <Controller
-            name={name}
-            control={control}
-            defaultValue={defaultValue}
-            render={({ field }) => (
-              <div style={{ display: "flex" }}>
-                <div style={{ width: "180px", flexShrink: 0 }}>
-                  <label>{label}</label>
-                </div>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    disablePast
-                    {...field}
-                    inputProps={{
-                      style: {
-                        height: 18,
-                      },
-                    }}
-                    onChange={(newValue) => {
-                      field.onChange(dayjs(newValue).format("YYYY-MM-DD"));
-                    }}
-                    PopperProps={{
-                      placement: "right-end",
-                    }}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        required
-                        fullWidth
-                        size="small"
-                        InputLabelProps={{ shrink: true }}
-                        sx={{ width: "223px" }}
-                      />
-                    )}
-                  />
-                </LocalizationProvider>
-              </div>
-            )}
-          />
-        }
-      />
-    </Grid>
-  );
-};
-
 const renderMultiSelect = (
   name,
   label,
@@ -334,3 +308,52 @@ const renderMultiSelect = (
     </Grid>
   );
 };
+
+const renderDatePicker = (
+  name,
+  label,
+  defaultValue,
+  control,
+  labelWidth = 180
+) => {
+  return (
+    <Grid item xs={6}>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div style={{ width: labelWidth, flexShrink: 0 }}>
+          <label>{label}</label>
+        </div>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <Controller
+            name={name}
+            control={control}
+            defaultValue={defaultValue}
+            render={({ field }) => (
+              <DatePicker
+                disablePast
+                label=""
+                {...field}
+                onChange={(newValue) => {
+                  field.onChange(dayjs(newValue).format('YYYY-MM-DD'));
+                }}
+                PopperProps={{
+                  placement: 'right-end',
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    required
+                    fullWidth
+                    size="small"
+                    InputLabelProps={{ shrink: true }}
+                  />
+                )}
+              />
+            )}
+          />
+        </LocalizationProvider>
+      </div>
+    </Grid>
+  );
+};
+
+

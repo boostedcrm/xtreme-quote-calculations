@@ -20,21 +20,17 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 const VehicleExpense = ({ control, watch, getValues, register, setValue }) => {
+  // const { control, handleSubmit, register, getValues } = useForm({
+  //   defaultValues: {
+  //     materials: [
+  //       { name: "", size: "", coverage: "", amount: "", pricePer: "" },
+  //     ],
+  //   },
+  // });
   const { fields, append, remove, update } = useFieldArray({
     control,
     name: "vehicleexpense",
   });
-
-  function calculateTotalVehicleExpenseCost(fields) {
-    let totalVehicleExpenseCost = fields.reduce((acc, field, index) => {
-      const amount = getValues(
-        `vehicleexpense[${index}].vehicleExpenseSubtotal`
-      );
-      return acc + (amount || 0);
-    }, 0);
-
-    setValue(`totalVehicleExpenseCost`, totalVehicleExpenseCost);
-  }
 
   return (
     <Box>
@@ -60,6 +56,7 @@ const VehicleExpense = ({ control, watch, getValues, register, setValue }) => {
           {fields.map((item, index) => (
             <TableRow key={item.id}>
               <TableCell>
+                
                 <Controller
                   name={`vehicleexpense[${index}].mileage`}
                   control={control}
@@ -107,6 +104,7 @@ const VehicleExpense = ({ control, watch, getValues, register, setValue }) => {
                 />
               </TableCell>
               <TableCell>
+                
                 <Controller
                   name={`vehicleexpense[${index}].rate`}
                   control={control}
@@ -162,12 +160,7 @@ const VehicleExpense = ({ control, watch, getValues, register, setValue }) => {
                 )}
               </TableCell>
               <TableCell>
-                <IconButton
-                  onClick={() => {
-                    remove(index);
-                    calculateTotalVehicleExpenseCost(fields);
-                  }}
-                >
+                <IconButton onClick={() => remove(index)}>
                   <DeleteIcon />
                 </IconButton>
               </TableCell>

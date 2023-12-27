@@ -11,11 +11,11 @@ function App() {
   const [dealID, setDealID] = useState(null);
   const [zohoLoaded, setZohoLoaded] = useState(false);
   const [page, setPage] = useState("Home");
-  const [concreteItems, setConcreteItems] = useState([]);
-  const [honingItems, setHoningItems] = useState([]);
-  const [coatingItems, setCoatingItems] = useState([]);
+  const [checklistData, setCheckListData] = useState(null)
   const [dealData, setDealData] = useState(null);
   const [products, setProducts] = useState([]);
+  const [quoteDistributions, setQuoteDistributions] = useState([]);
+  const [quoteType, setQuoteType] = useState(null)
 
   useEffect(() => {
     ZOHO.embeddedApp.on("PageLoad", function (data) {
@@ -32,6 +32,17 @@ function App() {
       ) {
         console.log(data);
       });
+
+      ZOHO.CRM.API.getAllRecords({
+        Entity: "QuoteDistributions",
+        sort_order: "asc",
+        per_page: 200,
+        page: 1,
+      }).then(function (data) {
+        // console.log({products:});
+        console.log({ quoteDistributions: data });
+        // setQuoteDistributions(data.data)
+      });
     });
   }, []);
 
@@ -45,15 +56,60 @@ function App() {
           RecordID: dealID,
         }).then(function (data) {
           setDealData(data?.data[0]);
+          if (data?.data[0] !== undefined) {
+            const dealData = data?.data[0];
+            const Quote_Type = dealData.Quote_Type;
+            if (Quote_Type != null) {
+              const quoteType = Quote_Type.split(" ")[0];
+              setQuoteType(Quote_Type)
+              if (
+                quoteType === "Concrete" &&
+                dealData?.Concrete_Bid_Checklist?.id !== null
+              ) {
+                ZOHO.CRM.API.getRecord({
+                  Entity: "Concrete_Bid_Checklists",
+                  approved: "both",
+                  RecordID: dealData?.Concrete_Bid_Checklist?.id,
+                }).then(function (data) {
+                  console.log({ Concrete_Bid_Checklists: data });
+                  setCheckListData(data.data[0])
+                });
+              }
+              if (
+                quoteType === "Coating" &&
+                dealData?.Coating_Bid_Checklist?.id !== null
+              ) {
+                ZOHO.CRM.API.getRecord({
+                  Entity: "Coating_Bid_Checklists",
+                  approved: "both",
+                  RecordID: dealData?.Coating_Bid_Checklist?.id,
+                }).then(function (data) {
+                  setCheckListData(data.data[0])
+                });
+              }
+              if (
+                quoteType === "Honing" &&
+                dealData?.Honing_Bid_Checklist?.id !== null
+              ) {
+                ZOHO.CRM.API.getRecord({
+                  Entity: "Honing_Bid_Checklists",
+                  approved: "both",
+                  RecordID: dealData?.Honing_Bid_Checklist?.id,
+                }).then(function (data) {
+                  // console.log({ Honing_Bid_Checklists: data });
+                  setCheckListData(data.data[0])
+                });
+              }
+            }
+          }
         });
-
         ZOHO.CRM.API.getAllRecords({
           Entity: "Products",
           sort_order: "asc",
           per_page: 200,
           page: 1,
         }).then(function (data) {
-          console.log({products: data.data});
+          // console.log({products:});
           setProducts(data.data);
         });
       }
@@ -112,6 +168,9 @@ function App() {
           dealData={dealData}
           products={products}
           ZOHO={ZOHO}
+          quoteDistributions={quoteDistributions}
+          checklistData={checklistData}
+          quoteType={quoteType}
         />
       )}
       {/* <Rayhan products={products} /> */}

@@ -39,6 +39,9 @@ export default function QuoteCalculation({
   dealData,
   products,
   ZOHO,
+  quoteDistributions,
+  checklistData,
+  quoteType
 }) {
   const { control, handleSubmit, register, watch, getValues, setValue } =
     useForm({
@@ -103,6 +106,9 @@ export default function QuoteCalculation({
               dealData={dealData}
               control={control}
               watch={watch}
+              quoteDistributions={quoteDistributions}
+              checklistData={checklistData}
+              quoteType={quoteType}
             />
           )}
           {activeStep === 1 && (

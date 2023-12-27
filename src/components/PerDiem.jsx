@@ -44,14 +44,6 @@ const PerDiem = ({ control, watch, getValues, register, setValue }) => {
     name: "perdiem",
   });
 
-  function calculateTotalPerdiemCost(fields) {
-    let totalperdiemCost = fields.reduce((acc, field, i) => {
-      const amount = getValues(`perdiem[${i}].perdiemSubtotal`);
-      return acc + (amount || 0);
-    }, 0);
-    setValue(`totalperdiemCost`, totalperdiemCost);
-  }
-
   return (
     <Box>
       <Typography
@@ -93,32 +85,13 @@ const PerDiem = ({ control, watch, getValues, register, setValue }) => {
                         <TextField {...params} label="" size="small" />
                       )}
                       onChange={(_, data) => {
-                        if (data) {
-                          const crewSize = Number(
-                            getValues(`perdiem[${index}].crewSize`) || 1
-                          );
-                          const days = Number(
-                            getValues(`perdiem[${index}].days`) || 1
-                          );
-                          update(index, {
-                            ...fields[index],
-                            crewSize: crewSize,
-                            days: days,
-                            costPerDay: data?.costPerDay || 0,
-                            perdiemSubtotal: crewSize * days * data?.costPerDay,
-                          });
-                        } else {
-                          update(index, {
-                            ...fields[index],
-                            name: {},
-                            crewSize: 0,
-                            days: 0,
-                            costPerDay: data?.costPerDay || 0,
-                            perdiemSubtotal: 0,
-                          });
-                        }
-
-                        calculateTotalPerdiemCost(fields);
+                        update(index, {
+                          ...fields[index],
+                          crewSize: 1,
+                          days: 0,
+                          costPerDay: data?.costPerDay,
+                          perdiemSubtotal: 0,
+                        });
                         field.onChange(data);
                       }}
                     />
@@ -200,7 +173,17 @@ const PerDiem = ({ control, watch, getValues, register, setValue }) => {
                           perdiemSubtotal
                         );
 
-                        calculateTotalPerdiemCost(fields);
+                        let totalperdiemCost = fields.reduce(
+                          (acc, field, i) => {
+                            const amount = getValues(
+                              `perdiem[${i}].perdiemSubtotal`
+                            );
+                            return acc + (amount || 0);
+                          },
+                          0
+                        );
+                        setValue(`totalperdiemCost`, totalperdiemCost);
+
                         field.onChange(e.target.value);
                       }}
                     />
@@ -234,12 +217,7 @@ const PerDiem = ({ control, watch, getValues, register, setValue }) => {
                 )}
               </TableCell>
               <TableCell>
-                <IconButton
-                  onClick={() => {
-                    remove(index);
-                    calculateTotalPerdiemCost(fields);
-                  }}
-                >
+                <IconButton onClick={() => remove(index)}>
                   <DeleteIcon />
                 </IconButton>
               </TableCell>

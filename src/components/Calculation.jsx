@@ -42,13 +42,6 @@ export default function Calculation({
 
   return (
     <Box p={2}>
-      <FormControlLabel
-        control={<Checkbox />}
-        label="Perform calculations."
-        style={{ marginBottom: "8px" }}
-      />
-      <br />
-      <br />
       <Grid containe style={{ marginBottom: "15px" }}>
         {renderTextField(
           `miscellaneousCost`,
@@ -143,11 +136,6 @@ export default function Calculation({
           control
         )}
       </Grid>
-      <FormControlLabel
-        control={<Checkbox />}
-        label="Perform calculations."
-        style={{ marginBottom: "8px" }}
-      />
       <br />
       <Grid container spacing={2}>
         {renderTextField(
@@ -178,6 +166,23 @@ export default function Calculation({
             <DeleteIcon sx={{cursor: "pointer"}} onClick={() => removeClarification(index)}/>
           </Box>
         ))}
+              <Box>
+        {/* <FormControlLabel
+          control={
+            <Checkbox onChange={(event) => updateSendForSignature(event)} />
+          }
+          label="Send for Review"
+          style={{ marginBottom: "8px" }}
+        /> */}
+        {renderCheckboxField(
+          "Sent_for_Review", // name of the field
+          "Send for Review", // label
+          false, // default value
+          control, // form control from react-hook-form
+          170 // optional label width, default is 170 if not provided
+        )}
+        {renderMultiTextField("review_note", "Review Note", "", control, 350)}
+      </Box>
     </Box>
   );
 }
@@ -225,6 +230,38 @@ const renderMultiTextField = (name, label, defaultValue, control, width) => (
           sx={{ width: width }}
         />
       )}
+    />
+  </Grid>
+);
+
+
+
+const renderCheckboxField = (
+  name,
+  label,
+  defaultValue,
+  control,
+  labelWidth = 170
+) => (
+  <Grid item xs={6}>
+    <FormControlLabel
+      control={
+        <Controller
+          name={name}
+          control={control}
+          defaultValue={defaultValue}
+          render={({ field }) => (
+            <div style={{ display: "flex" }}>
+              <div style={{ width: labelWidth, flexShrink: 0 }}>
+                <label>{label}</label>
+              </div>
+              <Checkbox {...field} />
+            </div>
+          )}
+        />
+      }
+      label=""
+      labelPlacement="start"
     />
   </Grid>
 );

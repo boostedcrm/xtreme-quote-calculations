@@ -50,7 +50,7 @@ const LaborCosts = ({ ZOHO, control, getValues, register, setValue }) => {
     console.log(data);
   };
 
-  function calculateTotalLaborCost(fields) {
+  function removeRow(fields) {
     let totalManHours = 0;
 
     fields.forEach((element, i) => {
@@ -58,7 +58,9 @@ const LaborCosts = ({ ZOHO, control, getValues, register, setValue }) => {
 
       let days = Number(getValues(`labor[${i}].days`) || 0);
       let hoursPerDay = Number(getValues(`labor[${i}].hoursPerDay`) || 0);
-
+      // if (i === index) {
+      //   days = Number(e.target.value || 0);
+      // }
       totalManHours = totalManHours + men * days * hoursPerDay;
     });
 
@@ -107,24 +109,15 @@ const LaborCosts = ({ ZOHO, control, getValues, register, setValue }) => {
                         <TextField {...params} label="" size="small" />
                       )}
                       onChange={(_, data) => {
-                        let timeFrame = Number(getValues(`labor[${index}].timeFrame`) || 0);
-
-                        let men = Number(getValues(`labor[${index}].men`) || 0);
-
-                        let days = Number(getValues(`labor[${index}].days`) || 0);
-                        let hoursPerDay = Number(
-                          getValues(`labor[${index}].hoursPerDay`) || 0
-                        );
                         update(index, {
                           ...fields[index],
-                          timeFrame: timeFrame,
-                          days: days,
-                          hoursPerDay: hoursPerDay,
-                          men: men,
-                          costPerHour: data?.Rate || 0,
-                          rowTotal: timeFrame * days * hoursPerDay * men * (data?.Rate || 0),
+                          timeFrame: 0,
+                          days: 0,
+                          hoursPerDay: 0,
+                          men: 0,
+                          costPerHour: data?.Rate,
+                          rowTotal: 0,
                         });
-                        calculateTotalLaborCost(fields)
                         return field.onChange(data);
                       }}
                     />
@@ -376,12 +369,10 @@ const LaborCosts = ({ ZOHO, control, getValues, register, setValue }) => {
                 />
               </TableCell>
               <TableCell>
-                <IconButton
-                  onClick={() => {
-                    remove(index);
-                    calculateTotalLaborCost(fields);
-                  }}
-                >
+                <IconButton onClick={() => {
+                  remove(index)
+                  removeRow(fields)
+                }}>
                   <DeleteIcon />
                 </IconButton>
               </TableCell>
