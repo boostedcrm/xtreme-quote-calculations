@@ -44,6 +44,14 @@ const PerDiem = ({ control, watch, getValues, register, setValue }) => {
     name: "perdiem",
   });
 
+  function calculateTotalPerdiemCost(fields) {
+    let totalperdiemCost = fields.reduce((acc, field, i) => {
+      const amount = getValues(`perdiem[${i}].perdiemSubtotal`);
+      return acc + (amount || 0);
+    }, 0);
+    setValue(`totalperdiemCost`, totalperdiemCost);
+  }
+
   return (
     <Box>
       <Typography
@@ -173,17 +181,7 @@ const PerDiem = ({ control, watch, getValues, register, setValue }) => {
                           perdiemSubtotal
                         );
 
-                        let totalperdiemCost = fields.reduce(
-                          (acc, field, i) => {
-                            const amount = getValues(
-                              `perdiem[${i}].perdiemSubtotal`
-                            );
-                            return acc + (amount || 0);
-                          },
-                          0
-                        );
-                        setValue(`totalperdiemCost`, totalperdiemCost);
-
+                        calculateTotalPerdiemCost(fields)
                         field.onChange(e.target.value);
                       }}
                     />
@@ -217,7 +215,12 @@ const PerDiem = ({ control, watch, getValues, register, setValue }) => {
                 )}
               </TableCell>
               <TableCell>
-                <IconButton onClick={() => remove(index)}>
+                <IconButton
+                  onClick={() => {
+                    remove(index);
+                    calculateTotalPerdiemCost(fields);
+                  }}
+                >
                   <DeleteIcon />
                 </IconButton>
               </TableCell>
