@@ -50,6 +50,25 @@ const ExquipmentCost = ({
     name: "equipment",
   });
 
+  function calculateTotal(fields) {
+    let totalEquipmentHours = 0;
+
+    fields.forEach((element, i) => {
+      let days = Number(getValues(`equipment[${i}].days`) || 0);
+      let hoursPerDay = Number(getValues(`equipment[${i}].hoursPerDay`) || 0);
+      
+      totalEquipmentHours = totalEquipmentHours + days * hoursPerDay;
+    });
+
+    setValue(`totalEquipmentHours`, totalEquipmentHours);
+
+    let equipmentTotal = fields.reduce((acc, field, index) => {
+      const amount = getValues(`equipment[${index}].equipmentSubTotal`);
+      return acc + (amount || 0);
+    }, 0);
+    setValue(`equipmentTotal`, equipmentTotal);
+  }
+
   return (
     <Box>
       <Table>
@@ -344,7 +363,12 @@ const ExquipmentCost = ({
                 />
               </TableCell>
               <TableCell>
-                <IconButton onClick={() => remove(index)}>
+                <IconButton
+                  onClick={() => {
+                    remove(index);
+                    calculateTotal(fields);
+                  }}
+                >
                   <DeleteIcon />
                 </IconButton>
               </TableCell>
