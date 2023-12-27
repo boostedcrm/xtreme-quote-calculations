@@ -25,6 +25,33 @@ const VehicleExpense = ({ control, watch, getValues, register, setValue }) => {
     name: "vehicleexpense",
   });
 
+  
+  function calculateTotalCost() {
+    let materialTotalCost = Number(getValues(`materialTotalCost`) || 0);
+    let equipmentTotal = Number(getValues(`equipmentTotal`) || 0);
+    let totalLaborCost = Number(getValues(`totalLaborCost`) || 0);
+
+    let totallodgingCost = Number(getValues(`totallodgingCost`) || 0);
+    let totalperdiemCost = Number(getValues(`totalperdiemCost`) || 0);
+    let totalrentalEquipmenCost = Number(
+      getValues(`totalrentalEquipmenCost`) || 0
+    );
+    let totalVehicleExpenseCost = Number(
+      getValues(`totalVehicleExpenseCost`) || 0
+    );
+
+    let miscellaneousCost =
+      totallodgingCost +
+      totalperdiemCost +
+      totalrentalEquipmenCost +
+      totalVehicleExpenseCost;
+
+    setValue(`miscellaneousCost`, miscellaneousCost);
+    let totalCost =
+      miscellaneousCost + materialTotalCost + equipmentTotal + totalLaborCost;
+    setValue(`totalCost`, totalCost);
+  }
+
   function calculateTotalVehicleExpenseCost(fields) {
     let totalVehicleExpenseCost = fields.reduce((acc, field, index) => {
       const amount = getValues(
@@ -34,6 +61,7 @@ const VehicleExpense = ({ control, watch, getValues, register, setValue }) => {
     }, 0);
 
     setValue(`totalVehicleExpenseCost`, totalVehicleExpenseCost);
+    calculateTotalCost()
   }
 
   return (
@@ -85,20 +113,7 @@ const VehicleExpense = ({ control, watch, getValues, register, setValue }) => {
                           vehicleExpenseSubtotal
                         );
 
-                        let totalVehicleExpenseCost = fields.reduce(
-                          (acc, field, index) => {
-                            const amount = getValues(
-                              `vehicleexpense[${index}].vehicleExpenseSubtotal`
-                            );
-                            return acc + (amount || 0);
-                          },
-                          0
-                        );
-
-                        setValue(
-                          `totalVehicleExpenseCost`,
-                          totalVehicleExpenseCost
-                        );
+                        calculateTotalVehicleExpenseCost(fields)
 
                         field.onChange(e.target.value);
                       }}
@@ -131,21 +146,7 @@ const VehicleExpense = ({ control, watch, getValues, register, setValue }) => {
                           `vehicleexpense[${index}].vehicleExpenseSubtotal`,
                           vehicleExpenseSubtotal
                         );
-
-                        let totalVehicleExpenseCost = fields.reduce(
-                          (acc, field, index) => {
-                            const amount = getValues(
-                              `vehicleexpense[${index}].vehicleExpenseSubtotal`
-                            );
-                            return acc + (amount || 0);
-                          },
-                          0
-                        );
-
-                        setValue(
-                          `totalVehicleExpenseCost`,
-                          totalVehicleExpenseCost
-                        );
+                        calculateTotalVehicleExpenseCost(fields)
 
                         field.onChange(e.target.value);
                       }}
