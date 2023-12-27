@@ -32,6 +32,32 @@ const RentalEquipment = ({ control, watch, getValues, register, setValue }) => {
     name: "rentalequipment",
   });
 
+  function calculateTotalCost() {
+    let materialTotalCost = Number(getValues(`materialTotalCost`) || 0);
+    let equipmentTotal = Number(getValues(`equipmentTotal`) || 0);
+    let totalLaborCost = Number(getValues(`totalLaborCost`) || 0);
+
+    let totallodgingCost = Number(getValues(`totallodgingCost`) || 0);
+    let totalperdiemCost = Number(getValues(`totalperdiemCost`) || 0);
+    let totalrentalEquipmenCost = Number(
+      getValues(`totalrentalEquipmenCost`) || 0
+    );
+    let totalVehicleExpenseCost = Number(
+      getValues(`totalVehicleExpenseCost`) || 0
+    );
+
+    let miscellaneousCost =
+      totallodgingCost +
+      totalperdiemCost +
+      totalrentalEquipmenCost +
+      totalVehicleExpenseCost;
+
+    setValue(`miscellaneousCost`, miscellaneousCost);
+    let totalCost =
+      miscellaneousCost + materialTotalCost + equipmentTotal + totalLaborCost;
+    setValue(`totalCost`, totalCost);
+  }
+
   function calculateTotalRentalEquipmentCost(fields) {
     let totalrentalEquipmenCost = fields.reduce((acc, field, index) => {
       const amount = getValues(
@@ -41,6 +67,7 @@ const RentalEquipment = ({ control, watch, getValues, register, setValue }) => {
     }, 0);
 
     setValue(`totalrentalEquipmenCost`, totalrentalEquipmenCost);
+    calculateTotalCost()
   }
 
   return (
@@ -100,20 +127,7 @@ const RentalEquipment = ({ control, watch, getValues, register, setValue }) => {
                           rentalEquipmentSubtotal
                         );
 
-                        let totalrentalEquipmenCost = fields.reduce(
-                          (acc, field, index) => {
-                            const amount = getValues(
-                              `rentalequipment[${index}].rentalEquipmentSubtotal`
-                            );
-                            return acc + (amount || 0);
-                          },
-                          0
-                        );
-
-                        setValue(
-                          `totalrentalEquipmenCost`,
-                          totalrentalEquipmenCost
-                        );
+                        calculateTotalRentalEquipmentCost(fields)
 
                         field.onChange(e.target.value);
                       }}
