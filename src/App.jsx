@@ -4,7 +4,6 @@ import logo from "../public/logo.png";
 import CloseIcon from "@mui/icons-material/Close";
 import QuoteCalculation from "./page/QuoteCalculation";
 import QuoteStepper from "./page/QuoteStepper";
-import Rayhan from "./components/Rayhan";
 
 const ZOHO = window.ZOHO;
 
