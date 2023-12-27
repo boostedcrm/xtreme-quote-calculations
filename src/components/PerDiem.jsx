@@ -93,13 +93,32 @@ const PerDiem = ({ control, watch, getValues, register, setValue }) => {
                         <TextField {...params} label="" size="small" />
                       )}
                       onChange={(_, data) => {
-                        update(index, {
-                          ...fields[index],
-                          crewSize: 1,
-                          days: 0,
-                          costPerDay: data?.costPerDay,
-                          perdiemSubtotal: 0,
-                        });
+                        if (data) {
+                          const crewSize = Number(
+                            getValues(`perdiem[${index}].crewSize`) || 1
+                          );
+                          const days = Number(
+                            getValues(`perdiem[${index}].days`) || 1
+                          );
+                          update(index, {
+                            ...fields[index],
+                            crewSize: crewSize,
+                            days: days,
+                            costPerDay: data?.costPerDay || 0,
+                            perdiemSubtotal: crewSize * days * data?.costPerDay,
+                          });
+                        } else {
+                          update(index, {
+                            ...fields[index],
+                            name: {},
+                            crewSize: 0,
+                            days: 0,
+                            costPerDay: data?.costPerDay || 0,
+                            perdiemSubtotal: 0,
+                          });
+                        }
+
+                        calculateTotalPerdiemCost(fields);
                         field.onChange(data);
                       }}
                     />
@@ -181,7 +200,7 @@ const PerDiem = ({ control, watch, getValues, register, setValue }) => {
                           perdiemSubtotal
                         );
 
-                        calculateTotalPerdiemCost(fields)
+                        calculateTotalPerdiemCost(fields);
                         field.onChange(e.target.value);
                       }}
                     />
