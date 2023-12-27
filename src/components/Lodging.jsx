@@ -32,12 +32,38 @@ const Lodging = ({ control, watch, getValues, register, setValue }) => {
     name: "lodging",
   });
 
+  function calculateTotalCost() {
+    let materialTotalCost = Number(getValues(`materialTotalCost`) || 0);
+    let equipmentTotal = Number(getValues(`equipmentTotal`) || 0);
+    let totalLaborCost = Number(getValues(`totalLaborCost`) || 0);
+    let totallodgingCost = Number(getValues(`totallodgingCost`) || 0);
+    let totalperdiemCost = Number(getValues(`totalperdiemCost`) || 0);
+    let totalrentalEquipmenCost = Number(
+      getValues(`totalrentalEquipmenCost`) || 0
+    );
+    let totalVehicleExpenseCost = Number(
+      getValues(`totalVehicleExpenseCost`) || 0
+    );
+
+    let miscellaneousCost =
+      totallodgingCost +
+      totalperdiemCost +
+      totalrentalEquipmenCost +
+      totalVehicleExpenseCost;
+
+    setValue(`miscellaneousCost`, miscellaneousCost);
+    let totalCost =
+      miscellaneousCost + materialTotalCost + equipmentTotal + totalLaborCost;
+    setValue(`totalCost`, totalCost);
+  }
+
   function calculateTotalLoadingCost(fields) {
     let totallodgingCost = fields.reduce((acc, field, index) => {
       const amount = getValues(`lodging[${index}].lodgingSubTotal`);
       return acc + (amount || 0);
     }, 0);
     setValue(`totallodgingCost`, totallodgingCost);
+    calculateTotalCost();
   }
 
   return (
@@ -112,6 +138,7 @@ const Lodging = ({ control, watch, getValues, register, setValue }) => {
                           0
                         );
                         setValue(`totallodgingCost`, totallodgingCost);
+                        calculateTotalCost();
 
                         field.onChange(e.target.value);
                       }}
@@ -149,6 +176,7 @@ const Lodging = ({ control, watch, getValues, register, setValue }) => {
                           `lodging[${index}].lodgingSubTotal`,
                           lodgingSubTotal
                         );
+                        calculateTotalLoadingCost(fields);
 
                         field.onChange(e.target.value);
                       }}
@@ -187,16 +215,8 @@ const Lodging = ({ control, watch, getValues, register, setValue }) => {
                           lodgingSubTotal
                         );
 
-                        let totallodgingCost = fields.reduce(
-                          (acc, field, index) => {
-                            const amount = getValues(
-                              `lodging[${index}].lodgingSubTotal`
-                            );
-                            return acc + (amount || 0);
-                          },
-                          0
-                        );
-                        setValue(`totallodgingCost`, totallodgingCost);
+                        calculateTotalLoadingCost(fields);
+
 
                         field.onChange(e.target.value);
                       }}

@@ -54,7 +54,6 @@ const ExquipmentCost = ({
     let materialTotalCost = Number(getValues(`materialTotalCost`) || 0);
     let equipmentTotal = Number(getValues(`equipmentTotal`) || 0);
     let totalLaborCost = Number(getValues(`totalLaborCost`) || 0);
-
     let totallodgingCost = Number(getValues(`totallodgingCost`) || 0);
     let totalperdiemCost = Number(getValues(`totalperdiemCost`) || 0);
     let totalrentalEquipmenCost = Number(
