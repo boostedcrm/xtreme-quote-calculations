@@ -44,6 +44,32 @@ const MaterialRow = ({
 }) => {
   const [product, setProduct] = useState(null);
 
+  function calculateTotalCost() {
+    let materialTotalCost = Number(getValues(`materialTotalCost`) || 0);
+    let equipmentTotal = Number(getValues(`equipmentTotal`) || 0);
+    let totalLaborCost = Number(getValues(`totalLaborCost`) || 0);
+
+    let totallodgingCost = Number(getValues(`totallodgingCost`) || 0);
+    let totalperdiemCost = Number(getValues(`totalperdiemCost`) || 0);
+    let totalrentalEquipmenCost = Number(
+      getValues(`totalrentalEquipmenCost`) || 0
+    );
+    let totalVehicleExpenseCost = Number(
+      getValues(`totalVehicleExpenseCost`) || 0
+    );
+
+    let miscellaneousCost =
+      totallodgingCost +
+      totalperdiemCost +
+      totalrentalEquipmenCost +
+      totalVehicleExpenseCost;
+
+    setValue(`miscellaneousCost`, miscellaneousCost);
+    let totalCost =
+      miscellaneousCost + materialTotalCost + equipmentTotal + totalLaborCost;
+    setValue(`totalCost`, totalCost);
+  }
+
   function calculateTotalMaterialCost(fields) {
     let materialsSubTotal = fields.reduce((acc, field, index) => {
       const amount = getValues(`materials[${index}].total`);
@@ -62,6 +88,7 @@ const MaterialRow = ({
     setValue(`materialTax`, materialTax);
 
     setValue(`materialTotalCost`, materialTotalCost);
+    calculateTotalCost();
   }
 
   return (
@@ -70,6 +97,7 @@ const MaterialRow = ({
         <Controller
           name={`materials[${index}].product`}
           control={control}
+          rules={{ required: true }}
           render={({ field }) => (
             <Autocomplete
               {...field}
@@ -77,10 +105,12 @@ const MaterialRow = ({
               getOptionLabel={(option) => option.Product_Name}
               isOptionEqualToValue={(option, value) => option.id === value.id}
               renderInput={(params) => (
-                <TextField {...params} label="Material" size="small" />
+                <TextField {...params} label="Material" size="small" required />
               )}
               onChange={(_, data) => {
-                let amount = Number(getValues(`materials[${index}].amount` || 0))
+                let amount = Number(
+                  getValues(`materials[${index}].amount` || 0)
+                );
                 update(index, {
                   ...fields[index],
                   size: data?.Size,
@@ -89,7 +119,7 @@ const MaterialRow = ({
                   amount: amount,
                   total: amount * (data?.Unit_Price || 0),
                 });
-                calculateTotalMaterialCost(fields)
+                calculateTotalMaterialCost(fields);
                 return field.onChange(data);
               }}
             />
@@ -198,13 +228,10 @@ const MaterialCosts = ({
   register,
   setValue,
 }) => {
-  
-
   const { fields, append, remove, update } = useFieldArray({
     control,
     name: "materials",
   });
-
 
   const handleAddNew = useCallback(() => append(defaultMaterial), [append]);
 

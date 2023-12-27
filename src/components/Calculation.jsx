@@ -53,7 +53,7 @@ export default function Calculation({
         {renderTextField(
           `miscellaneousCost`,
           "Miscellaneous cost",
-          "2242.78",
+          "",
           control
         )}
       </Grid>

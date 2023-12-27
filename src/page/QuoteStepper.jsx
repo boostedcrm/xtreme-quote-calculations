@@ -40,21 +40,10 @@ export default function QuoteCalculation({
   products,
   ZOHO,
 }) {
+
   const { control, handleSubmit, register, watch, getValues, setValue } =
     useForm({
-      defaultValues: {
-        labor: [
-          {
-            resourceTitle: "",
-            timeFrame: "",
-            days: "",
-            hoursPerDay: "",
-            men: "",
-            costPerHour: "",
-            rowTotal: 0
-          },
-        ],
-      },
+      defaultValues: {},
     });
 
   const [activeStep, setActiveStep] = useState(0);
@@ -69,6 +58,7 @@ export default function QuoteCalculation({
   };
 
   const handleNext = () => {
+    onSubmit();
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
   const handleReset = () => {
@@ -80,6 +70,7 @@ export default function QuoteCalculation({
 
   const onSubmit = (data) => {
     console.log({onSubmit: data});
+    handleClose()
   };
 
   return (
@@ -192,7 +183,7 @@ export default function QuoteCalculation({
             Save
           </Button>
           <Button variant="contained" type="submit">
-            Calculate
+            Save Rayhan
           </Button>
           {activeStep === steps.length - 1 ? (
             <Button variant="contained" type="submit">
