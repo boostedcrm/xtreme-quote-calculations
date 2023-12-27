@@ -18,6 +18,7 @@ export default function Calculation({
   watch,
   getValues,
   register,
+  setValue,
 }) {
   const [clarifications, setClarifications] = useState(null);
 
@@ -77,13 +78,47 @@ export default function Calculation({
         )}
         {renderTextField(`field3`, "Label for Field 3", "2242.78", control)}{" "}
         {/* Replace with actual label */}
-        {renderTextField(`commission`, "Commission", "2242.78", control)}
-        {renderTextField(
-          `commissionPercentage`,
-          "Commission Percentage",
-          "5.00",
-          control
-        )}
+        {renderTextField(`commission`, "Commission", "", control)}
+        <Grid item xs={6}>
+          <Controller
+            name={`commissionPercentage`}
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                sx={{ width: 350 }} // Set the width to 300px
+                label={"Commission Percentage"}
+                variant="outlined"
+                size="small"
+                margin="normal"
+                type="number"
+                onChange={(e) => {
+                  let grossProfitGoal = Number(
+                    getValues(`grossProfitGoal`) || 0
+                  );
+                  let Commission_Percentage = Number(e.target.value) || 5;
+                  let miscellaneousCost = Number(
+                    getValues(`miscellaneousCost`) || 0
+                  );
+                  let totalCost = Number(getValues(`totalCost`) || 0);
+
+                  let commission =
+                    (Commission_Percentage / 100) *
+                    (grossProfitGoal + miscellaneousCost);
+                  let minimumBidToCustomer =
+                    grossProfitGoal + miscellaneousCost + commission;
+                  let grossProfitAmount =
+                    minimumBidToCustomer - (totalCost + commission);
+                  setValue(`commission`, commission);
+                  setValue(`minimumBidToCustomer`, minimumBidToCustomer);
+                  setValue(`grossProfitAmount`, grossProfitAmount);
+
+                  field.onChange(e.target.value);
+                }}
+              />
+            )}
+          />
+        </Grid>
         {renderTextField(
           `minimumBidToCustomer`,
           "Minimum Bid to Customer",
@@ -102,7 +137,44 @@ export default function Calculation({
       </Grid>
       <br />
       <Grid container spacing={2}>
-        {renderTextField(`bidToCustomer`, "Bid To Customer", "", control)}
+        <Grid item xs={6}>
+          <Controller
+            name={`bidToCustomer`}
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                sx={{ width: 350 }} // Set the width to 300px
+                label={"Bid To Customer"}
+                variant="outlined"
+                size="small"
+                margin="normal"
+                type="number"
+                onChange={(e) => {
+                  let totalCost = Number(
+                    getValues(`totalCost`) || 5
+                  );
+                  let commissionPercentage = Number(
+                    getValues(`commissionPercentage`) || 5
+                  );
+                  let bidToCustomer = Number(e.target.value) || 0;
+
+                  let finalCommission =
+                    (commissionPercentage / 100) * bidToCustomer;
+
+                  let finalTotalCost = totalCost + finalCommission;
+
+                  let finalGrossProfit = bidToCustomer - finalTotalCost;
+                  setValue(`finalTotalCost`, finalTotalCost);
+                  setValue(`finalGrossProfit`, finalGrossProfit);
+                  setValue(`finalCommission`, finalCommission);
+
+                  field.onChange(e.target.value);
+                }}
+              />
+            )}
+          />
+        </Grid>
         {renderTextField(
           `commissionPercentageFinal`,
           "Commission Percentage",
@@ -167,7 +239,15 @@ export default function Calculation({
       {clarifications !== null &&
         clarifications.length > 0 &&
         clarifications.map((clarification, index) => (
-          <Box key={index} sx={{display: "flex", gap : 2,marginBottom: 2, alignItems: "center"}}>
+          <Box
+            key={index}
+            sx={{
+              display: "flex",
+              gap: 2,
+              marginBottom: 2,
+              alignItems: "center",
+            }}
+          >
             {renderMultiTextField(
               `Classification_${index + 1}`,
               `Classification ${index + 1}`,
@@ -175,7 +255,10 @@ export default function Calculation({
               control,
               600
             )}
-            <DeleteIcon sx={{cursor: "pointer"}} onClick={() => removeClarification(index)}/>
+            <DeleteIcon
+              sx={{ cursor: "pointer" }}
+              onClick={() => removeClarification(index)}
+            />
           </Box>
         ))}
     </Box>

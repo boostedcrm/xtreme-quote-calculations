@@ -68,6 +68,9 @@ const MaterialRow = ({
     let totalCost =
       miscellaneousCost + materialTotalCost + equipmentTotal + totalLaborCost;
     setValue(`totalCost`, totalCost);
+
+    let grossProfitGoal = (totalCost - miscellaneousCost)/(50/100)
+    setValue(`grossProfitGoal`, grossProfitGoal);
   }
 
   function calculateTotalMaterialCost(fields) {

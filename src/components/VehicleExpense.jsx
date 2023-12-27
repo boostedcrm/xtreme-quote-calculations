@@ -50,6 +50,8 @@ const VehicleExpense = ({ control, watch, getValues, register, setValue }) => {
     let totalCost =
       miscellaneousCost + materialTotalCost + equipmentTotal + totalLaborCost;
     setValue(`totalCost`, totalCost);
+    let grossProfitGoal = (totalCost - miscellaneousCost)/(50/100)
+    setValue(`grossProfitGoal`, grossProfitGoal);
   }
 
   function calculateTotalVehicleExpenseCost(fields) {
