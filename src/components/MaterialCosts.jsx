@@ -44,7 +44,26 @@ const MaterialRow = ({
 }) => {
   const [product, setProduct] = useState(null);
 
-  console.log({ product: product });
+  function setAllValue(fields) {
+    let materialsSubTotal = fields.reduce((acc, field, index) => {
+      const amount = getValues(`materials[${index}].total`);
+      return acc + (amount || 0);
+    }, 0);
+
+    let materialTax = materialsSubTotal * 0.06;
+    let materialWasteShipCost = materialsSubTotal * 0.16;
+    let materialTotalCost =
+      materialsSubTotal + materialWasteShipCost + materialTax;
+
+    setValue(`materialsSubTotal`, materialsSubTotal);
+
+    setValue(`materialWasteShipCost`, materialWasteShipCost);
+
+    setValue(`materialTax`, materialTax);
+
+    setValue(`materialTotalCost`, materialTotalCost);
+  }
+
   return (
     <TableRow key={item.id}>
       <TableCell sx={{ width: "150px" }}>
@@ -108,75 +127,18 @@ const MaterialRow = ({
                 type="number"
                 fullWidth
                 onChange={(e) => {
-                  // console.log({data: e});
-                  // e.preventDefault;
-                  // update(index, {
-                  //   ...fields[index],
-                  //   total:
-                  //     Number(e.target.value) * Number(fields[index]?.pricePer),
-                  // });
-
                   setValue(
                     `materials[${index}].total`,
                     Number(e.target.value) *
                       Number(getValues(`materials[${index}].pricePer`))
                   );
-                  // setValue(
-                  //   `materialsSubTotal`,
-                  //   fields.reduce((acc, field, index) => {
-                  //     const amount = getValues(`materials[${index}].total`);
-
-                  //     return acc + (amount || 0);
-                  //   }, 0)
-                  // );
-
-                  // setValue(
-                  //   `materialWasteShipCost`,
-                  //   fields.reduce((acc, field, index) => {
-                  //     const amount = getValues(`materials[${index}].total`);
-                  //     return (acc + (amount || 0)) * 0.16;
-                  //   }, 0)
-                  // );
-
-                  // setValue(
-                  //   `materialTax`,
-                  //   fields.reduce((acc, field, index) => {
-                  //     const amount = getValues(`materials[${index}].total`);
-                  //     return (acc + (amount || 0)) * 0.06;
-                  //   }, 0)
-                  // );
-
-                  let materialsSubTotal = fields.reduce((acc, field, index) => {
-                    const amount = getValues(`materials[${index}].total`);
-                    return acc + (amount || 0);
-                  }, 0);
-
-                  let materialTax = materialsSubTotal * 0.06;
-                  let materialWasteShipCost = materialsSubTotal * 0.16;
-                  let materialTotalCost =
-                    materialsSubTotal + materialWasteShipCost + materialTax;
-
-                  setValue(`materialsSubTotal`, materialsSubTotal);
-
-                  setValue(`materialWasteShipCost`, materialWasteShipCost);
-
-                  setValue(`materialTax`, materialTax);
-
-                  setValue(`materialTotalCost`, materialTotalCost);
-
+                  setAllValue(fields);
                   field.onChange(e.target.value);
                 }}
               />
             )}
           />
         </Grid>
-
-        {/* {renderTextField(
-          `materials[${index}].amount`,
-          "",
-          product?.Product_Name || "",
-          control
-        )} */}
       </TableCell>
       <TableCell>
         <Grid item xs={4}>
@@ -197,38 +159,12 @@ const MaterialRow = ({
                   startAdornment: <Typography>$</Typography>,
                 }}
                 onChange={(e) => {
-                  // console.log({data: e});
-                  // e.preventDefault;
-                  // update(index, {
-                  //   ...fields[index],
-                  //   total:
-                  //     Number(e.target.value) * Number(fields[index]?.pricePer),
-                  // });
-
                   setValue(
                     `materials[${index}].total`,
                     Number(e.target.value) *
                       Number(getValues(`materials[${index}].amount`))
                   );
-
-                  let materialsSubTotal = fields.reduce((acc, field, index) => {
-                    const amount = getValues(`materials[${index}].total`);
-                    return acc + (amount || 0);
-                  }, 0);
-
-                  let materialTax = materialsSubTotal * 0.06;
-                  let materialWasteShipCost = materialsSubTotal * 0.16;
-                  let materialTotalCost =
-                    materialsSubTotal + materialWasteShipCost + materialTax;
-
-                  setValue(`materialsSubTotal`, materialsSubTotal);
-
-                  setValue(`materialWasteShipCost`, materialWasteShipCost);
-
-                  setValue(`materialTax`, materialTax);
-
-                  setValue(`materialTotalCost`, materialTotalCost);
-
+                  setAllValue(fields);
                   field.onChange(e.target.value);
                 }}
               />
@@ -237,11 +173,15 @@ const MaterialRow = ({
         </Grid>
       </TableCell>
       <TableCell>
-        {/* <TextField size="small" fullWidth InputProps={{ readOnly: true }} /> */}
         {renderTextField(`materials[${index}].total`, "", "", control, true)}
       </TableCell>
       <TableCell>
-        <IconButton onClick={() => remove(index)}>
+        <IconButton
+          onClick={() => {
+            remove(index);
+            setAllValue(fields);
+          }}
+        >
           <DeleteIcon />
         </IconButton>
       </TableCell>
@@ -256,18 +196,13 @@ const MaterialCosts = ({
   register,
   setValue,
 }) => {
-  // const { control, handleSubmit, register, getValues } = useForm({
-  //   defaultValues: {
-  //     materials: [defaultMaterial],
-  //   },
-  // });
+  
 
   const { fields, append, remove, update } = useFieldArray({
     control,
     name: "materials",
   });
 
-  // const onSubmit = (data) => console.log(data);
 
   const handleAddNew = useCallback(() => append(defaultMaterial), [append]);
 
@@ -349,31 +284,9 @@ const MaterialCosts = ({
               />
             )}
           />
-          {/* <TextField
-            name={"materialsSubTotal"}
-            label="Mateiral Subtotal"
-            size="small"
-            fullWidth
-            margin="normal"
-            value={materialTotal}
-            InputProps={{
-              readOnly: true,
-              startAdornment: <Typography>$</Typography>,
-            }}
-          /> */}
         </Grid>
         <Grid item xs={3}>
           {" "}
-          {/* <TextField
-            label="Waste and Ship Cost"
-            size="small"
-            fullWidth
-            margin="normal"
-            InputProps={{
-              readOnly: true,
-              startAdornment: <Typography>$</Typography>,
-            }}
-          /> */}
           <Controller
             name={`materialWasteShipCost`}
             control={control}
@@ -416,16 +329,6 @@ const MaterialCosts = ({
         </Grid>
         <Grid item xs={3}>
           {" "}
-          {/* <TextField
-            label="Material Cost"
-            size="small"
-            fullWidth
-            margin="normal"
-            InputProps={{
-              readOnly: true,
-              startAdornment: <Typography>$</Typography>,
-            }}
-          /> */}
           <Controller
             name={`materialTotalCost`}
             control={control}
@@ -445,12 +348,6 @@ const MaterialCosts = ({
             )}
           />
         </Grid>
-        {/* <Box sx={{ padding: "5px 20px" }}>
-          <FormControlLabel
-            control={<Checkbox {...register("performCalculations")} />}
-            label="Perform calculations."
-          />
-        </Box> */}
       </Grid>
     </Box>
   );
