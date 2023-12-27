@@ -44,12 +44,39 @@ const PerDiem = ({ control, watch, getValues, register, setValue }) => {
     name: "perdiem",
   });
 
+  function calculateTotalCost() {
+    let materialTotalCost = Number(getValues(`materialTotalCost`) || 0);
+    let equipmentTotal = Number(getValues(`equipmentTotal`) || 0);
+    let totalLaborCost = Number(getValues(`totalLaborCost`) || 0);
+
+    let totallodgingCost = Number(getValues(`totallodgingCost`) || 0);
+    let totalperdiemCost = Number(getValues(`totalperdiemCost`) || 0);
+    let totalrentalEquipmenCost = Number(
+      getValues(`totalrentalEquipmenCost`) || 0
+    );
+    let totalVehicleExpenseCost = Number(
+      getValues(`totalVehicleExpenseCost`) || 0
+    );
+
+    let miscellaneousCost =
+      totallodgingCost +
+      totalperdiemCost +
+      totalrentalEquipmenCost +
+      totalVehicleExpenseCost;
+
+    setValue(`miscellaneousCost`, miscellaneousCost);
+    let totalCost =
+      miscellaneousCost + materialTotalCost + equipmentTotal + totalLaborCost;
+    setValue(`totalCost`, totalCost);
+  }
+
   function calculateTotalPerdiemCost(fields) {
     let totalperdiemCost = fields.reduce((acc, field, i) => {
       const amount = getValues(`perdiem[${i}].perdiemSubtotal`);
       return acc + (amount || 0);
     }, 0);
     setValue(`totalperdiemCost`, totalperdiemCost);
+    calculateTotalCost()
   }
 
   return (
@@ -154,16 +181,8 @@ const PerDiem = ({ control, watch, getValues, register, setValue }) => {
                           perdiemSubtotal
                         );
 
-                        let totalperdiemCost = fields.reduce(
-                          (acc, field, i) => {
-                            const amount = getValues(
-                              `perdiem[${i}].perdiemSubtotal`
-                            );
-                            return acc + (amount || 0);
-                          },
-                          0
-                        );
-                        setValue(`totalperdiemCost`, totalperdiemCost);
+                        calculateTotalPerdiemCost(fields);
+
 
                         field.onChange(e.target.value);
                       }}
