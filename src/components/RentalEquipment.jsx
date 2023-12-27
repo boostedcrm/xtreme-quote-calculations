@@ -32,9 +32,16 @@ const RentalEquipment = ({ control, watch, getValues, register, setValue }) => {
     name: "rentalequipment",
   });
 
-  // const onSubmit = (data) => {
-  //   console.log(data);
-  // };
+  function calculateTotalRentalEquipmentCost(fields) {
+    let totalrentalEquipmenCost = fields.reduce((acc, field, index) => {
+      const amount = getValues(
+        `rentalequipment[${index}].rentalEquipmentSubtotal`
+      );
+      return acc + (amount || 0);
+    }, 0);
+
+    setValue(`totalrentalEquipmenCost`, totalrentalEquipmenCost);
+  }
 
   return (
     <Box>
@@ -115,7 +122,12 @@ const RentalEquipment = ({ control, watch, getValues, register, setValue }) => {
                 />
               </TableCell>
               <TableCell>
-                {renderTextField(`rentalequipment[${index}].tax`, "", "", control)}
+                {renderTextField(
+                  `rentalequipment[${index}].tax`,
+                  "",
+                  "",
+                  control
+                )}
               </TableCell>
               <TableCell>
                 {renderTextField(
@@ -126,7 +138,12 @@ const RentalEquipment = ({ control, watch, getValues, register, setValue }) => {
                 )}
               </TableCell>
               <TableCell>
-                <IconButton onClick={() => remove(index)}>
+                <IconButton
+                  onClick={() => {
+                    remove(index);
+                    calculateTotalRentalEquipmentCost(fields);
+                  }}
+                >
                   <DeleteIcon />
                 </IconButton>
               </TableCell>
