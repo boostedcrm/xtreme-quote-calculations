@@ -50,6 +50,32 @@ const ExquipmentCost = ({
     name: "equipment",
   });
 
+  function calculateTotalCost() {
+    let materialTotalCost = Number(getValues(`materialTotalCost`) || 0);
+    let equipmentTotal = Number(getValues(`equipmentTotal`) || 0);
+    let totalLaborCost = Number(getValues(`totalLaborCost`) || 0);
+
+    let totallodgingCost = Number(getValues(`totallodgingCost`) || 0);
+    let totalperdiemCost = Number(getValues(`totalperdiemCost`) || 0);
+    let totalrentalEquipmenCost = Number(
+      getValues(`totalrentalEquipmenCost`) || 0
+    );
+    let totalVehicleExpenseCost = Number(
+      getValues(`totalVehicleExpenseCost`) || 0
+    );
+
+    let miscellaneousCost =
+      totallodgingCost +
+      totalperdiemCost +
+      totalrentalEquipmenCost +
+      totalVehicleExpenseCost;
+
+    setValue(`miscellaneousCost`, miscellaneousCost);
+    let totalCost =
+      miscellaneousCost + materialTotalCost + equipmentTotal + totalLaborCost;
+    setValue(`totalCost`, totalCost);
+  }
+
   function calculateTotalEquipmentCost(fields) {
     let totalEquipmentHours = 0;
 
@@ -67,6 +93,7 @@ const ExquipmentCost = ({
       return acc + (amount || 0);
     }, 0);
     setValue(`equipmentTotal`, equipmentTotal);
+    calculateTotalCost();
   }
 
   return (
@@ -190,6 +217,7 @@ const ExquipmentCost = ({
                           0
                         );
                         setValue(`equipmentTotal`, equipmentTotal);
+                        calculateTotalCost();
 
                         field.onChange(e.target.value);
                       }}
@@ -258,6 +286,7 @@ const ExquipmentCost = ({
                           0
                         );
                         setValue(`equipmentTotal`, equipmentTotal);
+                        calculateTotalCost();
 
                         field.onChange(e.target.value);
                       }}
@@ -324,6 +353,7 @@ const ExquipmentCost = ({
                           0
                         );
                         setValue(`equipmentTotal`, equipmentTotal);
+                        calculateTotalCost();
 
                         field.onChange(e.target.value);
                       }}
@@ -372,6 +402,7 @@ const ExquipmentCost = ({
                           0
                         );
                         setValue(`equipmentTotal`, equipmentTotal);
+                        calculateTotalCost();
 
                         field.onChange(e.target.value);
                       }}

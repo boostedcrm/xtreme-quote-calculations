@@ -71,6 +71,7 @@ const MaterialRow = ({
   }
 
   function calculateTotalMaterialCost(fields) {
+    // test
     let materialsSubTotal = fields.reduce((acc, field, index) => {
       const amount = getValues(`materials[${index}].total`);
       return acc + (amount || 0);

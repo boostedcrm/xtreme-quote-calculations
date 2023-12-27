@@ -50,6 +50,32 @@ const LaborCosts = ({ ZOHO, control, getValues, register, setValue }) => {
     console.log(data);
   };
 
+  function calculateTotalCost() {
+    let materialTotalCost = Number(getValues(`materialTotalCost`) || 0);
+    let equipmentTotal = Number(getValues(`equipmentTotal`) || 0);
+    let totalLaborCost = Number(getValues(`totalLaborCost`) || 0);
+
+    let totallodgingCost = Number(getValues(`totallodgingCost`) || 0);
+    let totalperdiemCost = Number(getValues(`totalperdiemCost`) || 0);
+    let totalrentalEquipmenCost = Number(
+      getValues(`totalrentalEquipmenCost`) || 0
+    );
+    let totalVehicleExpenseCost = Number(
+      getValues(`totalVehicleExpenseCost`) || 0
+    );
+
+    let miscellaneousCost =
+      totallodgingCost +
+      totalperdiemCost +
+      totalrentalEquipmenCost +
+      totalVehicleExpenseCost;
+
+    setValue(`miscellaneousCost`, miscellaneousCost);
+    let totalCost =
+      miscellaneousCost + materialTotalCost + equipmentTotal + totalLaborCost;
+    setValue(`totalCost`, totalCost);
+  }
+
   function calculateTotalLaborCost(fields) {
     let totalManHours = 0;
 
@@ -69,6 +95,7 @@ const LaborCosts = ({ ZOHO, control, getValues, register, setValue }) => {
       return acc + (amount || 0);
     }, 0);
     setValue(`totalLaborCost`, laborTotal);
+    calculateTotalCost();
   }
 
   return (
@@ -107,11 +134,15 @@ const LaborCosts = ({ ZOHO, control, getValues, register, setValue }) => {
                         <TextField {...params} label="" size="small" />
                       )}
                       onChange={(_, data) => {
-                        let timeFrame = Number(getValues(`labor[${index}].timeFrame`) || 0);
+                        let timeFrame = Number(
+                          getValues(`labor[${index}].timeFrame`) || 0
+                        );
 
                         let men = Number(getValues(`labor[${index}].men`) || 0);
 
-                        let days = Number(getValues(`labor[${index}].days`) || 0);
+                        let days = Number(
+                          getValues(`labor[${index}].days`) || 0
+                        );
                         let hoursPerDay = Number(
                           getValues(`labor[${index}].hoursPerDay`) || 0
                         );
@@ -122,9 +153,14 @@ const LaborCosts = ({ ZOHO, control, getValues, register, setValue }) => {
                           hoursPerDay: hoursPerDay,
                           men: men,
                           costPerHour: data?.Rate || 0,
-                          rowTotal: timeFrame * days * hoursPerDay * men * (data?.Rate || 0),
+                          rowTotal:
+                            timeFrame *
+                            days *
+                            hoursPerDay *
+                            men *
+                            (data?.Rate || 0),
                         });
-                        calculateTotalLaborCost(fields)
+                        calculateTotalLaborCost(fields);
                         return field.onChange(data);
                       }}
                     />
@@ -162,6 +198,7 @@ const LaborCosts = ({ ZOHO, control, getValues, register, setValue }) => {
                         }, 0);
                         setValue(`totalLaborCost`, laborTotal);
 
+                        calculateTotalCost();
                         field.onChange(e.target.value);
                       }}
                     />
@@ -217,6 +254,7 @@ const LaborCosts = ({ ZOHO, control, getValues, register, setValue }) => {
                         }, 0);
                         setValue(`totalLaborCost`, laborTotal);
 
+                        calculateTotalCost();
                         field.onChange(e.target.value);
                       }}
                     />
@@ -270,6 +308,7 @@ const LaborCosts = ({ ZOHO, control, getValues, register, setValue }) => {
                         }, 0);
                         setValue(`totalLaborCost`, laborTotal);
 
+                        calculateTotalCost();
                         field.onChange(e.target.value);
                       }}
                     />
@@ -324,6 +363,7 @@ const LaborCosts = ({ ZOHO, control, getValues, register, setValue }) => {
                         }, 0);
                         setValue(`totalLaborCost`, laborTotal);
 
+                        calculateTotalCost();
                         field.onChange(e.target.value);
                       }}
                     />
@@ -361,6 +401,7 @@ const LaborCosts = ({ ZOHO, control, getValues, register, setValue }) => {
                         }, 0);
                         setValue(`totalLaborCost`, laborTotal);
 
+                        calculateTotalCost();
                         field.onChange(e.target.value);
                       }}
                     />
