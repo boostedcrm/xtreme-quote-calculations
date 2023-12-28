@@ -471,7 +471,7 @@ const LaborCosts = ({ ZOHO, control, getValues, register, setValue }) => {
           <Grid item xs={6}>
             {" "}
             <TextField
-              label="Total Man Hours"
+              label="Total Labor Hours"
               {...register("totalLaborCost")}
               size="small"
               fullWidth

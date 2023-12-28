@@ -65,6 +65,20 @@ const XtremeQuoteForm = ({ dealData }) => {
         {renderTextField("Quote_Type", "Quote Type", dealData?.Quote_Type || "", control)}
         {renderTextField("Total_Square_Feet", "Total Square Feet", "", control)}
       </Grid>
+      <Grid container>
+      {renderDatePicker(
+          'EstPerformDate',
+          'Est Perform Date',
+          '',
+          control
+        )}
+         {renderDatePicker(
+          'QuoteDueDate',
+          'Quote Due Date',
+          '',
+          control
+        )}
+      </Grid>
       {/* <Button type="submit" variant="contained" color="primary" style={{ marginTop: 16 }}>
         Submit Quote
       </Button> */}
@@ -239,56 +253,45 @@ const renderMultiTextField = (
   </Grid>
 );
 
-const renderDatePicker = (name, label, defaultValue, control) => {
+const renderDatePicker = (  name,
+  label,
+  defaultValue,
+  control,
+) => {
   return (
-    <Grid item xs={6}>
-      <FormControlLabel
-        labelPlacement="start"
-        control={
+<Grid item xs={6}>
+<LocalizationProvider dateAdapter={AdapterDayjs}>
           <Controller
             name={name}
             control={control}
             defaultValue={defaultValue}
             render={({ field }) => (
-              <div style={{ display: "flex" }}>
-                <div style={{ width: "180px", flexShrink: 0 }}>
-                  <label>{label}</label>
-                </div>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    disablePast
-                    {...field}
-                    inputProps={{
-                      style: {
-                        height: 18,
-                      },
-                    }}
-                    onChange={(newValue) => {
-                      field.onChange(dayjs(newValue).format("YYYY-MM-DD"));
-                    }}
-                    PopperProps={{
-                      placement: "right-end",
-                    }}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        required
-                        fullWidth
-                        size="small"
-                        InputLabelProps={{ shrink: true }}
-                        sx={{ width: "223px" }}
-                      />
-                    )}
+              <DatePicker
+                disablePast
+                label={label}
+                {...field}
+                onChange={(newValue) => {
+                  field.onChange(dayjs(newValue).format('YYYY-MM-DD'));
+                }}
+                PopperProps={{
+                  placement: 'right-end',
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    required
+                    fullWidth
+                    size="small"
+                    InputLabelProps={{ shrink: true }}
                   />
-                </LocalizationProvider>
-              </div>
+                )}
+              />
             )}
           />
-        }
-      />
+        </LocalizationProvider>
     </Grid>
-  );
-};
+  )
+}
 
 const renderMultiSelect = (
   name,
