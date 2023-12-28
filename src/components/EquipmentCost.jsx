@@ -458,7 +458,7 @@ const ExquipmentCost = ({
           <Grid item xs={6}>
             {" "}
             <TextField
-              label="Total Exquipment Hours"
+              label="Total Equipment Hours"
               {...register("totalEquipmentHours")}
               size="small"
               fullWidth
@@ -475,7 +475,7 @@ const ExquipmentCost = ({
           <Grid item xs={6}>
             {" "}
             <TextField
-              label="Total Exquipment Cost"
+              label="Total Equipment Cost"
               {...register("equipmentTotal")}
               size="small"
               fullWidth

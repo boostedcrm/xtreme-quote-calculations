@@ -185,7 +185,7 @@ const RentalEquipment = ({ control, watch, getValues, register, setValue }) => {
           <Grid item xs={6}>
             {" "}
             <TextField
-              label="Total Rental Equipmen Cost"
+              label="Total Rental Equipment Cost"
               {...register("totalrentalEquipmenCost")}
               size="small"
               fullWidth

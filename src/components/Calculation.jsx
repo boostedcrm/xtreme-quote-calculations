@@ -242,8 +242,8 @@ export default function Calculation({
             }}
           >
             {renderMultiTextField(
-              `Classification_${index + 1}`,
-              `Classification ${index + 1}`,
+              `Clarifications${index + 1}`,
+              `Clarifications ${index + 1}`,
               clarification.Description,
               control,
               600

@@ -275,7 +275,7 @@ const Lodging = ({ control, watch, getValues, register, setValue }) => {
           <Grid item xs={6}>
             {" "}
             <TextField
-              label="Total Loading Cost"
+              label="Total Lodging Cost"
               {...register("totallodgingCost")}
               size="small"
               fullWidth
