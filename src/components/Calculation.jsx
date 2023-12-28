@@ -43,13 +43,6 @@ export default function Calculation({
 
   return (
     <Box p={2}>
-      <FormControlLabel
-        control={<Checkbox />}
-        label="Perform calculations."
-        style={{ marginBottom: "8px" }}
-      />
-      <br />
-      <br />
       <Grid containe style={{ marginBottom: "15px" }}>
         {renderTextField(
           `miscellaneousCost`,
@@ -68,7 +61,7 @@ export default function Calculation({
           "2242.78",
           control
         )}
-        {renderTextField(`field2`, "Label for Field 2", "2242.78", control)}{" "}
+        {renderTextField(`field2`, "", "2242.78", control)}{" "}
         {/* Replace with actual label */}
         {renderTextField(
           `travelAndMisc`,
@@ -76,8 +69,10 @@ export default function Calculation({
           "2242.78",
           control
         )}
-        {renderTextField(`field3`, "Label for Field 3", "2242.78", control)}{" "}
+        {renderTextField(`field3`, "", "2242.78", control)}{" "}
         {/* Replace with actual label */}
+      </Grid>
+      <Grid container>
         {renderTextField(`commission`, "Commission", "", control)}
         <Grid item xs={6}>
           <Controller
@@ -119,13 +114,18 @@ export default function Calculation({
             )}
           />
         </Grid>
-        {renderTextField(
+      </Grid>
+      <Grid container>
+      {renderTextField(
           `minimumBidToCustomer`,
           "Minimum Bid to Customer",
           "",
           control
         )}
-        {renderTextField(`field4`, "Label for Field 4", "", control)}{" "}
+        {renderTextField(`field4`, "", "", control)}{" "}
+      </Grid>
+      <br />
+      <Grid container>
         {/* Replace with actual label */}
         {renderTextField(
           `grossProfitAmount`,
@@ -151,9 +151,7 @@ export default function Calculation({
                 margin="normal"
                 type="number"
                 onChange={(e) => {
-                  let totalCost = Number(
-                    getValues(`totalCost`) || 5
-                  );
+                  let totalCost = Number(getValues(`totalCost`) || 5);
                   let commissionPercentage = Number(
                     getValues(`commissionPercentage`) || 5
                   );
@@ -215,11 +213,6 @@ export default function Calculation({
           control
         )}
       </Grid>
-      <FormControlLabel
-        control={<Checkbox />}
-        label="Perform calculations."
-        style={{ marginBottom: "8px" }}
-      />
       <br />
       <Grid container spacing={2}>
         {renderTextField(
