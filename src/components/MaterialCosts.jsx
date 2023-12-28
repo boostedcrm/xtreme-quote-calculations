@@ -368,7 +368,7 @@ const MaterialCosts = ({
             render={({ field }) => (
               <TextField
                 {...field}
-                label={"Material Cost"}
+                label={"Total Material Cost"}
                 variant="outlined"
                 size="small"
                 margin="normal"
