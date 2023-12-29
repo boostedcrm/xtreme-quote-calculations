@@ -96,7 +96,7 @@ const RentalEquipment = ({ control, watch, getValues, register, setValue }) => {
         <TableBody>
           {fields.map((item, index) => (
             <TableRow key={item.id}>
-              <TableCell>
+              <TableCell sx={{paddingTop: 3 }}>
                 {renderTextField(
                   `rentalequipment[${index}].equipmentName`,
                   "Equipment Name",

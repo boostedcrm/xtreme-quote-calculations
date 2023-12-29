@@ -106,7 +106,7 @@ const PerDiem = ({ control, watch, getValues, register, setValue }) => {
         <TableBody>
           {fields.map((item, index) => (
             <TableRow key={item.id}>
-              <TableCell sx={{ width: "150px" }}>
+              <TableCell sx={{ width: "150px",paddingTop: 3  }}>
                 <Controller
                   name={`perdiem[${index}].name`}
                   control={control}
