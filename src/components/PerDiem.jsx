@@ -64,12 +64,13 @@ const PerDiem = ({ control, watch, getValues, register, setValue }) => {
       totalrentalEquipmenCost +
       totalVehicleExpenseCost;
 
-    setValue(`miscellaneousCost`, miscellaneousCost);
+    setValue(`miscellaneousCost`, Number(miscellaneousCost.toFixed(2)));
     let totalCost =
       miscellaneousCost + materialTotalCost + equipmentTotal + totalLaborCost;
-    setValue(`totalCost`, totalCost);
-    let grossProfitGoal = (totalCost - miscellaneousCost)/(50/100)
-    setValue(`grossProfitGoal`, grossProfitGoal);
+    setValue(`totalCost`, Number(totalCost.toFixed(2)));
+
+    let grossProfitGoal = (totalCost - miscellaneousCost) / (50 / 100);
+    setValue(`grossProfitGoal`, Number(grossProfitGoal.toFixed(2)));
   }
 
   function calculateTotalPerdiemCost(fields) {
@@ -77,7 +78,7 @@ const PerDiem = ({ control, watch, getValues, register, setValue }) => {
       const amount = getValues(`perdiem[${i}].perdiemSubtotal`);
       return acc + (amount || 0);
     }, 0);
-    setValue(`totalperdiemCost`, totalperdiemCost);
+    setValue(`totalperdiemCost`,Number(totalperdiemCost.toFixed(2)) );
     calculateTotalCost()
   }
 
@@ -180,7 +181,7 @@ const PerDiem = ({ control, watch, getValues, register, setValue }) => {
 
                         setValue(
                           `perdiem[${index}].perdiemSubtotal`,
-                          perdiemSubtotal
+                          Number(perdiemSubtotal.toFixed(2))
                         );
 
                         calculateTotalPerdiemCost(fields);
@@ -218,7 +219,7 @@ const PerDiem = ({ control, watch, getValues, register, setValue }) => {
 
                         setValue(
                           `perdiem[${index}].perdiemSubtotal`,
-                          perdiemSubtotal
+                          Number(perdiemSubtotal.toFixed(2))
                         );
 
                         calculateTotalPerdiemCost(fields);
