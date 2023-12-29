@@ -52,12 +52,13 @@ const RentalEquipment = ({ control, watch, getValues, register, setValue }) => {
       totalrentalEquipmenCost +
       totalVehicleExpenseCost;
 
-    setValue(`miscellaneousCost`, miscellaneousCost);
+    setValue(`miscellaneousCost`, Number(miscellaneousCost.toFixed(2)));
     let totalCost =
       miscellaneousCost + materialTotalCost + equipmentTotal + totalLaborCost;
-    setValue(`totalCost`, totalCost);
-    let grossProfitGoal = (totalCost - miscellaneousCost)/(50/100)
-    setValue(`grossProfitGoal`, grossProfitGoal);
+    setValue(`totalCost`, Number(totalCost.toFixed(2)));
+
+    let grossProfitGoal = (totalCost - miscellaneousCost) / (50 / 100);
+    setValue(`grossProfitGoal`, Number(grossProfitGoal.toFixed(2)));
   }
 
   function calculateTotalRentalEquipmentCost(fields) {
@@ -68,8 +69,11 @@ const RentalEquipment = ({ control, watch, getValues, register, setValue }) => {
       return acc + (amount || 0);
     }, 0);
 
-    setValue(`totalrentalEquipmenCost`, totalrentalEquipmenCost);
-    calculateTotalCost()
+    setValue(
+      `totalrentalEquipmenCost`,
+      Number(totalrentalEquipmenCost.toFixed(2))
+    );
+    calculateTotalCost();
   }
 
   return (
@@ -123,13 +127,16 @@ const RentalEquipment = ({ control, watch, getValues, register, setValue }) => {
 
                         let rentalEquipmentSubtotal = rate + tax;
 
-                        setValue(`rentalequipment[${index}].tax`, tax);
+                        setValue(
+                          `rentalequipment[${index}].tax`,
+                          Number(tax.toFixed(2))
+                        );
                         setValue(
                           `rentalequipment[${index}].rentalEquipmentSubtotal`,
-                          rentalEquipmentSubtotal
+                          Number(rentalEquipmentSubtotal.toFixed(2))
                         );
 
-                        calculateTotalRentalEquipmentCost(fields)
+                        calculateTotalRentalEquipmentCost(fields);
 
                         field.onChange(e.target.value);
                       }}
@@ -142,7 +149,9 @@ const RentalEquipment = ({ control, watch, getValues, register, setValue }) => {
                   `rentalequipment[${index}].tax`,
                   "",
                   "",
-                  control
+                  control,
+                  "small",
+                  true
                 )}
               </TableCell>
               <TableCell>
@@ -237,7 +246,7 @@ const renderTextField = (
   defaultValue,
   control,
   size = "small",
-  labelWidth = 180
+  readOnly = false
 ) => (
   <Grid item xs={6}>
     <Controller
@@ -245,7 +254,15 @@ const renderTextField = (
       control={control}
       defaultValue={defaultValue}
       render={({ field }) => (
-        <TextField label="" variant="outlined" {...field} size={size} />
+        <TextField
+          label=""
+          variant="outlined"
+          {...field}
+          size={size}
+          InputProps={{
+            readOnly: readOnly
+          }}
+        />
       )}
     />
   </Grid>
