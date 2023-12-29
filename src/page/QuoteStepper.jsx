@@ -53,6 +53,7 @@ export default function QuoteCalculation({
   const steps = getSteps();
 
   const handleStep = (step) => () => {
+    setValue("step", step);
     setActiveStep(step);
   };
 
