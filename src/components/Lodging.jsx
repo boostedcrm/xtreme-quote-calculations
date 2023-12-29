@@ -36,6 +36,7 @@ const Lodging = ({ control, watch, getValues, register, setValue }) => {
     let materialTotalCost = Number(getValues(`materialTotalCost`) || 0);
     let equipmentTotal = Number(getValues(`equipmentTotal`) || 0);
     let totalLaborCost = Number(getValues(`totalLaborCost`) || 0);
+
     let totallodgingCost = Number(getValues(`totallodgingCost`) || 0);
     let totalperdiemCost = Number(getValues(`totalperdiemCost`) || 0);
     let totalrentalEquipmenCost = Number(
@@ -51,12 +52,13 @@ const Lodging = ({ control, watch, getValues, register, setValue }) => {
       totalrentalEquipmenCost +
       totalVehicleExpenseCost;
 
-    setValue(`miscellaneousCost`, miscellaneousCost);
+    setValue(`miscellaneousCost`, Number(miscellaneousCost.toFixed(2)));
     let totalCost =
       miscellaneousCost + materialTotalCost + equipmentTotal + totalLaborCost;
-    setValue(`totalCost`, totalCost);
-    let grossProfitGoal = (totalCost - miscellaneousCost)/(50/100)
-    setValue(`grossProfitGoal`, grossProfitGoal);
+    setValue(`totalCost`, Number(totalCost.toFixed(2)));
+
+    let grossProfitGoal = (totalCost - miscellaneousCost) / (50 / 100);
+    setValue(`grossProfitGoal`, Number(grossProfitGoal.toFixed(2)));
   }
 
   function calculateTotalLoadingCost(fields) {
@@ -64,7 +66,7 @@ const Lodging = ({ control, watch, getValues, register, setValue }) => {
       const amount = getValues(`lodging[${index}].lodgingSubTotal`);
       return acc + (amount || 0);
     }, 0);
-    setValue(`totallodgingCost`, totallodgingCost);
+    setValue(`totallodgingCost`, Number(totallodgingCost.toFixed(2)) );
     calculateTotalCost();
   }
 
@@ -127,7 +129,7 @@ const Lodging = ({ control, watch, getValues, register, setValue }) => {
 
                         setValue(
                           `lodging[${index}].lodgingSubTotal`,
-                          lodgingSubTotal
+                          Number(lodgingSubTotal.toFixed(2))
                         );
 
                         let totallodgingCost = fields.reduce(
@@ -139,7 +141,7 @@ const Lodging = ({ control, watch, getValues, register, setValue }) => {
                           },
                           0
                         );
-                        setValue(`totallodgingCost`, totallodgingCost);
+                        setValue(`totallodgingCost`,Number(totallodgingCost.toFixed(2)) );
                         calculateTotalCost();
 
                         field.onChange(e.target.value);
@@ -176,7 +178,7 @@ const Lodging = ({ control, watch, getValues, register, setValue }) => {
 
                         setValue(
                           `lodging[${index}].lodgingSubTotal`,
-                          lodgingSubTotal
+                          Number(lodgingSubTotal.toFixed(2))
                         );
                         calculateTotalLoadingCost(fields);
 
@@ -214,7 +216,7 @@ const Lodging = ({ control, watch, getValues, register, setValue }) => {
 
                         setValue(
                           `lodging[${index}].lodgingSubTotal`,
-                          lodgingSubTotal
+                          Number(lodgingSubTotal.toFixed(2))
                         );
 
                         calculateTotalLoadingCost(fields);
