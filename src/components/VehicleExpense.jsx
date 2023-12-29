@@ -46,12 +46,13 @@ const VehicleExpense = ({ control, watch, getValues, register, setValue }) => {
       totalrentalEquipmenCost +
       totalVehicleExpenseCost;
 
-    setValue(`miscellaneousCost`, miscellaneousCost);
+    setValue(`miscellaneousCost`, Number(miscellaneousCost.toFixed(2)));
     let totalCost =
       miscellaneousCost + materialTotalCost + equipmentTotal + totalLaborCost;
-    setValue(`totalCost`, totalCost);
-    let grossProfitGoal = (totalCost - miscellaneousCost)/(50/100)
-    setValue(`grossProfitGoal`, grossProfitGoal);
+    setValue(`totalCost`, Number(totalCost.toFixed(2)));
+
+    let grossProfitGoal = (totalCost - miscellaneousCost) / (50 / 100);
+    setValue(`grossProfitGoal`, Number(grossProfitGoal.toFixed(2)));
   }
 
   function calculateTotalVehicleExpenseCost(fields) {
@@ -62,7 +63,7 @@ const VehicleExpense = ({ control, watch, getValues, register, setValue }) => {
       return acc + (amount || 0);
     }, 0);
 
-    setValue(`totalVehicleExpenseCost`, totalVehicleExpenseCost);
+    setValue(`totalVehicleExpenseCost`,Number(totalVehicleExpenseCost.toFixed(2)) );
     calculateTotalCost()
   }
 
@@ -112,7 +113,7 @@ const VehicleExpense = ({ control, watch, getValues, register, setValue }) => {
 
                         setValue(
                           `vehicleexpense[${index}].vehicleExpenseSubtotal`,
-                          vehicleExpenseSubtotal
+                          Number(vehicleExpenseSubtotal.toFixed(2)) 
                         );
 
                         calculateTotalVehicleExpenseCost(fields)
@@ -146,7 +147,7 @@ const VehicleExpense = ({ control, watch, getValues, register, setValue }) => {
 
                         setValue(
                           `vehicleexpense[${index}].vehicleExpenseSubtotal`,
-                          vehicleExpenseSubtotal
+                          Number(vehicleExpenseSubtotal.toFixed(2)) 
                         );
                         calculateTotalVehicleExpenseCost(fields)
 
