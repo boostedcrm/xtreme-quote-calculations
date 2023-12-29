@@ -54,6 +54,7 @@ const ExquipmentCost = ({
     let materialTotalCost = Number(getValues(`materialTotalCost`) || 0);
     let equipmentTotal = Number(getValues(`equipmentTotal`) || 0);
     let totalLaborCost = Number(getValues(`totalLaborCost`) || 0);
+
     let totallodgingCost = Number(getValues(`totallodgingCost`) || 0);
     let totalperdiemCost = Number(getValues(`totalperdiemCost`) || 0);
     let totalrentalEquipmenCost = Number(
@@ -69,13 +70,13 @@ const ExquipmentCost = ({
       totalrentalEquipmenCost +
       totalVehicleExpenseCost;
 
-    setValue(`miscellaneousCost`, miscellaneousCost);
+    setValue(`miscellaneousCost`, Number(miscellaneousCost.toFixed(2)));
     let totalCost =
       miscellaneousCost + materialTotalCost + equipmentTotal + totalLaborCost;
-    setValue(`totalCost`, totalCost);
-    
-    let grossProfitGoal = (totalCost - miscellaneousCost)/(50/100)
-    setValue(`grossProfitGoal`, grossProfitGoal);
+    setValue(`totalCost`, Number(totalCost.toFixed(2)));
+
+    let grossProfitGoal = (totalCost - miscellaneousCost) / (50 / 100);
+    setValue(`grossProfitGoal`, Number(grossProfitGoal.toFixed(2)));
   }
 
   function calculateTotalEquipmentCost(fields) {
@@ -88,13 +89,13 @@ const ExquipmentCost = ({
       totalEquipmentHours = totalEquipmentHours + days * hoursPerDay;
     });
 
-    setValue(`totalEquipmentHours`, totalEquipmentHours);
+    setValue(`totalEquipmentHours`, totalEquipmentHours.toFixed(2));
 
     let equipmentTotal = fields.reduce((acc, field, index) => {
-      const amount = getValues(`equipment[${index}].equipmentSubTotal`);
+      const amount = Number(getValues(`equipment[${index}].equipmentSubTotal`));
       return acc + (amount || 0);
     }, 0);
-    setValue(`equipmentTotal`, equipmentTotal);
+    setValue(`equipmentTotal`, equipmentTotal.toFixed(2));
     calculateTotalCost();
   }
 
@@ -157,8 +158,14 @@ const ExquipmentCost = ({
                             days: days,
                             hoursPerDay: hoursPerDay,
                             directCostPerHour: directCostPerHour,
-                            equipmentSubTotal:
-                              quantity * days * hoursPerDay * directCostPerHour,
+                            equipmentSubTotal: Number(
+                              (
+                                quantity *
+                                days *
+                                hoursPerDay *
+                                directCostPerHour
+                              ).toFixed(2)
+                            ),
                           });
                         } else {
                           update(index, {
@@ -206,7 +213,7 @@ const ExquipmentCost = ({
 
                         setValue(
                           `equipment[${index}].equipmentSubTotal`,
-                          equipmentSubTotal
+                          Number(equipmentSubTotal.toFixed(2))
                         );
 
                         let equipmentTotal = fields.reduce(
@@ -218,7 +225,10 @@ const ExquipmentCost = ({
                           },
                           0
                         );
-                        setValue(`equipmentTotal`, equipmentTotal);
+                        setValue(
+                          `equipmentTotal`,
+                          Number(equipmentTotal.toFixed(2))
+                        );
                         calculateTotalCost();
 
                         field.onChange(e.target.value);
@@ -257,7 +267,7 @@ const ExquipmentCost = ({
 
                         setValue(
                           `equipment[${index}].equipmentSubTotal`,
-                          equipmentSubTotal
+                          Number(equipmentSubTotal.toFixed(2))
                         );
 
                         let totalEquipmentHours = 0;
@@ -276,7 +286,10 @@ const ExquipmentCost = ({
                             totalEquipmentHours + days * hoursPerDay;
                         });
 
-                        setValue(`totalEquipmentHours`, totalEquipmentHours);
+                        setValue(
+                          `totalEquipmentHours`,
+                          Number(totalEquipmentHours.toFixed(2))
+                        );
 
                         let equipmentTotal = fields.reduce(
                           (acc, field, index) => {
@@ -287,7 +300,10 @@ const ExquipmentCost = ({
                           },
                           0
                         );
-                        setValue(`equipmentTotal`, equipmentTotal);
+                        setValue(
+                          `equipmentTotal`,
+                          Number(equipmentTotal.toFixed(2))
+                        );
                         calculateTotalCost();
 
                         field.onChange(e.target.value);
@@ -324,7 +340,7 @@ const ExquipmentCost = ({
 
                         setValue(
                           `equipment[${index}].equipmentSubTotal`,
-                          equipmentSubTotal
+                          Number(equipmentSubTotal.toFixed(2))
                         );
 
                         let totalEquipmentHours = 0;
@@ -343,7 +359,10 @@ const ExquipmentCost = ({
                             totalEquipmentHours + days * hoursPerDay;
                         });
 
-                        setValue(`totalEquipmentHours`, totalEquipmentHours);
+                        setValue(
+                          `totalEquipmentHours`,
+                          Number(totalEquipmentHours.toFixed(2))
+                        );
 
                         let equipmentTotal = fields.reduce(
                           (acc, field, index) => {
@@ -354,7 +373,10 @@ const ExquipmentCost = ({
                           },
                           0
                         );
-                        setValue(`equipmentTotal`, equipmentTotal);
+                        setValue(
+                          `equipmentTotal`,
+                          Number(equipmentTotal.toFixed(2))
+                        );
                         calculateTotalCost();
 
                         field.onChange(e.target.value);
@@ -389,7 +411,7 @@ const ExquipmentCost = ({
 
                         setValue(
                           `equipment[${index}].equipmentSubTotal`,
-                          equipmentSubTotal
+                          Number(equipmentSubTotal.toFixed(2))
                         );
 
                         let totalEquipmentHours = 0;
@@ -403,7 +425,10 @@ const ExquipmentCost = ({
                           },
                           0
                         );
-                        setValue(`equipmentTotal`, equipmentTotal);
+                        setValue(
+                          `equipmentTotal`,
+                          Number(equipmentTotal.toFixed(2))
+                        );
                         calculateTotalCost();
 
                         field.onChange(e.target.value);
