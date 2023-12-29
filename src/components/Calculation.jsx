@@ -7,6 +7,7 @@ import {
   Box,
   Button,
   IconButton,
+  Typography,
 } from "@mui/material";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 
@@ -189,6 +190,10 @@ export default function Calculation({
                 {...field}
                 size="small"
                 sx={{ width: 350 }} // Set the width to 300px
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: <Typography>$</Typography>,
+                }}
               />
             )}
           />
@@ -223,9 +228,15 @@ export default function Calculation({
                     grossProfitGoal + miscellaneousCost + commission;
                   let grossProfitAmount =
                     minimumBidToCustomer - (totalCost + commission);
-                  setValue(`commission`,Number(commission.toFixed(2)) );
-                  setValue(`minimumBidToCustomer`,Number(minimumBidToCustomer.toFixed(2)) );
-                  setValue(`grossProfitAmount`,Number(grossProfitAmount.toFixed(2)) );
+                  setValue(`commission`, Number(commission.toFixed(2)));
+                  setValue(
+                    `minimumBidToCustomer`,
+                    Number(minimumBidToCustomer.toFixed(2))
+                  );
+                  setValue(
+                    `grossProfitAmount`,
+                    Number(grossProfitAmount.toFixed(2))
+                  );
 
                   field.onChange(e.target.value);
                 }}
@@ -247,6 +258,10 @@ export default function Calculation({
                 {...field}
                 size="small"
                 sx={{ width: 350 }} // Set the width to 300px
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: <Typography>$</Typography>,
+                }}
               />
             )}
           />
@@ -282,6 +297,10 @@ export default function Calculation({
                 {...field}
                 size="small"
                 sx={{ width: 350 }} // Set the width to 300px
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: <Typography>$</Typography>,
+                }}
               />
             )}
           />
@@ -332,9 +351,15 @@ export default function Calculation({
                   let finalTotalCost = totalCost + finalCommission;
 
                   let finalGrossProfit = bidToCustomer - finalTotalCost;
-                  setValue(`finalTotalCost`,Number(finalTotalCost.toFixed(2)) );
-                  setValue(`finalGrossProfit`,Number(finalGrossProfit.toFixed(2)) );
-                  setValue(`finalCommission`,Number(finalCommission.toFixed(2)) );
+                  setValue(`finalTotalCost`, Number(finalTotalCost.toFixed(2)));
+                  setValue(
+                    `finalGrossProfit`,
+                    Number(finalGrossProfit.toFixed(2))
+                  );
+                  setValue(
+                    `finalCommission`,
+                    Number(finalCommission.toFixed(2))
+                  );
 
                   field.onChange(e.target.value);
                 }}
@@ -370,6 +395,10 @@ export default function Calculation({
                 {...field}
                 size="small"
                 sx={{ width: 350 }} // Set the width to 300px
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: <Typography>$</Typography>,
+                }}
               />
             )}
           />
@@ -402,6 +431,10 @@ export default function Calculation({
                 {...field}
                 size="small"
                 sx={{ width: 350 }} // Set the width to 300px
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: <Typography>$</Typography>,
+                }}
               />
             )}
           />
@@ -437,6 +470,10 @@ export default function Calculation({
                 {...field}
                 size="small"
                 sx={{ width: 350 }} // Set the width to 300px
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: <Typography>$</Typography>,
+                }}
               />
             )}
           />
