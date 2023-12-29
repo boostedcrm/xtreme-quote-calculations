@@ -125,7 +125,7 @@ export default function Calculation({
           />
         </Grid>
         <Grid item xs={6}>
-          <Controller
+          {/* <Controller
             name="field2"
             control={control}
             defaultValue="2242.78"
@@ -139,6 +139,7 @@ export default function Calculation({
               />
             )}
           />
+            */}
         </Grid>
         <Grid item xs={6}>
           <Controller
@@ -157,7 +158,7 @@ export default function Calculation({
           />
         </Grid>
         {/* Replace with actual label */}
-        <Grid item xs={6}>
+        {/* <Grid item xs={6}>
           <Controller
             name="field3"
             control={control}
@@ -172,7 +173,7 @@ export default function Calculation({
               />
             )}
           />
-        </Grid>
+        </Grid> */}
         {/* Replace with actual label */}
       </Grid>
       <Grid container>
@@ -250,7 +251,7 @@ export default function Calculation({
             )}
           />
         </Grid>
-        <Grid item xs={6}>
+        {/* <Grid item xs={6}>
           <Controller
             name="field4"
             control={control}
@@ -265,7 +266,7 @@ export default function Calculation({
               />
             )}
           />
-        </Grid>
+        </Grid> */}
       </Grid>
       <br />
       <Grid container>
@@ -442,7 +443,7 @@ export default function Calculation({
         </Grid>
       </Grid>
       <br />
-      <Grid container spacing={2}>
+      {/* <Grid container spacing={2}>
         <Grid item xs={6}>
           <Controller
             name="revenuePerSquareFoot"
@@ -475,7 +476,7 @@ export default function Calculation({
             )}
           />
         </Grid>
-      </Grid>
+      </Grid> */}
       <br />
       <Grid container spacing={2}>
         <Grid item xs={6}>
@@ -494,7 +495,7 @@ export default function Calculation({
             )}
           />
         </Grid>
-        <Grid item xs={6}>
+        {/* <Grid item xs={6}>
           <Controller
             name="ratePerSquareFootCurrency"
             control={control}
@@ -509,7 +510,7 @@ export default function Calculation({
               />
             )}
           />
-        </Grid>
+        </Grid> */}
       </Grid>
       <br />
       {clarifications !== null &&
