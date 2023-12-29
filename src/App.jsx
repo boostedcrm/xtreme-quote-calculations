@@ -14,8 +14,8 @@ function App() {
   const [dealData, setDealData] = useState(null);
   const [products, setProducts] = useState([]);
   const [quoteDistributions, setQuoteDistributions] = useState([]);
-  const [quoteType, setQuoteType] = useState(null)
-  const [checklistData, setCheckListData] = useState(null)
+  const [quoteType, setQuoteType] = useState(null);
+  const [checklistData, setCheckListData] = useState(null);
 
   useEffect(() => {
     ZOHO.embeddedApp.on("PageLoad", function (data) {
@@ -47,10 +47,13 @@ function App() {
           setDealData(data?.data[0]);
           if (data?.data[0] !== undefined) {
             const dealData = data?.data[0];
+            console.log({dealData});
+            let previousData = JSON.parse(dealData?.Clarification20 || "{}");
+            console.log({previousData});
             const Quote_Type = dealData.Quote_Type;
             if (Quote_Type != null) {
               const quoteType = Quote_Type.split(" ")[0];
-              setQuoteType(Quote_Type)
+              setQuoteType(Quote_Type);
               if (
                 quoteType === "Concrete" &&
                 dealData?.Concrete_Bid_Checklist?.id !== null
@@ -61,7 +64,7 @@ function App() {
                   RecordID: dealData?.Concrete_Bid_Checklist?.id,
                 }).then(function (data) {
                   console.log({ Concrete_Bid_Checklists: data });
-                  setCheckListData(data.data[0])
+                  setCheckListData(data.data[0]);
                 });
               }
               if (
@@ -73,7 +76,7 @@ function App() {
                   approved: "both",
                   RecordID: dealData?.Coating_Bid_Checklist?.id,
                 }).then(function (data) {
-                  setCheckListData(data.data[0])
+                  setCheckListData(data.data[0]);
                 });
               }
               if (
@@ -86,7 +89,7 @@ function App() {
                   RecordID: dealData?.Honing_Bid_Checklist?.id,
                 }).then(function (data) {
                   // console.log({ Honing_Bid_Checklists: data });
-                  setCheckListData(data.data[0])
+                  setCheckListData(data.data[0]);
                 });
               }
             }
@@ -99,7 +102,7 @@ function App() {
           per_page: 200,
           page: 1,
         }).then(function (data) {
-          console.log({products: data.data});
+          console.log({ products: data.data });
           setProducts(data.data);
         });
       }
