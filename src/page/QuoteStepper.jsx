@@ -39,8 +39,9 @@ export default function QuoteCalculation({
   dealData,
   products,
   ZOHO,
+  checklistData,
+  quoteType,
 }) {
-
   const { control, handleSubmit, register, watch, getValues, setValue } =
     useForm({
       defaultValues: {},
@@ -58,7 +59,6 @@ export default function QuoteCalculation({
   };
 
   const handleNext = () => {
-    onSubmit();
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
   const handleReset = () => {
@@ -69,8 +69,8 @@ export default function QuoteCalculation({
   };
 
   const onSubmit = (data) => {
-    console.log({onSubmit: data});
-    handleClose()
+    console.log({ onSubmit: data });
+    handleClose();
   };
 
   return (
@@ -94,6 +94,8 @@ export default function QuoteCalculation({
               dealData={dealData}
               control={control}
               watch={watch}
+              checklistData={checklistData}
+              quoteType={quoteType}
             />
           )}
           {activeStep === 1 && (
@@ -170,6 +172,8 @@ export default function QuoteCalculation({
               setValue={setValue}
               getValues={getValues}
               register={register}
+              checklistData={checklistData}
+              quoteType={quoteType}
             />
           )}
         </Box>
@@ -182,12 +186,10 @@ export default function QuoteCalculation({
           <Button onClick={handleClose} variant="contained" color="success">
             Save
           </Button>
-          <Button variant="contained" type="submit">
-            Save Rayhan
-          </Button>
+
           {activeStep === steps.length - 1 ? (
             <Button variant="contained" type="submit">
-              Calculate
+              Update Deal
             </Button>
           ) : (
             <Button
