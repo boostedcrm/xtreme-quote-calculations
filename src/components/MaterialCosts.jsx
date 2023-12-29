@@ -64,13 +64,13 @@ const MaterialRow = ({
       totalrentalEquipmenCost +
       totalVehicleExpenseCost;
 
-    setValue(`miscellaneousCost`, miscellaneousCost);
+    setValue(`miscellaneousCost`, Number(miscellaneousCost.toFixed(2)) );
     let totalCost =
       miscellaneousCost + materialTotalCost + equipmentTotal + totalLaborCost;
-    setValue(`totalCost`, totalCost);
+    setValue(`totalCost`, Number(totalCost.toFixed(2)) );
 
-    let grossProfitGoal = (totalCost - miscellaneousCost)/(50/100)
-    setValue(`grossProfitGoal`, grossProfitGoal);
+    let grossProfitGoal = (totalCost - miscellaneousCost) / (50 / 100);
+    setValue(`grossProfitGoal`, Number(grossProfitGoal.toFixed(2)) );
   }
 
   function calculateTotalMaterialCost(fields) {
@@ -85,13 +85,13 @@ const MaterialRow = ({
     let materialTotalCost =
       materialsSubTotal + materialWasteShipCost + materialTax;
 
-    setValue(`materialsSubTotal`, materialsSubTotal);
+    setValue(`materialsSubTotal`, materialsSubTotal.toFixed(2));
 
-    setValue(`materialWasteShipCost`, materialWasteShipCost);
+    setValue(`materialWasteShipCost`, materialWasteShipCost.toFixed(2));
 
-    setValue(`materialTax`, materialTax);
+    setValue(`materialTax`, materialTax.toFixed(2));
 
-    setValue(`materialTotalCost`, materialTotalCost);
+    setValue(`materialTotalCost`, materialTotalCost.toFixed(2));
     calculateTotalCost();
   }
 
@@ -163,11 +163,12 @@ const MaterialRow = ({
                 type="number"
                 fullWidth
                 onChange={(e) => {
-                  setValue(
-                    `materials[${index}].total`,
-                    Number(e.target.value) *
-                      Number(getValues(`materials[${index}].pricePer`))
-                  );
+                  let pricePer =
+                    Number(getValues(`materials[${index}].pricePer`)) || 0;
+                  let amount = Number(e.target.value) || 0;
+
+                  let total = amount * pricePer;
+                  setValue(`materials[${index}].total`, Number(total.toFixed(2)));
                   calculateTotalMaterialCost(fields);
                   field.onChange(e.target.value);
                 }}
@@ -195,11 +196,10 @@ const MaterialRow = ({
                   startAdornment: <Typography>$</Typography>,
                 }}
                 onChange={(e) => {
-                  setValue(
-                    `materials[${index}].total`,
-                    Number(e.target.value) *
-                      Number(getValues(`materials[${index}].amount`))
-                  );
+                  let pricePer = Number(e.target.value) || 0;
+                  let amount =  Number(getValues(`materials[${index}].amount`)) || 0;
+                  let total = amount * pricePer;
+                  setValue(`materials[${index}].total`, Number(total.toFixed(2)));
                   calculateTotalMaterialCost(fields);
                   field.onChange(e.target.value);
                 }}
@@ -209,7 +209,26 @@ const MaterialRow = ({
         </Grid>
       </TableCell>
       <TableCell>
-        {renderTextField(`materials[${index}].total`, "", "", control, true)}
+        <Grid item xs={4}>
+          <Controller
+            name={`materials[${index}].total`}
+            control={control}
+            type="number"
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label={""}
+                InputProps={{
+                  readOnly: true,
+                }}
+                variant="outlined"
+                size="small"
+                margin="normal"
+                fullWidth
+              />
+            )}
+          />
+        </Grid>
       </TableCell>
       <TableCell>
         <IconButton
