@@ -49,7 +49,9 @@ export default function QuoteCalculation({
         : { step: 0 },
     });
 
-  const [activeStep, setActiveStep] = useState(JSON.parse(dealData.Clarification20)?.step || 0);
+  const [activeStep, setActiveStep] = useState(
+    JSON.parse(dealData.Clarification20)?.step || 0
+  );
   const steps = getSteps();
 
   const handleStep = (step) => () => {
@@ -81,9 +83,15 @@ export default function QuoteCalculation({
       APIData: apiData,
       Trigger: ["workflow"], // ["workflow"]
     };
-    ZOHO.CRM.API.updateRecord(config).then(function (data) {
-      console.log({ updateRecord: data });
-    });
+    ZOHO.CRM.API.updateRecord(config)
+      .then(function (data) {
+        console.log({ updateRecord: data });
+        handleClose();
+      })
+      .catch((error) => {
+        console.log({ error: error });
+        handleClose();
+      });
   };
 
   return (
