@@ -78,7 +78,7 @@ const RentalEquipment = ({ control, watch, getValues, register, setValue }) => {
 
   return (
     <Box>
-      <Typography
+      {/* <Typography
         variant="h5"
         sx={{
           padding: "25px 10px 5px 10px",
@@ -86,7 +86,7 @@ const RentalEquipment = ({ control, watch, getValues, register, setValue }) => {
       >
         Rental Equipment
       </Typography>
-      <hr />
+      <hr /> */}
       <Table>
         <TableHead>
           <TableRow>
@@ -100,7 +100,7 @@ const RentalEquipment = ({ control, watch, getValues, register, setValue }) => {
         <TableBody>
           {fields.map((item, index) => (
             <TableRow key={item.id}>
-              <TableCell>
+              <TableCell sx={{paddingTop: 3 }}>
                 {renderTextField(
                   `rentalequipment[${index}].equipmentName`,
                   "Equipment Name",
@@ -194,7 +194,7 @@ const RentalEquipment = ({ control, watch, getValues, register, setValue }) => {
           <Grid item xs={6}>
             {" "}
             <TextField
-              label="Total Rental Equipmen Cost"
+              label="Total Rental Equipment Cost"
               {...register("totalrentalEquipmenCost")}
               size="small"
               fullWidth

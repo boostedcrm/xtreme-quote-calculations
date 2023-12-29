@@ -19,19 +19,41 @@ export default function Calculation({
   getValues,
   register,
   setValue,
+  checklistData,
+  quoteType,
 }) {
   const [clarifications, setClarifications] = useState(null);
+  const [typeOfQuote, setQuoteType] = useState(null);
 
   useEffect(() => {
     async function getData() {
-      ZOHO.CRM.API.getAllRecords({
-        Entity: "Clarifications",
-        sort_order: "asc",
-        per_page: 200,
-        page: 1,
-      }).then(function (data) {
-        setClarifications(data?.data);
-      });
+      try {
+        const response = await ZOHO.CRM.API.getAllRecords({
+          Entity: "Clarifications",
+          sort_order: "asc",
+          per_page: 200,
+          page: 1,
+        });
+
+        if (response?.data) {
+          const firstWordOfQuoteType = quoteType?.split(" ")[0];
+
+          const filteredData = response.data.filter((item) => {
+            // Handle the specific case for "Concrete"
+            if (firstWordOfQuoteType === "Concrete") {
+              return item.Type === "Concrete/Honing";
+            }
+            // For other types, perform a regular match
+            return item.Type === firstWordOfQuoteType;
+          });
+
+          console.log({ filteredData });
+
+          setClarifications(filteredData);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     }
     getData();
   }, [ZOHO]);
@@ -43,42 +65,134 @@ export default function Calculation({
 
   return (
     <Box p={2}>
-      <FormControlLabel
-        control={<Checkbox />}
-        label="Perform calculations."
-        style={{ marginBottom: "8px" }}
-      />
-      <br />
-      <br />
       <Grid containe style={{ marginBottom: "15px" }}>
-        {renderTextField(
+        {/* {renderTextField(
           `miscellaneousCost`,
           "Miscellaneous cost",
           "",
           control
-        )}
+        )} */}
+        <Grid item xs={6}>
+          <Controller
+            name="miscellaneousCost"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                label="Miscellaneous cost"
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+              />
+            )}
+          />
+        </Grid>
       </Grid>
       <Grid container spacing={2} style={{ marginBottom: "15px" }}>
-        {renderTextField(`totalCost`, "Total Cost", "", control)}
+        <Grid item xs={6}>
+          <Controller
+            name="totalCost"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                label="Total Cost"
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+              />
+            )}
+          />
+        </Grid>
       </Grid>
       <Grid container spacing={2} style={{ marginBottom: "15px" }}>
-        {renderTextField(
-          `grossProfitGoal`,
-          "Gross Profit Goal at 50%",
-          "2242.78",
-          control
-        )}
-        {renderTextField(`field2`, "Label for Field 2", "2242.78", control)}{" "}
+        <Grid item xs={6}>
+          <Controller
+            name="grossProfitGoal"
+            control={control}
+            defaultValue="2242.78"
+            render={({ field }) => (
+              <TextField
+                label="Gross Profit Goal at 50%"
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+              />
+            )}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          {/* <Controller
+            name="field2"
+            control={control}
+            defaultValue="2242.78"
+            render={({ field }) => (
+              <TextField
+                label=""
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+              />
+            )}
+          />
+            */}
+        </Grid>
+        <Grid item xs={6}>
+          <Controller
+            name="travelAndMisc"
+            control={control}
+            defaultValue="2242.78"
+            render={({ field }) => (
+              <TextField
+                label="Travel and Misc"
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+              />
+            )}
+          />
+        </Grid>
         {/* Replace with actual label */}
-        {renderTextField(
-          `travelAndMisc`,
-          "Travel and Misc",
-          "2242.78",
-          control
-        )}
-        {renderTextField(`field3`, "Label for Field 3", "2242.78", control)}{" "}
+        {/* <Grid item xs={6}>
+          <Controller
+            name="field3"
+            control={control}
+            defaultValue="2242.78"
+            render={({ field }) => (
+              <TextField
+                label=""
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+              />
+            )}
+          />
+        </Grid> */}
         {/* Replace with actual label */}
-        {renderTextField(`commission`, "Commission", "", control)}
+      </Grid>
+      <Grid container>
+        <Grid item xs={6}>
+          <Controller
+            name="commission"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                label="Commission"
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+              />
+            )}
+          />
+        </Grid>
         <Grid item xs={6}>
           <Controller
             name={`commissionPercentage`}
@@ -119,21 +233,76 @@ export default function Calculation({
             )}
           />
         </Grid>
-        {renderTextField(
-          `minimumBidToCustomer`,
-          "Minimum Bid to Customer",
-          "",
-          control
-        )}
-        {renderTextField(`field4`, "Label for Field 4", "", control)}{" "}
+      </Grid>
+      <Grid container>
+        <Grid item xs={6}>
+          <Controller
+            name="minimumBidToCustomer"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                label="Minimum Bid to Customer"
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+              />
+            )}
+          />
+        </Grid>
+        {/* <Grid item xs={6}>
+          <Controller
+            name="field4"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                label=""
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+              />
+            )}
+          />
+        </Grid> */}
+      </Grid>
+      <br />
+      <Grid container>
+        <Grid item xs={6}>
+          <Controller
+            name="grossProfitAmount"
+            control={control}
+            defaultValue="2242.78"
+            render={({ field }) => (
+              <TextField
+                label="Gross Profit Amount"
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+              />
+            )}
+          />
+        </Grid>
         {/* Replace with actual label */}
-        {renderTextField(
-          `grossProfitAmount`,
-          "Gross Profit Amount",
-          "2242.78",
-          control
-        )}
-        {renderTextField(`grossProfitPct`, "Gross Profit Pct", "", control)}
+        <Grid item xs={6}>
+          <Controller
+            name="grossProfitPct"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                label="Gross Profit Pct"
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+              />
+            )}
+          />
+        </Grid>
       </Grid>
       <br />
       <Grid container spacing={2}>
@@ -151,9 +320,7 @@ export default function Calculation({
                 margin="normal"
                 type="number"
                 onChange={(e) => {
-                  let totalCost = Number(
-                    getValues(`totalCost`) || 5
-                  );
+                  let totalCost = Number(getValues(`totalCost`) || 5);
                   let commissionPercentage = Number(
                     getValues(`commissionPercentage`) || 5
                   );
@@ -175,65 +342,175 @@ export default function Calculation({
             )}
           />
         </Grid>
-        {renderTextField(
-          `commissionPercentageFinal`,
-          "Commission Percentage",
-          "",
-          control
-        )}
-        {renderTextField(`finalCommission`, "Final Commission", "", control)}
-        {renderTextField(
-          `totalCostPercentage`,
-          "Total Cost Percentage",
-          "",
-          control
-        )}
-        {renderTextField(`finalTotalCost`, "Final Total Cost", "", control)}
-        {renderTextField(
-          `actualGrossProfitPercentage`,
-          "Actual Gross Profit Percentage",
-          "",
-          control
-        )}
+        <Grid item xs={6}>
+          <Controller
+            name="commissionPercentageFinal"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                label="Commission Percentage"
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+              />
+            )}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Controller
+            name="finalCommission"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                label="Final Commission"
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+              />
+            )}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Controller
+            name="totalCostPercentage"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                label="Total Cost Percentage"
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+              />
+            )}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Controller
+            name="finalTotalCost"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                label="Final Total Cost"
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+              />
+            )}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Controller
+            name="actualGrossProfitPercentage"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                label="Actual Gross Profit Percentage"
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+              />
+            )}
+          />
+        </Grid>
       </Grid>
       <br />
       <Grid container spacing={2}>
-        {renderTextField(`finalGrossProfit`, "Final Gross Profit", "", control)}
+        <Grid item xs={6}>
+          <Controller
+            name="finalGrossProfit"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                label="Final Gross Profit"
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+              />
+            )}
+          />
+        </Grid>
       </Grid>
       <br />
-      <Grid container spacing={2}>
-        {renderTextField(
-          `revenuePerSquareFoot`,
-          "Revenue Per Square Ft",
-          "",
-          control
-        )}
-        {renderTextField(
-          `revenuePerManHour`,
-          "Revenue Per Man Hour",
-          "",
-          control
-        )}
-      </Grid>
-      <FormControlLabel
-        control={<Checkbox />}
-        label="Perform calculations."
-        style={{ marginBottom: "8px" }}
-      />
+      {/* <Grid container spacing={2}>
+        <Grid item xs={6}>
+          <Controller
+            name="revenuePerSquareFoot"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                label="Revenue Per Square Ft"
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+              />
+            )}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Controller
+            name="revenuePerManHour"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                label="Revenue Per Man Hour"
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+              />
+            )}
+          />
+        </Grid>
+      </Grid> */}
       <br />
       <Grid container spacing={2}>
-        {renderTextField(
-          `serviceOnQuote`,
-          "Service (appears on quote)",
-          "Fountain Restoration",
-          control
-        )}
-        {renderTextField(
-          `ratePerSquareFootCurrency`,
-          "Rate Per Square Foot Currency",
-          "8.97",
-          control
-        )}
+        <Grid item xs={6}>
+          <Controller
+            name="serviceOnQuote"
+            control={control}
+            defaultValue="Fountain Restoration"
+            render={({ field }) => (
+              <TextField
+                label="Service (appears on quote)"
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+              />
+            )}
+          />
+        </Grid>
+        {/* <Grid item xs={6}>
+          <Controller
+            name="ratePerSquareFootCurrency"
+            control={control}
+            defaultValue="8.97"
+            render={({ field }) => (
+              <TextField
+                label="Rate Per Square Foot Currency"
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+              />
+            )}
+          />
+        </Grid> */}
       </Grid>
       <br />
       {clarifications !== null &&
@@ -249,8 +526,8 @@ export default function Calculation({
             }}
           >
             {renderMultiTextField(
-              `Classification_${index + 1}`,
-              `Classification ${index + 1}`,
+              `Clarifications${index + 1}`,
+              `Clarifications ${index + 1}`,
               clarification.Description,
               control,
               600
@@ -261,6 +538,16 @@ export default function Calculation({
             />
           </Box>
         ))}
+      <Box>
+        {renderCheckboxField(
+          "Sent_for_Review", // name of the field
+          "Send for Review", // label
+          false, // default value
+          control, // form control from react-hook-form
+          170 // optional label width, default is 170 if not provided
+        )}
+        {renderMultiTextField("review_note", "Review Note", "", control, 350)}
+      </Box>
     </Box>
   );
 }
@@ -307,6 +594,36 @@ const renderMultiTextField = (name, label, defaultValue, control, width) => (
           sx={{ width: width }}
         />
       )}
+    />
+  </Grid>
+);
+
+const renderCheckboxField = (
+  name,
+  label,
+  defaultValue,
+  control,
+  labelWidth = 170
+) => (
+  <Grid item xs={6}>
+    <FormControlLabel
+      control={
+        <Controller
+          name={name}
+          control={control}
+          defaultValue={defaultValue}
+          render={({ field }) => (
+            <div style={{ display: "flex" }}>
+              <div style={{ width: labelWidth, flexShrink: 0 }}>
+                <label>{label}</label>
+              </div>
+              <Checkbox {...field} />
+            </div>
+          )}
+        />
+      }
+      label=""
+      labelPlacement="start"
     />
   </Grid>
 );

@@ -69,7 +69,7 @@ const VehicleExpense = ({ control, watch, getValues, register, setValue }) => {
 
   return (
     <Box>
-      <Typography
+      {/* <Typography
         variant="h5"
         sx={{
           padding: "25px 10px 5px 10px",
@@ -77,7 +77,7 @@ const VehicleExpense = ({ control, watch, getValues, register, setValue }) => {
       >
         Vehicle Expenses
       </Typography>
-      <hr />
+      <hr /> */}
       <Table>
         <TableHead>
           <TableRow>

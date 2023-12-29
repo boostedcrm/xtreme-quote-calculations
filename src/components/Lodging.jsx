@@ -72,7 +72,7 @@ const Lodging = ({ control, watch, getValues, register, setValue }) => {
 
   return (
     <Box>
-      <Typography
+      {/* <Typography
         variant="h5"
         sx={{
           padding: "25px 10px 5px 10px",
@@ -80,7 +80,7 @@ const Lodging = ({ control, watch, getValues, register, setValue }) => {
       >
         Lodging
       </Typography>
-      <hr />
+      <hr /> */}
       <Table>
         <TableHead>
           <TableRow>
@@ -277,7 +277,7 @@ const Lodging = ({ control, watch, getValues, register, setValue }) => {
           <Grid item xs={6}>
             {" "}
             <TextField
-              label="Total Loading Cost"
+              label="Total Lodging Cost"
               {...register("totallodgingCost")}
               size="small"
               fullWidth

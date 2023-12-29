@@ -13,14 +13,24 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
+import { useEffect, useState } from "react";
 
-const XtremeQuoteForm = ({ dealData }) => {
+const XtremeQuoteForm = ({ dealData,checklistData,quoteType }) => {
+  const [totalSqft, setTotalSqft] = useState(0)
   const { control, handleSubmit } = useForm();
 
   const onSubmit = (data) => {
     console.log(data);
   };
 
+  useEffect(() => {
+    if(quoteType != null){
+      const checklistType = quoteType.split(" ")[1];
+      if(checklistType === "Polish" && checklistData?.Polished_SQFT != null){
+        setTotalSqft(checklistData?.Polished_SQFT)
+      }
+    }
+  },[])
   // console.log({ dealData: dealData?.Sales_Person?.name });
 
   return (
@@ -63,7 +73,22 @@ const XtremeQuoteForm = ({ dealData }) => {
       </Grid>
       <Grid container spacing={2}>
         {renderTextField("Quote_Type", "Quote Type", dealData?.Quote_Type || "", control)}
-        {renderTextField("Total_Square_Feet", "Total Square Feet", "", control)}
+        {renderTextField("Total_Square_Feet", "Total Square Feet", totalSqft, control)}
+      </Grid>
+      <br />
+      <Grid container gap={12}>
+      {renderDatePicker(
+          'EstPerformDate',
+          'Est Perform Date',
+          '',
+          control
+        )}
+         {renderDatePicker(
+          'QuoteDueDate',
+          'Quote Due Date',
+          '',
+          control
+        )}
       </Grid>
       {/* <Button type="submit" variant="contained" color="primary" style={{ marginTop: 16 }}>
         Submit Quote
@@ -241,51 +266,55 @@ const renderMultiTextField = (
 
 const renderDatePicker = (name, label, defaultValue, control) => {
   return (
-    <Grid item xs={6}>
-      <FormControlLabel
-        labelPlacement="start"
-        control={
-          <Controller
-            name={name}
-            control={control}
-            defaultValue={defaultValue}
-            render={({ field }) => (
-              <div style={{ display: "flex" }}>
-                <div style={{ width: "180px", flexShrink: 0 }}>
-                  <label>{label}</label>
-                </div>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    disablePast
-                    {...field}
-                    inputProps={{
-                      style: {
-                        height: 18,
+    <Grid item>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <Controller
+          name={name}
+          control={control}
+          defaultValue={defaultValue}
+          render={({ field }) => (
+            <DatePicker
+              disablePast
+              label={label}
+              {...field}
+              InputProps={{
+                style: { height: '18px' } // Reduces the height of the input field
+              }}
+              onChange={(newValue) => {
+                field.onChange(dayjs(newValue).format('YYYY-MM-DD'));
+              }}
+              PopperProps={{
+                placement: 'right-end',
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  required
+                  sx={{
+                    borderLeft: "3px solid red",
+                    borderRadius: "8px",
+                    "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
+                      {
+                        borderLeftColor: "transparent",
                       },
-                    }}
-                    onChange={(newValue) => {
-                      field.onChange(dayjs(newValue).format("YYYY-MM-DD"));
-                    }}
-                    PopperProps={{
-                      placement: "right-end",
-                    }}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        required
-                        fullWidth
-                        size="small"
-                        InputLabelProps={{ shrink: true }}
-                        sx={{ width: "223px" }}
-                      />
-                    )}
-                  />
-                </LocalizationProvider>
-              </div>
-            )}
-          />
-        }
-      />
+                    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                      {
+                        borderLeftColor: "transparent",
+                      },
+                  }}
+                  fullWidth
+                  size="small" // Keeps the input field small
+                  InputLabelProps={{ shrink: true }}
+                  // Additional styling can be applied here
+                  inputProps={{
+                    style: { fontSize: 12 } // Smaller font size for the input field
+                  }}
+                />
+              )}
+            />
+          )}
+        />
+      </LocalizationProvider>
     </Grid>
   );
 };

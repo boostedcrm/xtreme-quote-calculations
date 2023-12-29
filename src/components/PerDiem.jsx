@@ -84,7 +84,7 @@ const PerDiem = ({ control, watch, getValues, register, setValue }) => {
 
   return (
     <Box>
-      <Typography
+      {/* <Typography
         variant="h5"
         sx={{
           padding: "25px 10px 5px 10px",
@@ -92,7 +92,7 @@ const PerDiem = ({ control, watch, getValues, register, setValue }) => {
       >
         Per Diem
       </Typography>
-      <hr />
+      <hr /> */}
       <Table>
         <TableHead>
           <TableRow>
@@ -107,7 +107,7 @@ const PerDiem = ({ control, watch, getValues, register, setValue }) => {
         <TableBody>
           {fields.map((item, index) => (
             <TableRow key={item.id}>
-              <TableCell sx={{ width: "150px" }}>
+              <TableCell sx={{ width: "150px",paddingTop: 3  }}>
                 <Controller
                   name={`perdiem[${index}].name`}
                   control={control}

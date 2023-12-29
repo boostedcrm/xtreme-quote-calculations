@@ -11,11 +11,11 @@ function App() {
   const [dealID, setDealID] = useState(null);
   const [zohoLoaded, setZohoLoaded] = useState(false);
   const [page, setPage] = useState("Home");
-  const [concreteItems, setConcreteItems] = useState([]);
-  const [honingItems, setHoningItems] = useState([]);
-  const [coatingItems, setCoatingItems] = useState([]);
   const [dealData, setDealData] = useState(null);
   const [products, setProducts] = useState([]);
+  const [quoteDistributions, setQuoteDistributions] = useState([]);
+  const [quoteType, setQuoteType] = useState(null)
+  const [checklistData, setCheckListData] = useState(null)
 
   useEffect(() => {
     ZOHO.embeddedApp.on("PageLoad", function (data) {
@@ -45,6 +45,52 @@ function App() {
           RecordID: dealID,
         }).then(function (data) {
           setDealData(data?.data[0]);
+          if (data?.data[0] !== undefined) {
+            const dealData = data?.data[0];
+            const Quote_Type = dealData.Quote_Type;
+            if (Quote_Type != null) {
+              const quoteType = Quote_Type.split(" ")[0];
+              setQuoteType(Quote_Type)
+              if (
+                quoteType === "Concrete" &&
+                dealData?.Concrete_Bid_Checklist?.id !== null
+              ) {
+                ZOHO.CRM.API.getRecord({
+                  Entity: "Concrete_Bid_Checklists",
+                  approved: "both",
+                  RecordID: dealData?.Concrete_Bid_Checklist?.id,
+                }).then(function (data) {
+                  console.log({ Concrete_Bid_Checklists: data });
+                  setCheckListData(data.data[0])
+                });
+              }
+              if (
+                quoteType === "Coating" &&
+                dealData?.Coating_Bid_Checklist?.id !== null
+              ) {
+                ZOHO.CRM.API.getRecord({
+                  Entity: "Coating_Bid_Checklists",
+                  approved: "both",
+                  RecordID: dealData?.Coating_Bid_Checklist?.id,
+                }).then(function (data) {
+                  setCheckListData(data.data[0])
+                });
+              }
+              if (
+                quoteType === "Honing" &&
+                dealData?.Honing_Bid_Checklist?.id !== null
+              ) {
+                ZOHO.CRM.API.getRecord({
+                  Entity: "Honing_Bid_Checklists",
+                  approved: "both",
+                  RecordID: dealData?.Honing_Bid_Checklist?.id,
+                }).then(function (data) {
+                  // console.log({ Honing_Bid_Checklists: data });
+                  setCheckListData(data.data[0])
+                });
+              }
+            }
+          }
         });
 
         ZOHO.CRM.API.getAllRecords({
@@ -95,7 +141,7 @@ function App() {
       >
         <img src={logo} alt="logo" height={100} />
         <Typography variant="h4" align="center" fontWeight="bold">
-          Calculate Quote Rayhan Widget
+          Calculate Quote Widget
         </Typography>
         <Box>
           <CloseIcon
@@ -112,6 +158,9 @@ function App() {
           dealData={dealData}
           products={products}
           ZOHO={ZOHO}
+          // quoteDistributions={quoteDistributions}
+          checklistData={checklistData}
+          quoteType={quoteType}
         />
       )}
     </Box>

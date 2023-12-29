@@ -120,7 +120,7 @@ const ExquipmentCost = ({
         <TableBody>
           {fields.map((item, index) => (
             <TableRow key={item.id}>
-              <TableCell sx={{ width: "150px" }}>
+              <TableCell sx={{ width: "150px",paddingTop: 3  }}>
                 <Controller
                   name={`equipment[${index}].name`}
                   control={control}
@@ -483,7 +483,7 @@ const ExquipmentCost = ({
           <Grid item xs={6}>
             {" "}
             <TextField
-              label="Total Exquipment Hours"
+              label="Total Equipment Hours"
               {...register("totalEquipmentHours")}
               size="small"
               fullWidth
@@ -500,7 +500,7 @@ const ExquipmentCost = ({
           <Grid item xs={6}>
             {" "}
             <TextField
-              label="Total Exquipment Cost"
+              label="Total Equipment Cost"
               {...register("equipmentTotal")}
               size="small"
               fullWidth

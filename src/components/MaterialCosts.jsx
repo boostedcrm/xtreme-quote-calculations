@@ -97,38 +97,45 @@ const MaterialRow = ({
 
   return (
     <TableRow key={item.id}>
-      <TableCell sx={{ width: "150px" }}>
-        <Controller
-          name={`materials[${index}].product`}
-          control={control}
-          rules={{ required: true }}
-          render={({ field }) => (
-            <Autocomplete
-              {...field}
-              options={products}
-              getOptionLabel={(option) => option.Product_Name}
-              isOptionEqualToValue={(option, value) => option.id === value.id}
-              renderInput={(params) => (
-                <TextField {...params} label="Material" size="small" required />
-              )}
-              onChange={(_, data) => {
-                let amount = Number(
-                  getValues(`materials[${index}].amount` || 0)
-                );
-                update(index, {
-                  ...fields[index],
-                  size: data?.Size,
-                  coverage: data?.Coverage_Rate_per_Gallon || 0,
-                  pricePer: data?.Unit_Price || 0,
-                  amount: amount,
-                  total: amount * (data?.Unit_Price || 0),
-                });
-                calculateTotalMaterialCost(fields);
-                return field.onChange(data);
-              }}
-            />
-          )}
-        />
+      <TableCell sx={{ width: "150px",paddingTop: 3 }}>
+        <Grid item sx={4}>
+          <Controller
+            name={`materials[${index}].product`}
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <Autocomplete
+                {...field}
+                options={products}
+                getOptionLabel={(option) => option.Product_Name}
+                isOptionEqualToValue={(option, value) => option.id === value.id}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Material"
+                    size="small"
+                    required
+                  />
+                )}
+                onChange={(_, data) => {
+                  let amount = Number(
+                    getValues(`materials[${index}].amount` || 0)
+                  );
+                  update(index, {
+                    ...fields[index],
+                    size: data?.Size,
+                    coverage: data?.Coverage_Rate_per_Gallon || 0,
+                    pricePer: data?.Unit_Price || 0,
+                    amount: amount,
+                    total: amount * (data?.Unit_Price || 0),
+                  });
+                  calculateTotalMaterialCost(fields);
+                  return field.onChange(data);
+                }}
+              />
+            )}
+          />
+        </Grid>
       </TableCell>
       <TableCell>
         {renderTextField(
@@ -324,7 +331,7 @@ const MaterialCosts = ({
             render={({ field }) => (
               <TextField
                 {...field}
-                label={"Materials Sub Total"}
+                label={"Materials Subtotal"}
                 variant="outlined"
                 size="small"
                 margin="normal"
@@ -387,7 +394,7 @@ const MaterialCosts = ({
             render={({ field }) => (
               <TextField
                 {...field}
-                label={"Material Cost"}
+                label={"Total Material Cost"}
                 variant="outlined"
                 size="small"
                 margin="normal"
