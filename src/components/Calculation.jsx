@@ -109,9 +109,9 @@ export default function Calculation({
                     grossProfitGoal + miscellaneousCost + commission;
                   let grossProfitAmount =
                     minimumBidToCustomer - (totalCost + commission);
-                  setValue(`commission`, commission);
-                  setValue(`minimumBidToCustomer`, minimumBidToCustomer);
-                  setValue(`grossProfitAmount`, grossProfitAmount);
+                  setValue(`commission`,Number(commission.toFixed(2)) );
+                  setValue(`minimumBidToCustomer`,Number(minimumBidToCustomer.toFixed(2)) );
+                  setValue(`grossProfitAmount`,Number(grossProfitAmount.toFixed(2)) );
 
                   field.onChange(e.target.value);
                 }}
@@ -165,9 +165,9 @@ export default function Calculation({
                   let finalTotalCost = totalCost + finalCommission;
 
                   let finalGrossProfit = bidToCustomer - finalTotalCost;
-                  setValue(`finalTotalCost`, finalTotalCost);
-                  setValue(`finalGrossProfit`, finalGrossProfit);
-                  setValue(`finalCommission`, finalCommission);
+                  setValue(`finalTotalCost`,Number(finalTotalCost.toFixed(2)) );
+                  setValue(`finalGrossProfit`,Number(finalGrossProfit.toFixed(2)) );
+                  setValue(`finalCommission`,Number(finalCommission.toFixed(2)) );
 
                   field.onChange(e.target.value);
                 }}
@@ -270,8 +270,7 @@ const renderTextField = (
   label,
   defaultValue,
   control,
-  size = "small",
-  labelWidth = 180
+  size = "small"
 ) => (
   <Grid item xs={6}>
     <Controller
