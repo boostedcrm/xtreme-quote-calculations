@@ -8,6 +8,7 @@ import {
   MenuItem,
   FormControlLabel,
   Checkbox,
+  Box,
 } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -18,10 +19,6 @@ import { useEffect, useState } from "react";
 const XtremeQuoteForm = ({ dealData,checklistData,quoteType }) => {
   const [totalSqft, setTotalSqft] = useState(0)
   const { control, handleSubmit } = useForm();
-
-  const onSubmit = (data) => {
-    console.log(data);
-  };
 
   useEffect(() => {
     if(quoteType != null){
@@ -34,8 +31,8 @@ const XtremeQuoteForm = ({ dealData,checklistData,quoteType }) => {
   // console.log({ dealData: dealData?.Sales_Person?.name });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Grid container spacing={2}>
+    <Box>
+       <Grid container spacing={2}>
         {renderTextField(
           "Quote_Title",
           "Quote Title",
@@ -90,10 +87,7 @@ const XtremeQuoteForm = ({ dealData,checklistData,quoteType }) => {
           control
         )}
       </Grid>
-      {/* <Button type="submit" variant="contained" color="primary" style={{ marginTop: 16 }}>
-        Submit Quote
-      </Button> */}
-    </form>
+    </Box>
   );
 };
 

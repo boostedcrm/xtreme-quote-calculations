@@ -177,7 +177,7 @@ export default function Calculation({
         </Grid> */}
         {/* Replace with actual label */}
       </Grid>
-      <Grid container>
+      <Grid container spacing={2}>
         <Grid item xs={6}>
           <Controller
             name="commission"
@@ -237,7 +237,6 @@ export default function Calculation({
                     `grossProfitAmount`,
                     Number(grossProfitAmount.toFixed(2))
                   );
-
                   field.onChange(e.target.value);
                 }}
               />
@@ -284,7 +283,7 @@ export default function Calculation({
         </Grid> */}
       </Grid>
       <br />
-      <Grid container>
+      <Grid container spacing={2}>
         <Grid item xs={6}>
           <Controller
             name="grossProfitAmount"
@@ -368,7 +367,7 @@ export default function Calculation({
           />
         </Grid>
         <Grid item xs={6}>
-          <Controller
+          {/* <Controller
             name="commissionPercentageFinal"
             control={control}
             defaultValue=""
@@ -381,7 +380,7 @@ export default function Calculation({
                 sx={{ width: 350 }} // Set the width to 300px
               />
             )}
-          />
+          /> */}
         </Grid>
         <Grid item xs={6}>
           <Controller
