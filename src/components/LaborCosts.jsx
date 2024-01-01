@@ -158,7 +158,6 @@ const LaborCosts = ({ ZOHO, control, getValues, register, setValue }) => {
                           costPerHour: data?.Rate || 0,
                           rowTotal: Number(
                             (
-                              timeFrame *
                               days *
                               hoursPerDay *
                               men *
@@ -187,24 +186,7 @@ const LaborCosts = ({ ZOHO, control, getValues, register, setValue }) => {
                       fullWidth
                       type="number"
                       onChange={(e) => {
-                        let rowTotal =
-                          Number(e.target.value || 0) *
-                          Number(getValues(`labor[${index}].days`) || 0) *
-                          Number(
-                            getValues(`labor[${index}].hoursPerDay`) || 0
-                          ) *
-                          Number(getValues(`labor[${index}].men`) || 0) *
-                          Number(getValues(`labor[${index}].costPerHour`) || 0);
-
-                        setValue(`labor[${index}].rowTotal`, Number(rowTotal.toFixed(2)) );
-
-                        let laborTotal = fields.reduce((acc, field, index) => {
-                          const amount = getValues(`labor[${index}].rowTotal`);
-                          return acc + (amount || 0);
-                        }, 0);
-                        setValue(`totalLaborCost`,Number(laborTotal.toFixed(2)) );
-
-                        calculateTotalCost();
+                        
                         field.onChange(e.target.value);
                       }}
                     />
@@ -227,7 +209,6 @@ const LaborCosts = ({ ZOHO, control, getValues, register, setValue }) => {
                       onChange={(e) => {
                         let rowTotal =
                           Number(e.target.value || 0) *
-                          Number(getValues(`labor[${index}].timeFrame`) || 0) *
                           Number(
                             getValues(`labor[${index}].hoursPerDay`) || 0
                           ) *
@@ -283,7 +264,6 @@ const LaborCosts = ({ ZOHO, control, getValues, register, setValue }) => {
                       onChange={(e) => {
                         let rowTotal =
                           Number(e.target.value || 0) *
-                          Number(getValues(`labor[${index}].timeFrame`) || 0) *
                           Number(getValues(`labor[${index}].days`) || 0) *
                           Number(getValues(`labor[${index}].men`) || 0) *
                           Number(getValues(`labor[${index}].costPerHour`) || 0);
@@ -337,7 +317,6 @@ const LaborCosts = ({ ZOHO, control, getValues, register, setValue }) => {
                       onChange={(e) => {
                         let rowTotal =
                           Number(e.target.value || 0) *
-                          Number(getValues(`labor[${index}].timeFrame`) || 0) *
                           Number(getValues(`labor[${index}].days`) || 0) *
                           Number(
                             getValues(`labor[${index}].hoursPerDay`) || 0
@@ -392,7 +371,6 @@ const LaborCosts = ({ ZOHO, control, getValues, register, setValue }) => {
                       onChange={(e) => {
                         let rowTotal =
                           Number(e.target.value || 0) *
-                          Number(getValues(`labor[${index}].timeFrame`) || 0) *
                           Number(getValues(`labor[${index}].days`) || 0) *
                           Number(
                             getValues(`labor[${index}].hoursPerDay`) || 0
