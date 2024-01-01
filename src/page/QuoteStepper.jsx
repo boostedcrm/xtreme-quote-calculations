@@ -269,18 +269,29 @@ export default function QuoteCalculation({
       });
   };
 
+  const updateDealAndDisable = (apiData, dealData) => {
+    var config = {
+      Entity: "Deals",
+      APIData: apiData,
+      Trigger: ["workflow"], // ["workflow"]
+    };
+    ZOHO.CRM.API.updateRecord(config)
+      .then(function (data) {
+        console.log({ updateDealAndDisable: data });
+        handleClose();
+      })
+      .catch((error) => {
+        console.log({ updateDealAndDisableError: error });
+        handleClose();
+      });
+  };
+
   const onSubmit = (data) => {
     console.log({ onSubmit: data });
     activeStep === steps.length - 1;
     if (activeStep === steps.length - 1) {
       // Create quote and update deal
 
-      let apiData = { Clarification20: JSON.stringify(data), id: dealData?.id };
-      var config = {
-        Entity: "Deals",
-        APIData: apiData,
-        Trigger: ["workflow"], // ["workflow"]
-      };
       //  materialsSubTotal,
       const {
         materials = [],
@@ -299,7 +310,40 @@ export default function QuoteCalculation({
       createPerDiem(perdiem, dealData);
       createRentalEquipment(rentalequipment, dealData);
       createVehicleExpense(vehicleexpense, dealData);
-      updateDeal(data, dealData);
+
+      let updateDealData = {
+        Materials_Cost: Number(data?.materialTotalCost) || 0,
+        Total_Manhours: Number(data?.totalManHours) || 0,
+        Labor_Cost: Number(data?.totalLaborCost) || 0,
+        Total_Equipment_Hours: Number(data?.totalEquipmentHours) || 0,
+        Equipment_Cost: Number(data?.equipmentTotal) || 0,
+        Miscellaneous_Cost: Number(data?.miscellaneousCost) || 0,
+        Rev_Per_Manhour: Number(data?.totalManHours) || 0,
+        Quoted_Gross_Profit: Number(data?.grossProfitPct) || 0,
+        Quoted_Gross_Profit_Amount: Number(data?.grossProfitAmount) || 0,
+        Amount: Number(data?.bidToCustomer) || 0,
+        Minimum_Bid_to_the_Customer: Number(data?.minimumBidToCustomer) || 0,
+        Actual_Materials_Cost: 0,
+        Total_Man_Hours: 0,
+        Actual_Equipment_Cost: 0,
+        Actual_Equipment_Hours: 0,
+        Total_Square_Feet: 0,
+        Change_Order_Manhours: 0,
+        Actual_Change_Order_Cost: 0,
+        Final_Gross_Profit: 0,
+        Final_Total_Cost: 0,
+        Actual_Gross_Profit_Percentage: 0,
+        Clarification20: JSON.stringify(data),
+        id: dealData?.id,
+      };
+
+      // Service: "some",
+      // Vendor_Type1: "some",
+      // Quoting_Notes: "some",
+      // Rate_Per_Sq_Ft: "some",
+      // Bid_to_Customer: "some",
+
+      updateDealAndDisable(updateDealData);
     } else {
       updateDeal(data, dealData);
     }

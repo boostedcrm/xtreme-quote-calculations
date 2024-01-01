@@ -111,7 +111,7 @@ function App() {
   }, [zohoLoaded, dealID]);
 
   const handleClose = async () => {
-    await ZOHO.CRM.UI.Popup.close().then(function (data) {
+    await ZOHO.CRM.UI.Popup.closeReload().then(function (data) {
       console.log(data);
     });
   };
