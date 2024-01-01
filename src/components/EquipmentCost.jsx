@@ -120,7 +120,7 @@ const ExquipmentCost = ({
         <TableBody>
           {fields.map((item, index) => (
             <TableRow key={item.id}>
-              <TableCell sx={{ width: "150px",paddingTop: 3  }}>
+              <TableCell sx={{ width: "150px", paddingTop: 3 }}>
                 <Controller
                   name={`equipment[${index}].name`}
                   control={control}
@@ -136,6 +136,7 @@ const ExquipmentCost = ({
                         <TextField {...params} label="" size="small" />
                       )}
                       onChange={(_, data) => {
+                        console.log({ equip: data });
                         if (data) {
                           let quantity = Number(
                             getValues(`equipment[${index}].quantity`) || 0
@@ -146,11 +147,7 @@ const ExquipmentCost = ({
                           let hoursPerDay = Number(
                             getValues(`equipment[${index}].hoursPerDay`) || 0
                           );
-                          let directCostPerHour = Number(
-                            getValues(
-                              `equipment[${index}].directCostPerHour`
-                            ) || 5
-                          );
+                          let directCostPerHour = Number(data?.Rate);
 
                           update(index, {
                             ...fields[index],
