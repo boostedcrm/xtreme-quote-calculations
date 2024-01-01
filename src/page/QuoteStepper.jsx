@@ -76,8 +76,182 @@ export default function QuoteCalculation({
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const onSubmit = (data) => {
-    console.log({ onSubmit: data });
+  const createMaterial = (materials, dealData) => {
+    var materialData = materials?.map((material) => {
+      return {
+        Name: material?.product?.Product_Name,
+        Size: material?.size || "" + "",
+        Deal_Name: dealData?.id,
+        Coverage: Number(material?.coverage) || 0,
+        Price_Per: Number(material?.pricePer) || 0,
+        Amount: Number(material?.amount) || 0,
+        Material_Total: Number(material?.total) || 0,
+      };
+    });
+
+    ZOHO.CRM.API.insertRecord({
+      Entity: "Material_Quote",
+      APIData: materialData,
+      Trigger: ["workflow"],
+    }).then(function (data) {
+      console.log({ createMaterial: data });
+    });
+  };
+
+  const createLabor = (labors, dealData) => {
+    var laborData = labors?.map((labor) => {
+      return {
+        Name: labor?.resourceTitle?.Name,
+        Deal_Name: dealData?.id,
+        Time_Frame_Day_Week_Task: labor?.timeFrame || "" + "",
+        Days: Number(labor?.days) || 0,
+        Hours_Per_Day: Number(labor?.hoursPerDay) || 0,
+        Men: Number(labor?.men) || 0,
+        Cost_Per_Hour: Number(labor?.costPerHour) || 0,
+        Total: Number(labor?.rowTotal) || 0,
+      };
+    });
+
+    ZOHO.CRM.API.insertRecord({
+      Entity: "Labours_Quote",
+      APIData: laborData,
+      Trigger: ["workflow"],
+    })
+      .then(function (data) {
+        console.log({ createLabor: data });
+      })
+      .catch(function (error) {
+        console.log({ createLaborError: error });
+      });
+  };
+
+  const createEquipment = (labors, dealData) => {
+    var laborData = labors?.map((labor) => {
+      return {
+        Name: labor?.name?.Name,
+        Deal_Name: dealData?.id,
+        Days: Number(labor?.days) || 0,
+        Direct_Cost_Per_Hour: Number(labor?.directCostPerHour) || 0,
+        Hours_Per_Day: Number(labor?.hoursPerDay) || 0,
+        Quantity: Number(labor?.quantity) || 0,
+      };
+    });
+
+    ZOHO.CRM.API.insertRecord({
+      Entity: "Equipments_Quote",
+      APIData: laborData,
+      Trigger: ["workflow"],
+    })
+      .then(function (data) {
+        console.log({ createEquipment: data });
+      })
+      .catch(function (error) {
+        console.log({ createEquipmentError: error });
+      });
+  };
+
+  const createLodging = (labors, dealData) => {
+    var laborData = labors?.map((labor) => {
+      return {
+        Name: dealData?.Deal_Name,
+        Deal_Lookup: dealData?.id,
+        Days: Number(labor?.days) || 0,
+        Crew_Size: Number(labor?.crewSize) || 0,
+        Cost_Per_Room: Number(labor?.costPerRoom) || 0,
+        Quantity: Number(labor?.numberOfRooms) || 0,
+        Total: Number(labor?.lodgingSubTotal) || 0,
+      };
+    });
+
+    ZOHO.CRM.API.insertRecord({
+      Entity: "Lodging",
+      APIData: laborData,
+      Trigger: ["workflow"],
+    })
+      .then(function (data) {
+        console.log({ createLodging: data });
+      })
+      .catch(function (error) {
+        console.log({ createLodgingError: error });
+      });
+  };
+
+  const createPerDiem = (labors, dealData) => {
+    var laborData = labors?.map((labor) => {
+      return {
+        Name: labor?.name?.Name,
+        Deal_Lookup: dealData?.id,
+        Days: Number(labor?.days) || 0,
+        Cost_Per_Day: Number(labor?.costPerDay) || 0,
+        Crew_Size: Number(labor?.crewSize) || 0,
+        Meal_Type: labor?.name?.Name + "",
+        Total: Number(labor?.perdiemSubtotal) || 0,
+      };
+    });
+
+    ZOHO.CRM.API.insertRecord({
+      Entity: "Per_Diem",
+      APIData: laborData,
+      Trigger: ["workflow"],
+    })
+      .then(function (data) {
+        console.log({ createPerDiem: data });
+      })
+      .catch(function (error) {
+        console.log({ createPerDiemError: error });
+      });
+  };
+
+  const createRentalEquipment = (labors, dealData) => {
+    var laborData = labors?.map((labor) => {
+      return {
+        Name: labor?.equipmentName,
+        Deal_Lookup: dealData?.id,
+        Rate: Number(labor?.rate) || 0,
+        Total: Number(labor?.rentalEquipmentSubtotal) || 0,
+        Total_Rental_Equipment_Cost:
+          Number(labor?.rentalEquipmentSubtotal) || 0,
+      };
+    });
+
+    ZOHO.CRM.API.insertRecord({
+      Entity: "Rental_Equipment",
+      APIData: laborData,
+      Trigger: ["workflow"],
+    })
+      .then(function (data) {
+        console.log({ createRentalEquipment: data });
+      })
+      .catch(function (error) {
+        console.log({ createRentalEquipmentError: error });
+      });
+  };
+
+  const createVehicleExpense = (labors, dealData) => {
+    var laborData = labors?.map((labor) => {
+      return {
+        Name: dealData?.Deal_Name || "Test",
+        Deal_Name: dealData?.id,
+        Mileage: Number(labor?.mileage) || 0,
+        Rate: Number(labor?.rate) || 0,
+        Total: Number(labor?.vehicleExpenseSubtotal) || 0,
+      };
+    });
+
+    ZOHO.CRM.API.insertRecord({
+      Entity: "Vehicle_Expense",
+      APIData: laborData,
+      Trigger: ["workflow"],
+    })
+      .then(function (data) {
+        console.log({ createVehicleExpense: data });
+      })
+      .catch(function (error) {
+        console.log({ createVehicleExpenseError: error });
+      });
+  };
+
+  const updateDeal = (data, dealData) => {
     let apiData = { Clarification20: JSON.stringify(data), id: dealData?.id };
     var config = {
       Entity: "Deals",
@@ -93,6 +267,42 @@ export default function QuoteCalculation({
         console.log({ error: error });
         handleClose();
       });
+  };
+
+  const onSubmit = (data) => {
+    console.log({ onSubmit: data });
+    activeStep === steps.length - 1;
+    if (activeStep === steps.length - 1) {
+      // Create quote and update deal
+
+      let apiData = { Clarification20: JSON.stringify(data), id: dealData?.id };
+      var config = {
+        Entity: "Deals",
+        APIData: apiData,
+        Trigger: ["workflow"], // ["workflow"]
+      };
+      //  materialsSubTotal,
+      const {
+        materials = [],
+        labor = [],
+        equipment = [],
+        lodging = [],
+        perdiem = [],
+        rentalequipment = [],
+        vehicleexpense = [],
+      } = data;
+      // Material_Quote
+      createMaterial(materials, dealData);
+      createLabor(labor, dealData);
+      createEquipment(equipment, dealData);
+      createLodging(lodging, dealData);
+      createPerDiem(perdiem, dealData);
+      createRentalEquipment(rentalequipment, dealData);
+      createVehicleExpense(vehicleexpense, dealData);
+      updateDeal(data, dealData);
+    } else {
+      updateDeal(data, dealData);
+    }
   };
 
   return (
