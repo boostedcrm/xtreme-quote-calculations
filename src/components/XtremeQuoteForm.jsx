@@ -56,7 +56,7 @@ const XtremeQuoteForm = ({ dealData, checklistData, quoteType, control }) => {
           control
         )}
         {renderTextField(
-          "Contact_Name",
+          "Contact Name",
           "Contact Name",
           dealData?.Contact_Name?.name || "",
           control
@@ -64,13 +64,13 @@ const XtremeQuoteForm = ({ dealData, checklistData, quoteType, control }) => {
       </Grid>
       <Grid container spacing={2}>
         {renderTextField(
-          "Assigned_To",
+          "Assigned To",
           "Assigned To",
           dealData?.Assigned_To?.name,
           control
         )}
         {renderTextField(
-          "Salesperson",
+          "Sales person",
           "Sales person",
           dealData?.Sales_Person?.name,
           control
@@ -78,13 +78,13 @@ const XtremeQuoteForm = ({ dealData, checklistData, quoteType, control }) => {
       </Grid>
       <Grid container spacing={2}>
         {renderTextField(
-          "vendor_type",
+          "Vendor-Type",
           "Vendor Type",
-          dealData?.Vendor_Type1 || "",
+          dealData?.Vendor_Type	|| dealData?.Vendor_Type1 || "",
           control
         )}
         {renderTextField(
-          "Quote_Status",
+          "Quote Status",
           "Quote Status",
           dealData?.Quote_Status || "",
           control
@@ -92,7 +92,7 @@ const XtremeQuoteForm = ({ dealData, checklistData, quoteType, control }) => {
       </Grid>
       <Grid container spacing={2}>
         {renderTextField(
-          "Quote_Type",
+          "Quote Type",
           "Quote Type",
           dealData?.Quote_Type || "",
           control
