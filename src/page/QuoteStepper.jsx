@@ -252,7 +252,16 @@ export default function QuoteCalculation({
   };
 
   const updateDeal = (data, dealData) => {
-    let apiData = { Clarification20: JSON.stringify(data), id: dealData?.id };
+    let apiData = {
+      Clarification20: JSON.stringify({
+        ...data,
+        EstPerformDate: data?.EstPerformDate.toISO()
+          .toString()
+          .substring(0, 10),
+        QuoteDueDate: data?.QuoteDueDate.toISO().toString().substring(0, 10),
+      }),
+      id: dealData?.id,
+    };
     var config = {
       Entity: "Deals",
       APIData: apiData,
@@ -323,6 +332,16 @@ export default function QuoteCalculation({
         Quoted_Gross_Profit_Amount: Number(data?.grossProfitAmount) || 0,
         Amount: Number(data?.bidToCustomer) || 0,
         Minimum_Bid_to_the_Customer: Number(data?.minimumBidToCustomer) || 0,
+        Est_Perform_Date: data?.EstPerformDate.toISO()
+          .toString()
+          .substring(0, 10),
+        Est_Perform_Date1: data?.EstPerformDate.toISO()
+          .toString()
+          .substring(0, 10),
+        Estimated_Perform_Date: data?.EstPerformDate.toISO()
+          .toString()
+          .substring(0, 10),
+        Quote_Due_Date: data?.QuoteDueDate.toISO().toString().substring(0, 10),
         Actual_Materials_Cost: 0,
         Total_Man_Hours: 0,
         Actual_Equipment_Cost: 0,
@@ -333,7 +352,13 @@ export default function QuoteCalculation({
         Final_Gross_Profit: 0,
         Final_Total_Cost: 0,
         Actual_Gross_Profit_Percentage: 0,
-        Clarification20: JSON.stringify(data),
+        Clarification20: JSON.stringify({
+          ...data,
+          EstPerformDate: data?.EstPerformDate.toISO()
+            .toString()
+            .substring(0, 10),
+          QuoteDueDate: data?.QuoteDueDate.toISO().toString().substring(0, 10),
+        }),
         id: dealData?.id,
       };
 

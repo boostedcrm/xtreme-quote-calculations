@@ -1,4 +1,7 @@
 import { useForm, Controller } from "react-hook-form";
+import { DateTime } from "luxon";
+
+import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import {
   TextField,
   Grid,
@@ -103,8 +106,71 @@ const XtremeQuoteForm = ({ dealData, checklistData, quoteType, control }) => {
       </Grid>
       <br />
       <Grid container gap={12}>
-        {renderDatePicker("EstPerformDate", "Est Perform Date", "", control)}
-        {renderDatePicker("QuoteDueDate", "Quote Due Date", "", control)}
+        {/* {renderDatePicker("EstPerformDate", "Est Perform Date", "", control)} */}
+        <LocalizationProvider dateAdapter={AdapterLuxon}>
+          <Controller
+            control={control}
+            name={`EstPerformDate`}
+            rules={{ required: true }}
+            render={({ field }) => {
+              return (
+                <DatePicker
+                  label="Est Perform Date"
+                  value={
+                    DateTime.fromISO(field?.value) ||
+                    DateTime.now().setZone("utc")
+                  }
+                  inputRef={
+                    DateTime.fromISO(field?.ref) ||
+                    DateTime.now().setZone("utc")
+                  }
+                  // value={DateTime.now().setZone("utc")}
+                  // inputRef={DateTime.now().setZone("utc")}
+                  // minDate={DateTime.now().setZone("utc")}
+                  // maxDate={DateTime.fromISO(
+                  //   getValues(`subform[${index}].dueDate`)
+                  // )}
+                  onChange={(date) => {
+                    field.onChange(date);
+                  }}
+                />
+              );
+            }}
+          />
+        </LocalizationProvider>
+
+        {/* {renderDatePicker("QuoteDueDate", "Quote Due Date", "", control)} */}
+        <LocalizationProvider dateAdapter={AdapterLuxon}>
+          <Controller
+            control={control}
+            name={`QuoteDueDate`}
+            rules={{ required: true }}
+            render={({ field }) => {
+              return (
+                <DatePicker
+                  label="Quote Due Date"
+                  value={
+                    DateTime.fromISO(field?.value) ||
+                    DateTime.now().setZone("utc")
+                  }
+                  inputRef={
+                    DateTime.fromISO(field?.ref) ||
+                    DateTime.now().setZone("utc")
+                  }
+                  // value={DateTime.now().setZone("utc")}
+                  // inputRef={DateTime.now().setZone("utc")}
+                  // minDate={DateTime.now().setZone("utc")}
+                  // maxDate={DateTime.fromISO(
+                  //   getValues(`subform[${index}].dueDate`)
+                  // )}
+                  onChange={(date) => {
+                    field.onChange(date);
+                  }}
+                />
+              );
+            }}
+          />
+        </LocalizationProvider>
       </Grid>
     </Box>
   );
