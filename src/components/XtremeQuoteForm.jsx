@@ -115,7 +115,7 @@ const XtremeQuoteForm = ({ dealData, checklistData, quoteType, control }) => {
             render={({ field }) => {
               return (
                 <DatePicker
-                disabled={true}
+                // disabled={true}
                   label="Est Perform Date"
                   value={
                     DateTime.fromISO(field?.value) ||
@@ -149,7 +149,7 @@ const XtremeQuoteForm = ({ dealData, checklistData, quoteType, control }) => {
             render={({ field }) => {
               return (
                 <DatePicker
-                  disabled={true}
+                  // disabled={true}
                   label="Quote Due Date"
                   value={
                     DateTime.fromISO(field?.value) ||
