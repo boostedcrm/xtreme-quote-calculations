@@ -80,7 +80,7 @@ const XtremeQuoteForm = ({ dealData, checklistData, quoteType, control }) => {
         {renderTextField(
           "Vendor-Type",
           "Vendor Type",
-          dealData?.Vendor_Type	|| dealData?.Vendor_Type1 || "",
+          dealData?.Vendor_Type || dealData?.Vendor_Type1 || "",
           control
         )}
         {renderTextField(
@@ -115,6 +115,7 @@ const XtremeQuoteForm = ({ dealData, checklistData, quoteType, control }) => {
             render={({ field }) => {
               return (
                 <DatePicker
+                disabled={true}
                   label="Est Perform Date"
                   value={
                     DateTime.fromISO(field?.value) ||
@@ -148,6 +149,7 @@ const XtremeQuoteForm = ({ dealData, checklistData, quoteType, control }) => {
             render={({ field }) => {
               return (
                 <DatePicker
+                  disabled={true}
                   label="Quote Due Date"
                   value={
                     DateTime.fromISO(field?.value) ||
@@ -183,14 +185,14 @@ const renderTextField = (
   label,
   defaultValue,
   control,
-  size = "small",
-  labelWidth = 180
+  disabled = true
 ) => (
   <Grid item xs={4}>
     <Controller
       name={name}
       control={control}
       defaultValue={defaultValue}
+      disabled={disabled}
       render={({ field }) => (
         <TextField
           {...field}
