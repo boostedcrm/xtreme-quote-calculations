@@ -273,7 +273,7 @@ const PerDiem = ({ control, watch, getValues, register, setValue }) => {
         startIcon={<AddCircleOutlineIcon />}
         onClick={() =>
           append({
-            name: "",
+            name: null,
             size: "",
             coverage: "",
             amount: "",

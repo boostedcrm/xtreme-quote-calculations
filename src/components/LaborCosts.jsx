@@ -418,7 +418,7 @@ const LaborCosts = ({ ZOHO, control, getValues, register, setValue }) => {
         startIcon={<AddCircleOutlineIcon />}
         onClick={() =>
           append({
-            resourceTitle: "",
+            resourceTitle: null,
             timeFrame: 0,
             days: 0,
             hoursPerDay: 0,

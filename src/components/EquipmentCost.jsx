@@ -464,7 +464,7 @@ const ExquipmentCost = ({
         startIcon={<AddCircleOutlineIcon />}
         onClick={() =>
           append({
-            name: {},
+            name: null,
             quantity: 0,
             days: 0,
             hoursPerDay: 0,

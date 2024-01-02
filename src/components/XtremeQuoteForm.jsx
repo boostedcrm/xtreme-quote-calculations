@@ -16,23 +16,22 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 
-const XtremeQuoteForm = ({ dealData,checklistData,quoteType }) => {
-  const [totalSqft, setTotalSqft] = useState(0)
-  const { control, handleSubmit } = useForm();
+const XtremeQuoteForm = ({ dealData, checklistData, quoteType, control }) => {
+  const [totalSqft, setTotalSqft] = useState(0);
 
   useEffect(() => {
-    if(quoteType != null){
+    if (quoteType != null) {
       const checklistType = quoteType.split(" ")[1];
-      if(checklistType === "Polish" && checklistData?.Polished_SQFT != null){
-        setTotalSqft(checklistData?.Polished_SQFT)
+      if (checklistType === "Polish" && checklistData?.Polished_SQFT != null) {
+        setTotalSqft(checklistData?.Polished_SQFT);
       }
     }
-  },[])
+  }, []);
   // console.log({ dealData: dealData?.Sales_Person?.name });
 
   return (
     <Box>
-       <Grid container spacing={2}>
+      <Grid container spacing={2}>
         {renderTextField(
           "Quote_Title",
           "Quote Title",
@@ -61,31 +60,51 @@ const XtremeQuoteForm = ({ dealData,checklistData,quoteType }) => {
         )}
       </Grid>
       <Grid container spacing={2}>
-        {renderTextField("Assigned_To", "Assigned To", dealData?.Assigned_To?.name, control)}
-        {renderTextField("Salesperson", "Sales person", dealData?.Sales_Person?.name, control)}
+        {renderTextField(
+          "Assigned_To",
+          "Assigned To",
+          dealData?.Assigned_To?.name,
+          control
+        )}
+        {renderTextField(
+          "Salesperson",
+          "Sales person",
+          dealData?.Sales_Person?.name,
+          control
+        )}
       </Grid>
       <Grid container spacing={2}>
-        {renderTextField("vendor_type", "Vendor Type", dealData?.Vendor_Type1 || "", control)}
-        {renderTextField("Quote_Status", "Quote Status", dealData?.Quote_Status || "", control)}
+        {renderTextField(
+          "vendor_type",
+          "Vendor Type",
+          dealData?.Vendor_Type1 || "",
+          control
+        )}
+        {renderTextField(
+          "Quote_Status",
+          "Quote Status",
+          dealData?.Quote_Status || "",
+          control
+        )}
       </Grid>
       <Grid container spacing={2}>
-        {renderTextField("Quote_Type", "Quote Type", dealData?.Quote_Type || "", control)}
-        {renderTextField("Total_Square_Feet", "Total Square Feet", totalSqft, control)}
+        {renderTextField(
+          "Quote_Type",
+          "Quote Type",
+          dealData?.Quote_Type || "",
+          control
+        )}
+        {renderTextField(
+          "Total_Square_Feet",
+          "Total Square Feet",
+          totalSqft,
+          control
+        )}
       </Grid>
       <br />
       <Grid container gap={12}>
-      {renderDatePicker(
-          'EstPerformDate',
-          'Est Perform Date',
-          '',
-          control
-        )}
-         {renderDatePicker(
-          'QuoteDueDate',
-          'Quote Due Date',
-          '',
-          control
-        )}
+        {renderDatePicker("EstPerformDate", "Est Perform Date", "", control)}
+        {renderDatePicker("QuoteDueDate", "Quote Due Date", "", control)}
       </Grid>
     </Box>
   );
@@ -272,13 +291,13 @@ const renderDatePicker = (name, label, defaultValue, control) => {
               label={label}
               {...field}
               InputProps={{
-                style: { height: '18px' } // Reduces the height of the input field
+                style: { height: "18px" }, // Reduces the height of the input field
               }}
               onChange={(newValue) => {
-                field.onChange(dayjs(newValue).format('YYYY-MM-DD'));
+                field.onChange(dayjs(newValue).format("YYYY-MM-DD"));
               }}
               PopperProps={{
-                placement: 'right-end',
+                placement: "right-end",
               }}
               renderInput={(params) => (
                 <TextField
@@ -301,7 +320,7 @@ const renderDatePicker = (name, label, defaultValue, control) => {
                   InputLabelProps={{ shrink: true }}
                   // Additional styling can be applied here
                   inputProps={{
-                    style: { fontSize: 12 } // Smaller font size for the input field
+                    style: { fontSize: 12 }, // Smaller font size for the input field
                   }}
                 />
               )}
