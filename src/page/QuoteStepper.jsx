@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { DateTime } from "luxon";
+
 import {
   Box,
   Button,
@@ -255,10 +257,14 @@ export default function QuoteCalculation({
     let apiData = {
       Clarification20: JSON.stringify({
         ...data,
-        EstPerformDate: data?.EstPerformDate.toISO()
+        EstPerformDate: DateTime.fromISO(data?.EstPerformDate)
+          .toISO()
           .toString()
           .substring(0, 10),
-        QuoteDueDate: data?.QuoteDueDate.toISO().toString().substring(0, 10),
+        QuoteDueDate: DateTime.fromISO(data?.QuoteDueDate)
+          .toISO()
+          .toString()
+          .substring(0, 10),
       }),
       id: dealData?.id,
     };
@@ -332,16 +338,30 @@ export default function QuoteCalculation({
         Quoted_Gross_Profit_Amount: Number(data?.grossProfitAmount) || 0,
         Amount: Number(data?.bidToCustomer) || 0,
         Minimum_Bid_to_the_Customer: Number(data?.minimumBidToCustomer) || 0,
-        Est_Perform_Date: data?.EstPerformDate.toISO()
+        Est_Perform_Date: DateTime.fromISO(
+          data?.EstPerformDate || DateTime.now().setZone("utc")
+        )
+          .toISO()
           .toString()
           .substring(0, 10),
-        Est_Perform_Date1: data?.EstPerformDate.toISO()
+        Est_Perform_Date1: DateTime.fromISO(
+          data?.EstPerformDate || DateTime.now().setZone("utc")
+        )
+          .toISO()
           .toString()
           .substring(0, 10),
-        Estimated_Perform_Date: data?.EstPerformDate.toISO()
+        Estimated_Perform_Date: DateTime.fromISO(
+          data?.EstPerformDate || DateTime.now().setZone("utc")
+        )
+          .toISO()
           .toString()
           .substring(0, 10),
-        Quote_Due_Date: data?.QuoteDueDate.toISO().toString().substring(0, 10),
+        Quote_Due_Date: DateTime.fromISO(
+          data?.QuoteDueDate || DateTime.now().setZone("utc")
+        )
+          .toISO()
+          .toString()
+          .substring(0, 10),
         Actual_Materials_Cost: 0,
         Total_Man_Hours: 0,
         Actual_Equipment_Cost: 0,
@@ -354,10 +374,18 @@ export default function QuoteCalculation({
         Actual_Gross_Profit_Percentage: 0,
         Clarification20: JSON.stringify({
           ...data,
-          EstPerformDate: data?.EstPerformDate.toISO()
+          EstPerformDate: DateTime.fromISO(
+            data?.EstPerformDate || DateTime.now().setZone("utc")
+          )
+            .toISO()
             .toString()
             .substring(0, 10),
-          QuoteDueDate: data?.QuoteDueDate.toISO().toString().substring(0, 10),
+          QuoteDueDate: DateTime.fromISO(
+            data?.QuoteDueDate || DateTime.now().setZone("utc")
+          )
+            .toISO()
+            .toString()
+            .substring(0, 10),
         }),
         id: dealData?.id,
       };
