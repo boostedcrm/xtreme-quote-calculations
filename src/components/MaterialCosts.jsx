@@ -65,6 +65,7 @@ const MaterialRow = ({
       totalVehicleExpenseCost;
 
     setValue(`miscellaneousCost`, Number(miscellaneousCost.toFixed(2)) );
+    setValue(`travelAndMisc`, Number(miscellaneousCost.toFixed(2)));
     let totalCost =
       miscellaneousCost + materialTotalCost + equipmentTotal + totalLaborCost;
     setValue(`totalCost`, Number(totalCost.toFixed(2)) );

@@ -71,12 +71,14 @@ const ExquipmentCost = ({
       totalVehicleExpenseCost;
 
     setValue(`miscellaneousCost`, Number(miscellaneousCost.toFixed(2)));
+    setValue(`travelAndMisc`, Number(miscellaneousCost.toFixed(2)));
     let totalCost =
       miscellaneousCost + materialTotalCost + equipmentTotal + totalLaborCost;
     setValue(`totalCost`, Number(totalCost.toFixed(2)));
 
     let grossProfitGoal = (totalCost - miscellaneousCost) / (50 / 100);
     setValue(`grossProfitGoal`, Number(grossProfitGoal.toFixed(2)));
+    
   }
 
   function calculateTotalEquipmentCost(fields) {
