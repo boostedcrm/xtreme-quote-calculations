@@ -536,6 +536,9 @@ export default function QuoteCalculation({
               Update Deal
             </Button>
           ) : (
+            <></>
+          )}
+          {activeStep != steps.length - 1 ? (
             <Button
               onClick={handleNext}
               variant="contained"
@@ -543,6 +546,8 @@ export default function QuoteCalculation({
             >
               Next
             </Button>
+          ) : (
+            <></>
           )}
         </Box>
         {activeStep === steps.length && (
