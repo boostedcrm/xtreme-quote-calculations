@@ -293,20 +293,49 @@ export default function QuoteCalculation({
   };
 
   const updateDealAndDisable = (apiData, dealData) => {
+    let transition_id = "5031174000000562282";
+    var BlueprintData = {
+      blueprint: [
+        {
+          transition_id: transition_id,
+          data: {
+            ...apiData,
+            Quote_Calculator: "Calculate Quote",
+          },
+        },
+      ],
+    };
     var config = {
       Entity: "Deals",
-      APIData: apiData,
-      Trigger: ["workflow"], // ["workflow"]
+      RecordID: dealData?.id,
+      BlueprintData: BlueprintData,
     };
-    ZOHO.CRM.API.updateRecord(config)
+
+    ZOHO.CRM.API.updateBluePrint(config)
       .then(function (data) {
-        console.log({ updateDealAndDisable: data });
+        console.log({ updateBluePrint: data });
         handleClose();
       })
-      .catch((error) => {
-        console.log({ updateDealAndDisableError: error });
-        handleClose();
+      .catch(function (error) {
+        console.log({ updateBluePrintEerror: error });
       });
+
+    // var config = {
+    //   Entity: "Deals",
+    //   APIData: apiData,
+    //   Trigger: ["workflow"],
+    // };
+    // ZOHO.CRM.API.updateRecord(config)
+    //   .then(function (data) {
+    //     console.log({ updateDealAndDisable: data });
+    //     // ZOHO.CRM.BLUEPRINT.proceed();
+
+    //     // handleClose();
+    //   })
+    //   .catch((error) => {
+    //     console.log({ updateDealAndDisableError: error });
+    //     // handleClose();
+    //   });
   };
 
   const onSubmit = (data) => {
@@ -326,13 +355,27 @@ export default function QuoteCalculation({
         vehicleexpense = [],
       } = data;
       // Material_Quote
-      createMaterial(materials, dealData);
-      createLabor(labor, dealData);
-      createEquipment(equipment, dealData);
-      createLodging(lodging, dealData);
-      createPerDiem(perdiem, dealData);
-      createRentalEquipment(rentalequipment, dealData);
-      createVehicleExpense(vehicleexpense, dealData);
+      if (materials?.length >= 1) {
+        createMaterial(materials, dealData);
+      }
+      if (labor?.length >= 1) {
+        createLabor(labor, dealData);
+      }
+      if (equipment?.length >= 1) {
+        createEquipment(equipment, dealData);
+      }
+      if (lodging?.length >= 1) {
+        createLodging(lodging, dealData);
+      }
+      if (perdiem?.length >= 1) {
+        createPerDiem(perdiem, dealData);
+      }
+      if (rentalequipment?.length >= 1) {
+        createRentalEquipment(rentalequipment, dealData);
+      }
+      if (vehicleexpense?.length >= 1) {
+        createVehicleExpense(vehicleexpense, dealData);
+      }
 
       let updateDealData = {
         Materials_Cost: Number(data?.materialTotalCost) || 0,
@@ -412,7 +455,7 @@ export default function QuoteCalculation({
       // Rate_Per_Sq_Ft: "some",
       // Bid_to_Customer: "some",
 
-      updateDealAndDisable(updateDealData);
+      updateDealAndDisable(updateDealData, dealData);
     } else {
       updateDeal(data, dealData);
     }
@@ -528,9 +571,9 @@ export default function QuoteCalculation({
           </Button>
           <Box sx={{ flex: "1 1 auto" }} />
           <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit" variant="contained" color="success">
+          {/* <Button type="submit" variant="contained" color="success">
             Save
-          </Button>
+          </Button> */}
           {activeStep === steps.length - 1 ? (
             <Button variant="contained" type="submit">
               Update Deal
