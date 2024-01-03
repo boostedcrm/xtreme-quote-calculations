@@ -257,11 +257,19 @@ export default function QuoteCalculation({
     let apiData = {
       Clarification20: JSON.stringify({
         ...data,
-        EstPerformDate: DateTime.fromISO(data?.EstPerformDate)
+        Est_Perform_Date: DateTime.fromISO(
+          data?.Est_Perform_Date ||
+            dealData?.Est_Perform_Date ||
+            DateTime.now().setZone("utc")
+        )
           .toISO()
           .toString()
           .substring(0, 10),
-        QuoteDueDate: DateTime.fromISO(data?.QuoteDueDate)
+        Quote_Due_Date: DateTime.fromISO(
+          data?.Quote_Due_Date ||
+            dealData?.Quote_Due_Date ||
+            DateTime.now().setZone("utc")
+        )
           .toISO()
           .toString()
           .substring(0, 10),
@@ -339,25 +347,33 @@ export default function QuoteCalculation({
         Amount: Number(data?.bidToCustomer) || 0,
         Minimum_Bid_to_the_Customer: Number(data?.minimumBidToCustomer) || 0,
         Est_Perform_Date: DateTime.fromISO(
-          data?.EstPerformDate || DateTime.now().setZone("utc")
+          data?.Est_Perform_Date ||
+            dealData?.Est_Perform_Date ||
+            DateTime.now().setZone("utc")
         )
           .toISO()
           .toString()
           .substring(0, 10),
         Est_Perform_Date1: DateTime.fromISO(
-          data?.EstPerformDate || DateTime.now().setZone("utc")
+          data?.Est_Perform_Date ||
+            dealData?.Est_Perform_Date ||
+            DateTime.now().setZone("utc")
         )
           .toISO()
           .toString()
           .substring(0, 10),
         Estimated_Perform_Date: DateTime.fromISO(
-          data?.EstPerformDate || DateTime.now().setZone("utc")
+          data?.Est_Perform_Date ||
+            dealData?.Est_Perform_Date ||
+            DateTime.now().setZone("utc")
         )
           .toISO()
           .toString()
           .substring(0, 10),
         Quote_Due_Date: DateTime.fromISO(
-          data?.QuoteDueDate || DateTime.now().setZone("utc")
+          data?.Quote_Due_Date ||
+            dealData?.Quote_Due_Date ||
+            DateTime.now().setZone("utc")
         )
           .toISO()
           .toString()
@@ -374,14 +390,14 @@ export default function QuoteCalculation({
         Actual_Gross_Profit_Percentage: 0,
         Clarification20: JSON.stringify({
           ...data,
-          EstPerformDate: DateTime.fromISO(
-            data?.EstPerformDate || DateTime.now().setZone("utc")
+          Est_Perform_Date: DateTime.fromISO(
+            data?.Est_Perform_Date || DateTime.now().setZone("utc")
           )
             .toISO()
             .toString()
             .substring(0, 10),
-          QuoteDueDate: DateTime.fromISO(
-            data?.QuoteDueDate || DateTime.now().setZone("utc")
+          Quote_Due_Date: DateTime.fromISO(
+            data?.Quote_Due_Date || DateTime.now().setZone("utc")
           )
             .toISO()
             .toString()

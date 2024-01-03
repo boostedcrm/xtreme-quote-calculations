@@ -110,20 +110,29 @@ const XtremeQuoteForm = ({ dealData, checklistData, quoteType, control }) => {
         <LocalizationProvider dateAdapter={AdapterLuxon}>
           <Controller
             control={control}
-            name={`EstPerformDate`}
-            rules={{ required: true }}
+            name={`Est_Perform_Date`}
             render={({ field }) => {
               return (
                 <DatePicker
-                // disabled={true}
+                  // disabled={true}
+                  disabled={dealData?.Est_Perform_Date ? true : false}
+                  required={
+                    dealData?.Est_Perform_Date
+                      ? false
+                      : field?.value
+                      ? false
+                      : true
+                  }
                   label="Est Perform Date"
                   value={
-                    DateTime.fromISO(field?.value) ||
-                    DateTime.now().setZone("utc")
+                    DateTime.fromISO(
+                      field?.value || dealData?.Est_Perform_Date
+                    ) || DateTime.now().setZone("utc")
                   }
                   inputRef={
-                    DateTime.fromISO(field?.ref) ||
-                    DateTime.now().setZone("utc")
+                    DateTime.fromISO(
+                      field?.ref || dealData?.Est_Perform_Date
+                    ) || DateTime.now().setZone("utc")
                   }
                   // value={DateTime.now().setZone("utc")}
                   // inputRef={DateTime.now().setZone("utc")}
@@ -144,19 +153,31 @@ const XtremeQuoteForm = ({ dealData, checklistData, quoteType, control }) => {
         <LocalizationProvider dateAdapter={AdapterLuxon}>
           <Controller
             control={control}
-            name={`QuoteDueDate`}
-            rules={{ required: true }}
+            name={`Quote_Due_Date`}
             render={({ field }) => {
               return (
                 <DatePicker
-                  // disabled={true}
+                  // disabled={dealData?.Quote_Due_Date ? true : false}
+                  defaultValue={
+                    DateTime.fromISO(
+                      field?.value || dealData?.Quote_Due_Date
+                    ) || DateTime.now().setZone("utc")
+                  }
+                  required={
+                    dealData?.Quote_Due_Date
+                      ? false
+                      : field?.value
+                      ? false
+                      : true
+                  }
                   label="Quote Due Date"
                   value={
-                    DateTime.fromISO(field?.value) ||
-                    DateTime.now().setZone("utc")
+                    DateTime.fromISO(
+                      field?.value || dealData?.Quote_Due_Date
+                    ) || DateTime.now().setZone("utc")
                   }
                   inputRef={
-                    DateTime.fromISO(field?.ref) ||
+                    DateTime.fromISO(field?.ref || dealData?.Quote_Due_Date) ||
                     DateTime.now().setZone("utc")
                   }
                   // value={DateTime.now().setZone("utc")}
