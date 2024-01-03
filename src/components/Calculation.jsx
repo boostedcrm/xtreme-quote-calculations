@@ -77,7 +77,6 @@ export default function Calculation({
           <Controller
             name="miscellaneousCost"
             control={control}
-            defaultValue=""
             render={({ field }) => (
               <TextField
                 label="Miscellaneous cost"
@@ -99,7 +98,6 @@ export default function Calculation({
           <Controller
             name="totalCost"
             control={control}
-            defaultValue=""
             render={({ field }) => (
               <TextField
                 label="Total Cost"
@@ -121,7 +119,6 @@ export default function Calculation({
           <Controller
             name="grossProfitGoal"
             control={control}
-            defaultValue="2242.78"
             render={({ field }) => (
               <TextField
                 label="Gross Profit Goal at 50%"
@@ -158,7 +155,6 @@ export default function Calculation({
           <Controller
             name="travelAndMisc"
             control={control}
-            defaultValue=""
             render={({ field }) => (
               <TextField
                 label="Travel and Misc"
@@ -198,7 +194,6 @@ export default function Calculation({
           <Controller
             name="commission"
             control={control}
-            defaultValue=""
             render={({ field }) => (
               <TextField
                 label="Commission"
@@ -265,7 +260,6 @@ export default function Calculation({
           <Controller
             name="minimumBidToCustomer"
             control={control}
-            defaultValue=""
             render={({ field }) => (
               <TextField
                 label="Minimum Bid to Customer"
@@ -304,7 +298,6 @@ export default function Calculation({
           <Controller
             name="grossProfitAmount"
             control={control}
-            defaultValue=""
             render={({ field }) => (
               <TextField
                 label="Gross Profit Amount"
@@ -325,7 +318,6 @@ export default function Calculation({
           <Controller
             name="grossProfitPct"
             control={control}
-            defaultValue=""
             render={({ field }) => (
               <TextField
                 label="Gross Profit Pct"
@@ -402,7 +394,6 @@ export default function Calculation({
           <Controller
             name="finalCommission"
             control={control}
-            defaultValue=""
             render={({ field }) => (
               <TextField
                 label="Final Commission"
@@ -422,7 +413,6 @@ export default function Calculation({
           <Controller
             name="totalCostPercentage"
             control={control}
-            defaultValue=""
             render={({ field }) => (
               <TextField
                 label="Total Cost Percentage"
@@ -438,7 +428,6 @@ export default function Calculation({
           <Controller
             name="finalTotalCost"
             control={control}
-            defaultValue=""
             render={({ field }) => (
               <TextField
                 label="Final Total Cost"
@@ -458,7 +447,6 @@ export default function Calculation({
           <Controller
             name="actualGrossProfitPercentage"
             control={control}
-            defaultValue=""
             render={({ field }) => (
               <TextField
                 label="Actual Gross Profit Percentage"
@@ -477,7 +465,6 @@ export default function Calculation({
           <Controller
             name="finalGrossProfit"
             control={control}
-            defaultValue=""
             render={({ field }) => (
               <TextField
                 label="Final Gross Profit"
