@@ -571,17 +571,20 @@ export default function QuoteCalculation({
           </Button>
           <Box sx={{ flex: "1 1 auto" }} />
           <Button onClick={handleClose}>Cancel</Button>
-          {/* <Button type="submit" variant="contained" color="success">
-            Save
-          </Button> */}
-          {activeStep === steps.length - 1 ? (
+
+          {!dealData?.Quote_Calculator && (
+            <Button type="submit" variant="contained" color="success">
+              Save
+            </Button>
+          )}
+          {activeStep === (steps.length - 1) && !dealData?.Quote_Calculator ? (
             <Button variant="contained" type="submit">
               Update Deal
             </Button>
           ) : (
             <></>
           )}
-          {activeStep != steps.length - 1 ? (
+          {activeStep != steps.length - 1  ? (
             <Button
               onClick={handleNext}
               variant="contained"
