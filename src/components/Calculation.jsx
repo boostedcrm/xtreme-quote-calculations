@@ -85,6 +85,10 @@ export default function Calculation({
                 {...field}
                 size="small"
                 sx={{ width: 350 }} // Set the width to 300px
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: <Typography>$</Typography>,
+                }}
               />
             )}
           />
@@ -103,6 +107,10 @@ export default function Calculation({
                 {...field}
                 size="small"
                 sx={{ width: 350 }} // Set the width to 300px
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: <Typography>$</Typography>,
+                }}
               />
             )}
           />
@@ -121,6 +129,10 @@ export default function Calculation({
                 {...field}
                 size="small"
                 sx={{ width: 350 }} // Set the width to 300px
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: <Typography>$</Typography>,
+                }}
               />
             )}
           />
@@ -146,7 +158,7 @@ export default function Calculation({
           <Controller
             name="travelAndMisc"
             control={control}
-            defaultValue="2242.78"
+            defaultValue=""
             render={({ field }) => (
               <TextField
                 label="Travel and Misc"
@@ -154,6 +166,10 @@ export default function Calculation({
                 {...field}
                 size="small"
                 sx={{ width: 350 }} // Set the width to 300px
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: <Typography>$</Typography>,
+                }}
               />
             )}
           />
@@ -288,7 +304,7 @@ export default function Calculation({
           <Controller
             name="grossProfitAmount"
             control={control}
-            defaultValue="2242.78"
+            defaultValue=""
             render={({ field }) => (
               <TextField
                 label="Gross Profit Amount"
