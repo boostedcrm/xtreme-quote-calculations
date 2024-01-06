@@ -126,12 +126,12 @@ const XtremeQuoteForm = ({ dealData, checklistData, quoteType, control }) => {
                   label="Est Perform Date"
                   value={
                     DateTime.fromISO(
-                      field?.value || dealData?.Est_Perform_Date
+                      dealData?.Est_Perform_Date || field?.value
                     ) || DateTime.now().setZone("utc")
                   }
                   inputRef={
                     DateTime.fromISO(
-                      field?.ref || dealData?.Est_Perform_Date
+                      dealData?.Est_Perform_Date || field?.ref
                     ) || DateTime.now().setZone("utc")
                   }
                   // value={DateTime.now().setZone("utc")}
@@ -158,11 +158,12 @@ const XtremeQuoteForm = ({ dealData, checklistData, quoteType, control }) => {
               return (
                 <DatePicker
                   // disabled={dealData?.Quote_Due_Date ? true : false}
-                  defaultValue={
-                    DateTime.fromISO(
-                      field?.value || dealData?.Quote_Due_Date
-                    ) || DateTime.now().setZone("utc")
-                  }
+                  disabled={dealData?.Quote_Due_Date ? true : false}
+                  // defaultValue={
+                  //   DateTime.fromISO(
+                  //     dealData?.Quote_Due_Date || field?.value
+                  //   ) || DateTime.now().setZone("utc")
+                  // }
                   required={
                     dealData?.Quote_Due_Date
                       ? false
@@ -173,11 +174,11 @@ const XtremeQuoteForm = ({ dealData, checklistData, quoteType, control }) => {
                   label="Quote Due Date"
                   value={
                     DateTime.fromISO(
-                      field?.value || dealData?.Quote_Due_Date
+                      dealData?.Quote_Due_Date || field?.value
                     ) || DateTime.now().setZone("utc")
                   }
                   inputRef={
-                    DateTime.fromISO(field?.ref || dealData?.Quote_Due_Date) ||
+                    DateTime.fromISO(dealData?.Quote_Due_Date || field?.ref) ||
                     DateTime.now().setZone("utc")
                   }
                   // value={DateTime.now().setZone("utc")}
