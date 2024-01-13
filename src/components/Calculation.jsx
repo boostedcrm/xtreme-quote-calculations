@@ -19,6 +19,7 @@ export default function Calculation({
   watch,
   getValues,
   register,
+  unregister,
   setValue,
   checklistData,
   quoteType,
@@ -29,31 +30,35 @@ export default function Calculation({
   useEffect(() => {
     async function getData() {
       try {
-        const response = await ZOHO.CRM.API.getAllRecords({
+        const clarifications = await ZOHO.CRM.API.getAllRecords({
           Entity: "Clarifications",
           sort_order: "asc",
           per_page: 200,
           page: 1,
         });
 
-        if (response?.data) {
-          const firstWordOfQuoteType = quoteType?.split(" ")[0];
+        console.log({ clarifications });
 
-          const filteredData = response.data.filter((item) => {
-            // Handle the specific case for "Concrete"
-            if (firstWordOfQuoteType === "Concrete") {
-              return item.Type === "Concrete/Honing";
+        if (clarifications?.data) {
+          let firstWordOfQuoteType = quoteType?.split(" ")[0];
+          firstWordOfQuoteType = "Concrete";
+          const filteredCarificationsData = clarifications.data.filter(
+            (item) => {
+              // Handle the specific case for "Concrete"
+              if (firstWordOfQuoteType === "Concrete") {
+                return item.Type === "Concrete/Honing";
+              }
+              // For other types, perform a regular match
+              return item.Type === firstWordOfQuoteType;
             }
-            // For other types, perform a regular match
-            return item.Type === firstWordOfQuoteType;
-          });
+          );
 
-          console.log({ filteredData });
+          console.log({ filteredCarificationsData });
 
-          setClarifications(filteredData);
+          setClarifications(filteredCarificationsData);
         }
-      } catch (error) {
-        console.error("Error fetching data:", error);
+      } catch (clarificationError) {
+        console.error({ clarificationError });
       }
     }
     getData();
@@ -61,6 +66,7 @@ export default function Calculation({
 
   const removeClarification = (index) => {
     const newClarifications = clarifications.filter((_, i) => i !== index);
+    unregister(`Clarifications${index}`);
     setClarifications(newClarifications);
   };
 
