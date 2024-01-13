@@ -98,7 +98,7 @@ const XtremeQuoteForm = ({ dealData, checklistData, quoteType, control }) => {
           control
         )}
         {renderTextField(
-          "Total_Square_Feet",
+          "SquareFeet",
           "Total Square Feet",
           totalSqft,
           control
