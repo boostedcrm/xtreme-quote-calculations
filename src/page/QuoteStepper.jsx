@@ -44,12 +44,19 @@ export default function QuoteCalculation({
   checklistData,
   quoteType,
 }) {
-  const { control, handleSubmit, register, watch, getValues, setValue } =
-    useForm({
-      defaultValues: dealData?.Clarification20
-        ? { step: 0, ...JSON.parse(dealData.Clarification20) }
-        : { step: 0 },
-    });
+  const {
+    control,
+    handleSubmit,
+    register,
+    unregister,
+    watch,
+    getValues,
+    setValue,
+  } = useForm({
+    defaultValues: dealData?.Clarification20
+      ? { step: 0, ...JSON.parse(dealData.Clarification20) }
+      : { step: 0 },
+  });
 
   const [activeStep, setActiveStep] = useState(
     JSON.parse(dealData.Clarification20)?.step || 0
@@ -253,15 +260,24 @@ export default function QuoteCalculation({
       });
   };
 
-  const updateDeal = (data, dealData) => {
+  const saveQuoteData = () => {
+    let data = getValues();
     let apiData = {
       Clarification20: JSON.stringify({
         ...data,
-        EstPerformDate: DateTime.fromISO(data?.EstPerformDate)
+        Est_Perform_Date: DateTime.fromISO(
+          data?.Est_Perform_Date ||
+            dealData?.Est_Perform_Date ||
+            DateTime.now().setZone("utc")
+        )
           .toISO()
           .toString()
           .substring(0, 10),
-        QuoteDueDate: DateTime.fromISO(data?.QuoteDueDate)
+        Quote_Due_Date: DateTime.fromISO(
+          data?.Quote_Due_Date ||
+            dealData?.Quote_Due_Date ||
+            DateTime.now().setZone("utc")
+        )
           .toISO()
           .toString()
           .substring(0, 10),
@@ -285,121 +301,167 @@ export default function QuoteCalculation({
   };
 
   const updateDealAndDisable = (apiData, dealData) => {
+    let transition_id = "5031174000000562282";
+    var BlueprintData = {
+      blueprint: [
+        {
+          transition_id: transition_id,
+          data: {
+            ...apiData,
+            Quote_Calculator: "Calculate Quote",
+          },
+        },
+      ],
+    };
     var config = {
       Entity: "Deals",
-      APIData: apiData,
-      Trigger: ["workflow"], // ["workflow"]
+      RecordID: dealData?.id,
+      BlueprintData: BlueprintData,
     };
-    ZOHO.CRM.API.updateRecord(config)
+
+    ZOHO.CRM.API.updateBluePrint(config)
       .then(function (data) {
-        console.log({ updateDealAndDisable: data });
+        console.log({ updateBluePrint: data });
         handleClose();
       })
-      .catch((error) => {
-        console.log({ updateDealAndDisableError: error });
-        handleClose();
+      .catch(function (error) {
+        console.log({ updateBluePrintEerror: error });
       });
+
+    // var config = {
+    //   Entity: "Deals",
+    //   APIData: apiData,
+    //   Trigger: ["workflow"],
+    // };
+    // ZOHO.CRM.API.updateRecord(config)
+    //   .then(function (data) {
+    //     console.log({ updateDealAndDisable: data });
+    //     // ZOHO.CRM.BLUEPRINT.proceed();
+
+    //     // handleClose();
+    //   })
+    //   .catch((error) => {
+    //     console.log({ updateDealAndDisableError: error });
+    //     // handleClose();
+    //   });
   };
 
   const onSubmit = (data) => {
     console.log({ onSubmit: data });
-    activeStep === steps.length - 1;
-    if (activeStep === steps.length - 1) {
-      // Create quote and update deal
+    // Create quote and update deal
 
-      //  materialsSubTotal,
-      const {
-        materials = [],
-        labor = [],
-        equipment = [],
-        lodging = [],
-        perdiem = [],
-        rentalequipment = [],
-        vehicleexpense = [],
-      } = data;
-      // Material_Quote
-      createMaterial(materials, dealData);
-      createLabor(labor, dealData);
-      createEquipment(equipment, dealData);
-      createLodging(lodging, dealData);
-      createPerDiem(perdiem, dealData);
-      createRentalEquipment(rentalequipment, dealData);
-      createVehicleExpense(vehicleexpense, dealData);
+    // //  materialsSubTotal,
+    // const {
+    //   materials = [],
+    //   labor = [],
+    //   equipment = [],
+    //   lodging = [],
+    //   perdiem = [],
+    //   rentalequipment = [],
+    //   vehicleexpense = [],
+    // } = data;
+    // // Material_Quote
+    // if (materials?.length >= 1) {
+    //   createMaterial(materials, dealData);
+    // }
+    // if (labor?.length >= 1) {
+    //   createLabor(labor, dealData);
+    // }
+    // if (equipment?.length >= 1) {
+    //   createEquipment(equipment, dealData);
+    // }
+    // if (lodging?.length >= 1) {
+    //   createLodging(lodging, dealData);
+    // }
+    // if (perdiem?.length >= 1) {
+    //   createPerDiem(perdiem, dealData);
+    // }
+    // if (rentalequipment?.length >= 1) {
+    //   createRentalEquipment(rentalequipment, dealData);
+    // }
+    // if (vehicleexpense?.length >= 1) {
+    //   createVehicleExpense(vehicleexpense, dealData);
+    // }
 
-      let updateDealData = {
-        Materials_Cost: Number(data?.materialTotalCost) || 0,
-        Total_Manhours: Number(data?.totalManHours) || 0,
-        Labor_Cost: Number(data?.totalLaborCost) || 0,
-        Total_Equipment_Hours: Number(data?.totalEquipmentHours) || 0,
-        Equipment_Cost: Number(data?.equipmentTotal) || 0,
-        Miscellaneous_Cost: Number(data?.miscellaneousCost) || 0,
-        Rev_Per_Manhour: Number(data?.totalManHours) || 0,
-        Quoted_Gross_Profit: Number(data?.grossProfitPct) || 0,
-        Quoted_Gross_Profit_Amount: Number(data?.grossProfitAmount) || 0,
-        Amount: Number(data?.bidToCustomer) || 0,
-        Minimum_Bid_to_the_Customer: Number(data?.minimumBidToCustomer) || 0,
-        Est_Perform_Date: DateTime.fromISO(
-          data?.EstPerformDate || DateTime.now().setZone("utc")
-        )
-          .toISO()
-          .toString()
-          .substring(0, 10),
-        Est_Perform_Date1: DateTime.fromISO(
-          data?.EstPerformDate || DateTime.now().setZone("utc")
-        )
-          .toISO()
-          .toString()
-          .substring(0, 10),
-        Estimated_Perform_Date: DateTime.fromISO(
-          data?.EstPerformDate || DateTime.now().setZone("utc")
-        )
-          .toISO()
-          .toString()
-          .substring(0, 10),
-        Quote_Due_Date: DateTime.fromISO(
-          data?.QuoteDueDate || DateTime.now().setZone("utc")
-        )
-          .toISO()
-          .toString()
-          .substring(0, 10),
-        Actual_Materials_Cost: 0,
-        Total_Man_Hours: 0,
-        Actual_Equipment_Cost: 0,
-        Actual_Equipment_Hours: 0,
-        Total_Square_Feet: 0,
-        Change_Order_Manhours: 0,
-        Actual_Change_Order_Cost: 0,
-        Final_Gross_Profit: 0,
-        Final_Total_Cost: 0,
-        Actual_Gross_Profit_Percentage: 0,
-        Clarification20: JSON.stringify({
-          ...data,
-          EstPerformDate: DateTime.fromISO(
-            data?.EstPerformDate || DateTime.now().setZone("utc")
-          )
-            .toISO()
-            .toString()
-            .substring(0, 10),
-          QuoteDueDate: DateTime.fromISO(
-            data?.QuoteDueDate || DateTime.now().setZone("utc")
-          )
-            .toISO()
-            .toString()
-            .substring(0, 10),
-        }),
-        id: dealData?.id,
-      };
+    // let updateDealData = {
+    //   Materials_Cost: Number(data?.materialTotalCost) || 0,
+    //   Total_Manhours: Number(data?.totalManHours) || 0,
+    //   Labor_Cost: Number(data?.totalLaborCost) || 0,
+    //   Total_Equipment_Hours: Number(data?.totalEquipmentHours) || 0,
+    //   Equipment_Cost: Number(data?.equipmentTotal) || 0,
+    //   Miscellaneous_Cost: Number(data?.miscellaneousCost) || 0,
+    //   Rev_Per_Manhour: Number(data?.totalManHours) || 0,
+    //   Quoted_Gross_Profit: Number(data?.grossProfitPct) || 0,
+    //   Quoted_Gross_Profit_Amount: Number(data?.grossProfitAmount) || 0,
+    //   Amount: Number(data?.bidToCustomer) || 0,
+    //   Minimum_Bid_to_the_Customer: Number(data?.minimumBidToCustomer) || 0,
+    //   Est_Perform_Date: DateTime.fromISO(
+    //     data?.Est_Perform_Date ||
+    //       dealData?.Est_Perform_Date ||
+    //       DateTime.now().setZone("utc")
+    //   )
+    //     .toISO()
+    //     .toString()
+    //     .substring(0, 10),
+    //   Est_Perform_Date1: DateTime.fromISO(
+    //     data?.Est_Perform_Date ||
+    //       dealData?.Est_Perform_Date ||
+    //       DateTime.now().setZone("utc")
+    //   )
+    //     .toISO()
+    //     .toString()
+    //     .substring(0, 10),
+    //   Estimated_Perform_Date: DateTime.fromISO(
+    //     data?.Est_Perform_Date ||
+    //       dealData?.Est_Perform_Date ||
+    //       DateTime.now().setZone("utc")
+    //   )
+    //     .toISO()
+    //     .toString()
+    //     .substring(0, 10),
+    //   Quote_Due_Date: DateTime.fromISO(
+    //     data?.Quote_Due_Date ||
+    //       dealData?.Quote_Due_Date ||
+    //       DateTime.now().setZone("utc")
+    //   )
+    //     .toISO()
+    //     .toString()
+    //     .substring(0, 10),
+    //   Actual_Materials_Cost: 0,
+    //   Total_Man_Hours: 0,
+    //   Actual_Equipment_Cost: 0,
+    //   Actual_Equipment_Hours: 0,
+    //   Total_Square_Feet: 0,
+    //   Change_Order_Manhours: 0,
+    //   Actual_Change_Order_Cost: 0,
+    //   Final_Gross_Profit: 0,
+    //   Final_Total_Cost: 0,
+    //   Actual_Gross_Profit_Percentage: 0,
+    //   Clarification20: JSON.stringify({
+    //     ...data,
+    //     Est_Perform_Date: DateTime.fromISO(
+    //       data?.Est_Perform_Date || DateTime.now().setZone("utc")
+    //     )
+    //       .toISO()
+    //       .toString()
+    //       .substring(0, 10),
+    //     Quote_Due_Date: DateTime.fromISO(
+    //       data?.Quote_Due_Date || DateTime.now().setZone("utc")
+    //     )
+    //       .toISO()
+    //       .toString()
+    //       .substring(0, 10),
+    //   }),
+    //   id: dealData?.id,
+    // };
 
-      // Service: "some",
-      // Vendor_Type1: "some",
-      // Quoting_Notes: "some",
-      // Rate_Per_Sq_Ft: "some",
-      // Bid_to_Customer: "some",
+    // // Service: "some",
+    // // Vendor_Type1: "some",
+    // // Quoting_Notes: "some",
+    // // Rate_Per_Sq_Ft: "some",
+    // // Bid_to_Customer: "some",
 
-      updateDealAndDisable(updateDealData);
-    } else {
-      updateDeal(data, dealData);
-    }
+    // updateDealAndDisable(updateDealData, dealData);
   };
 
   return (
@@ -501,6 +563,7 @@ export default function QuoteCalculation({
               setValue={setValue}
               getValues={getValues}
               register={register}
+              unregister={unregister}
               checklistData={checklistData}
               quoteType={quoteType}
             />
@@ -512,14 +575,22 @@ export default function QuoteCalculation({
           </Button>
           <Box sx={{ flex: "1 1 auto" }} />
           <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit" variant="contained" color="success">
-            Save
-          </Button>
-          {activeStep === steps.length - 1 ? (
+
+          {!dealData?.Quote_Calculator && (
+            <Button variant="contained" color="success" onClick={saveQuoteData}>
+              Save
+            </Button>
+          )}
+
+          {activeStep === steps.length - 1 && !dealData?.Quote_Calculator ? (
             <Button variant="contained" type="submit">
               Update Deal
             </Button>
           ) : (
+            <></>
+          )}
+
+          {activeStep != steps.length - 1 ? (
             <Button
               onClick={handleNext}
               variant="contained"
@@ -527,6 +598,8 @@ export default function QuoteCalculation({
             >
               Next
             </Button>
+          ) : (
+            <></>
           )}
         </Box>
         {activeStep === steps.length && (

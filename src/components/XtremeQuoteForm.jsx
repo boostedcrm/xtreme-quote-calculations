@@ -80,7 +80,7 @@ const XtremeQuoteForm = ({ dealData, checklistData, quoteType, control }) => {
         {renderTextField(
           "Vendor-Type",
           "Vendor Type",
-          dealData?.Vendor_Type	|| dealData?.Vendor_Type1 || "",
+          dealData?.Vendor_Type || dealData?.Vendor_Type1 || "",
           control
         )}
         {renderTextField(
@@ -110,19 +110,29 @@ const XtremeQuoteForm = ({ dealData, checklistData, quoteType, control }) => {
         <LocalizationProvider dateAdapter={AdapterLuxon}>
           <Controller
             control={control}
-            name={`EstPerformDate`}
-            rules={{ required: true }}
+            name={`Est_Perform_Date`}
             render={({ field }) => {
               return (
                 <DatePicker
+                  // disabled={true}
+                  disabled={dealData?.Est_Perform_Date ? true : false}
+                  required={
+                    dealData?.Est_Perform_Date
+                      ? false
+                      : field?.value
+                      ? false
+                      : true
+                  }
                   label="Est Perform Date"
                   value={
-                    DateTime.fromISO(field?.value) ||
-                    DateTime.now().setZone("utc")
+                    DateTime.fromISO(
+                      dealData?.Est_Perform_Date || field?.value
+                    ) || DateTime.now().setZone("utc")
                   }
                   inputRef={
-                    DateTime.fromISO(field?.ref) ||
-                    DateTime.now().setZone("utc")
+                    DateTime.fromISO(
+                      dealData?.Est_Perform_Date || field?.ref
+                    ) || DateTime.now().setZone("utc")
                   }
                   // value={DateTime.now().setZone("utc")}
                   // inputRef={DateTime.now().setZone("utc")}
@@ -143,18 +153,32 @@ const XtremeQuoteForm = ({ dealData, checklistData, quoteType, control }) => {
         <LocalizationProvider dateAdapter={AdapterLuxon}>
           <Controller
             control={control}
-            name={`QuoteDueDate`}
-            rules={{ required: true }}
+            name={`Quote_Due_Date`}
             render={({ field }) => {
               return (
                 <DatePicker
+                  // disabled={dealData?.Quote_Due_Date ? true : false}
+                  disabled={dealData?.Quote_Due_Date ? true : false}
+                  // defaultValue={
+                  //   DateTime.fromISO(
+                  //     dealData?.Quote_Due_Date || field?.value
+                  //   ) || DateTime.now().setZone("utc")
+                  // }
+                  required={
+                    dealData?.Quote_Due_Date
+                      ? false
+                      : field?.value
+                      ? false
+                      : true
+                  }
                   label="Quote Due Date"
                   value={
-                    DateTime.fromISO(field?.value) ||
-                    DateTime.now().setZone("utc")
+                    DateTime.fromISO(
+                      dealData?.Quote_Due_Date || field?.value
+                    ) || DateTime.now().setZone("utc")
                   }
                   inputRef={
-                    DateTime.fromISO(field?.ref) ||
+                    DateTime.fromISO(dealData?.Quote_Due_Date || field?.ref) ||
                     DateTime.now().setZone("utc")
                   }
                   // value={DateTime.now().setZone("utc")}
@@ -183,14 +207,14 @@ const renderTextField = (
   label,
   defaultValue,
   control,
-  size = "small",
-  labelWidth = 180
+  disabled = true
 ) => (
   <Grid item xs={4}>
     <Controller
       name={name}
       control={control}
       defaultValue={defaultValue}
+      disabled={disabled}
       render={({ field }) => (
         <TextField
           {...field}

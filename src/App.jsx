@@ -46,10 +46,18 @@ function App() {
         }).then(function (data) {
           setDealData(data?.data[0]);
           if (data?.data[0] !== undefined) {
+            var config = {
+              Entity: "Deals",
+              RecordID: dealID,
+            };
+
+            ZOHO.CRM.API.getBluePrint(config).then(function (data) {
+              console.log({getBluePrint: data});
+            });
             const dealData = data?.data[0];
-            console.log({dealData});
+            console.log({ dealData });
             let previousData = JSON.parse(dealData?.Clarification20 || "{}");
-            console.log({previousData});
+            console.log({ previousData });
             const Quote_Type = dealData.Quote_Type;
             if (Quote_Type != null) {
               const quoteType = Quote_Type.split(" ")[0];

@@ -19,6 +19,7 @@ export default function Calculation({
   watch,
   getValues,
   register,
+  unregister,
   setValue,
   checklistData,
   quoteType,
@@ -29,31 +30,35 @@ export default function Calculation({
   useEffect(() => {
     async function getData() {
       try {
-        const response = await ZOHO.CRM.API.getAllRecords({
+        const clarifications = await ZOHO.CRM.API.getAllRecords({
           Entity: "Clarifications",
           sort_order: "asc",
           per_page: 200,
           page: 1,
         });
 
-        if (response?.data) {
-          const firstWordOfQuoteType = quoteType?.split(" ")[0];
+        console.log({ clarifications });
 
-          const filteredData = response.data.filter((item) => {
-            // Handle the specific case for "Concrete"
-            if (firstWordOfQuoteType === "Concrete") {
-              return item.Type === "Concrete/Honing";
+        if (clarifications?.data) {
+          let firstWordOfQuoteType = quoteType?.split(" ")[0];
+          firstWordOfQuoteType = "Concrete";
+          const filteredCarificationsData = clarifications.data.filter(
+            (item) => {
+              // Handle the specific case for "Concrete"
+              if (firstWordOfQuoteType === "Concrete") {
+                return item.Type === "Concrete/Honing";
+              }
+              // For other types, perform a regular match
+              return item.Type === firstWordOfQuoteType;
             }
-            // For other types, perform a regular match
-            return item.Type === firstWordOfQuoteType;
-          });
+          );
 
-          console.log({ filteredData });
+          console.log({ filteredCarificationsData });
 
-          setClarifications(filteredData);
+          setClarifications(filteredCarificationsData);
         }
-      } catch (error) {
-        console.error("Error fetching data:", error);
+      } catch (clarificationError) {
+        console.error({ clarificationError });
       }
     }
     getData();
@@ -61,6 +66,7 @@ export default function Calculation({
 
   const removeClarification = (index) => {
     const newClarifications = clarifications.filter((_, i) => i !== index);
+    unregister(`Clarifications${index}`);
     setClarifications(newClarifications);
   };
 
@@ -77,7 +83,6 @@ export default function Calculation({
           <Controller
             name="miscellaneousCost"
             control={control}
-            defaultValue=""
             render={({ field }) => (
               <TextField
                 label="Miscellaneous cost"
@@ -85,6 +90,10 @@ export default function Calculation({
                 {...field}
                 size="small"
                 sx={{ width: 350 }} // Set the width to 300px
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: <Typography>$</Typography>,
+                }}
               />
             )}
           />
@@ -95,7 +104,6 @@ export default function Calculation({
           <Controller
             name="totalCost"
             control={control}
-            defaultValue=""
             render={({ field }) => (
               <TextField
                 label="Total Cost"
@@ -103,6 +111,10 @@ export default function Calculation({
                 {...field}
                 size="small"
                 sx={{ width: 350 }} // Set the width to 300px
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: <Typography>$</Typography>,
+                }}
               />
             )}
           />
@@ -113,7 +125,6 @@ export default function Calculation({
           <Controller
             name="grossProfitGoal"
             control={control}
-            defaultValue="2242.78"
             render={({ field }) => (
               <TextField
                 label="Gross Profit Goal at 50%"
@@ -121,6 +132,10 @@ export default function Calculation({
                 {...field}
                 size="small"
                 sx={{ width: 350 }} // Set the width to 300px
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: <Typography>$</Typography>,
+                }}
               />
             )}
           />
@@ -146,7 +161,6 @@ export default function Calculation({
           <Controller
             name="travelAndMisc"
             control={control}
-            defaultValue="2242.78"
             render={({ field }) => (
               <TextField
                 label="Travel and Misc"
@@ -154,6 +168,10 @@ export default function Calculation({
                 {...field}
                 size="small"
                 sx={{ width: 350 }} // Set the width to 300px
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: <Typography>$</Typography>,
+                }}
               />
             )}
           />
@@ -182,7 +200,6 @@ export default function Calculation({
           <Controller
             name="commission"
             control={control}
-            defaultValue=""
             render={({ field }) => (
               <TextField
                 label="Commission"
@@ -249,7 +266,6 @@ export default function Calculation({
           <Controller
             name="minimumBidToCustomer"
             control={control}
-            defaultValue=""
             render={({ field }) => (
               <TextField
                 label="Minimum Bid to Customer"
@@ -288,7 +304,6 @@ export default function Calculation({
           <Controller
             name="grossProfitAmount"
             control={control}
-            defaultValue="2242.78"
             render={({ field }) => (
               <TextField
                 label="Gross Profit Amount"
@@ -309,7 +324,6 @@ export default function Calculation({
           <Controller
             name="grossProfitPct"
             control={control}
-            defaultValue=""
             render={({ field }) => (
               <TextField
                 label="Gross Profit Pct"
@@ -386,7 +400,6 @@ export default function Calculation({
           <Controller
             name="finalCommission"
             control={control}
-            defaultValue=""
             render={({ field }) => (
               <TextField
                 label="Final Commission"
@@ -406,7 +419,6 @@ export default function Calculation({
           <Controller
             name="totalCostPercentage"
             control={control}
-            defaultValue=""
             render={({ field }) => (
               <TextField
                 label="Total Cost Percentage"
@@ -422,7 +434,6 @@ export default function Calculation({
           <Controller
             name="finalTotalCost"
             control={control}
-            defaultValue=""
             render={({ field }) => (
               <TextField
                 label="Final Total Cost"
@@ -442,7 +453,6 @@ export default function Calculation({
           <Controller
             name="actualGrossProfitPercentage"
             control={control}
-            defaultValue=""
             render={({ field }) => (
               <TextField
                 label="Actual Gross Profit Percentage"
@@ -461,7 +471,6 @@ export default function Calculation({
           <Controller
             name="finalGrossProfit"
             control={control}
-            defaultValue=""
             render={({ field }) => (
               <TextField
                 label="Final Gross Profit"
