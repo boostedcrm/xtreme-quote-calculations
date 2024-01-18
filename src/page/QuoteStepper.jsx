@@ -462,6 +462,33 @@ export default function QuoteCalculation({
     // // Bid_to_Customer: "some",
 
     // updateDealAndDisable(updateDealData, dealData);
+
+    let description =
+      "Hello " +
+      "owner_name" +
+      ", the Bid Checklist for " +
+      "accountName" +
+      " " +
+      "Deal_Name" +
+      " has been submitted to the estimating department.";
+    let task_map = {
+      Subject: "Your Bid Checklist has been submitted.",
+      $se_module: "Deals",
+      Description: description,
+      What_Id: dealData?.id,
+    };
+
+    ZOHO.CRM.API.insertRecord({
+      Entity: "Tasks",
+      APIData: task_map,
+      Trigger: ["workflow"],
+    })
+      .then(function (data) {
+        console.log(data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   return (
