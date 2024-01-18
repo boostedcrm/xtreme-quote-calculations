@@ -44,6 +44,7 @@ function App() {
           approved: "both",
           RecordID: dealID,
         }).then(function (data) {
+          console.log({dealData: data?.data[0]});
           setDealData(data?.data[0]);
           if (data?.data[0] !== undefined) {
             var config = {
@@ -52,16 +53,17 @@ function App() {
             };
 
             ZOHO.CRM.API.getBluePrint(config).then(function (data) {
-              console.log({getBluePrint: data});
+              console.log({ getBluePrint: data });
             });
             const dealData = data?.data[0];
             console.log({ dealData });
             let previousData = JSON.parse(dealData?.Clarification20 || "{}");
             console.log({ previousData });
             const Quote_Type = dealData.Quote_Type;
+
             if (Quote_Type != null) {
               const quoteType = Quote_Type.split(" ")[0];
-              setQuoteType(Quote_Type);
+              setQuoteType((prev) => Quote_Type);
               if (
                 quoteType === "Concrete" &&
                 dealData?.Concrete_Bid_Checklist?.id !== null
@@ -72,9 +74,10 @@ function App() {
                   RecordID: dealData?.Concrete_Bid_Checklist?.id,
                 }).then(function (data) {
                   console.log({ Concrete_Bid_Checklists: data });
-                  setCheckListData(data.data[0]);
+                  setCheckListData((prev) => data.data[0]);
                 });
               }
+
               if (
                 quoteType === "Coating" &&
                 dealData?.Coating_Bid_Checklist?.id !== null
@@ -87,6 +90,7 @@ function App() {
                   setCheckListData(data.data[0]);
                 });
               }
+
               if (
                 quoteType === "Honing" &&
                 dealData?.Honing_Bid_Checklist?.id !== null

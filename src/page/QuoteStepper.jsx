@@ -322,7 +322,6 @@ export default function QuoteCalculation({
     ZOHO.CRM.API.updateBluePrint(config)
       .then(function (data) {
         console.log({ updateBluePrint: data });
-        handleClose();
       })
       .catch(function (error) {
         console.log({ updateBluePrintEerror: error });
@@ -350,145 +349,151 @@ export default function QuoteCalculation({
     console.log({ onSubmit: data });
     // Create quote and update deal
 
-    // //  materialsSubTotal,
-    // const {
-    //   materials = [],
-    //   labor = [],
-    //   equipment = [],
-    //   lodging = [],
-    //   perdiem = [],
-    //   rentalequipment = [],
-    //   vehicleexpense = [],
-    // } = data;
-    // // Material_Quote
-    // if (materials?.length >= 1) {
-    //   createMaterial(materials, dealData);
-    // }
-    // if (labor?.length >= 1) {
-    //   createLabor(labor, dealData);
-    // }
-    // if (equipment?.length >= 1) {
-    //   createEquipment(equipment, dealData);
-    // }
-    // if (lodging?.length >= 1) {
-    //   createLodging(lodging, dealData);
-    // }
-    // if (perdiem?.length >= 1) {
-    //   createPerDiem(perdiem, dealData);
-    // }
-    // if (rentalequipment?.length >= 1) {
-    //   createRentalEquipment(rentalequipment, dealData);
-    // }
-    // if (vehicleexpense?.length >= 1) {
-    //   createVehicleExpense(vehicleexpense, dealData);
-    // }
+    //  materialsSubTotal,
+    const {
+      materials = [],
+      labor = [],
+      equipment = [],
+      lodging = [],
+      perdiem = [],
+      rentalequipment = [],
+      vehicleexpense = [],
+    } = data;
+    // Material_Quote
+    if (materials?.length >= 1) {
+      createMaterial(materials, dealData);
+    }
+    if (labor?.length >= 1) {
+      createLabor(labor, dealData);
+    }
+    if (equipment?.length >= 1) {
+      createEquipment(equipment, dealData);
+    }
+    if (lodging?.length >= 1) {
+      createLodging(lodging, dealData);
+    }
+    if (perdiem?.length >= 1) {
+      createPerDiem(perdiem, dealData);
+    }
+    if (rentalequipment?.length >= 1) {
+      createRentalEquipment(rentalequipment, dealData);
+    }
+    if (vehicleexpense?.length >= 1) {
+      createVehicleExpense(vehicleexpense, dealData);
+    }
 
-    // let updateDealData = {
-    //   Materials_Cost: Number(data?.materialTotalCost) || 0,
-    //   Total_Manhours: Number(data?.totalManHours) || 0,
-    //   Labor_Cost: Number(data?.totalLaborCost) || 0,
-    //   Total_Equipment_Hours: Number(data?.totalEquipmentHours) || 0,
-    //   Equipment_Cost: Number(data?.equipmentTotal) || 0,
-    //   Miscellaneous_Cost: Number(data?.miscellaneousCost) || 0,
-    //   Rev_Per_Manhour: Number(data?.totalManHours) || 0,
-    //   Quoted_Gross_Profit: Number(data?.grossProfitPct) || 0,
-    //   Quoted_Gross_Profit_Amount: Number(data?.grossProfitAmount) || 0,
-    //   Amount: Number(data?.bidToCustomer) || 0,
-    //   Minimum_Bid_to_the_Customer: Number(data?.minimumBidToCustomer) || 0,
-    //   Est_Perform_Date: DateTime.fromISO(
-    //     data?.Est_Perform_Date ||
-    //       dealData?.Est_Perform_Date ||
-    //       DateTime.now().setZone("utc")
-    //   )
-    //     .toISO()
-    //     .toString()
-    //     .substring(0, 10),
-    //   Est_Perform_Date1: DateTime.fromISO(
-    //     data?.Est_Perform_Date ||
-    //       dealData?.Est_Perform_Date ||
-    //       DateTime.now().setZone("utc")
-    //   )
-    //     .toISO()
-    //     .toString()
-    //     .substring(0, 10),
-    //   Estimated_Perform_Date: DateTime.fromISO(
-    //     data?.Est_Perform_Date ||
-    //       dealData?.Est_Perform_Date ||
-    //       DateTime.now().setZone("utc")
-    //   )
-    //     .toISO()
-    //     .toString()
-    //     .substring(0, 10),
-    //   Quote_Due_Date: DateTime.fromISO(
-    //     data?.Quote_Due_Date ||
-    //       dealData?.Quote_Due_Date ||
-    //       DateTime.now().setZone("utc")
-    //   )
-    //     .toISO()
-    //     .toString()
-    //     .substring(0, 10),
-    //   Actual_Materials_Cost: 0,
-    //   Total_Man_Hours: 0,
-    //   Actual_Equipment_Cost: 0,
-    //   Actual_Equipment_Hours: 0,
-    //   Total_Square_Feet: 0,
-    //   Change_Order_Manhours: 0,
-    //   Actual_Change_Order_Cost: 0,
-    //   Final_Gross_Profit: 0,
-    //   Final_Total_Cost: 0,
-    //   Actual_Gross_Profit_Percentage: 0,
-    //   Clarification20: JSON.stringify({
-    //     ...data,
-    //     Est_Perform_Date: DateTime.fromISO(
-    //       data?.Est_Perform_Date || DateTime.now().setZone("utc")
-    //     )
-    //       .toISO()
-    //       .toString()
-    //       .substring(0, 10),
-    //     Quote_Due_Date: DateTime.fromISO(
-    //       data?.Quote_Due_Date || DateTime.now().setZone("utc")
-    //     )
-    //       .toISO()
-    //       .toString()
-    //       .substring(0, 10),
-    //   }),
-    //   id: dealData?.id,
-    // };
-
-    // // Service: "some",
-    // // Vendor_Type1: "some",
-    // // Quoting_Notes: "some",
-    // // Rate_Per_Sq_Ft: "some",
-    // // Bid_to_Customer: "some",
-
-    // updateDealAndDisable(updateDealData, dealData);
-
-    let description =
-      "Hello " +
-      "owner_name" +
-      ", the Bid Checklist for " +
-      "accountName" +
-      " " +
-      "Deal_Name" +
-      " has been submitted to the estimating department.";
-    let task_map = {
-      Subject: "Your Bid Checklist has been submitted.",
-      $se_module: "Deals",
-      Description: description,
-      What_Id: dealData?.id,
+    let updateDealData = {
+      Materials_Cost: Number(data?.materialTotalCost) || 0,
+      Total_Manhours: Number(data?.totalManHours) || 0,
+      Labor_Cost: Number(data?.totalLaborCost) || 0,
+      Total_Equipment_Hours: Number(data?.totalEquipmentHours) || 0,
+      Equipment_Cost: Number(data?.equipmentTotal) || 0,
+      Miscellaneous_Cost: Number(data?.miscellaneousCost) || 0,
+      Rev_Per_Manhour: Number(data?.totalManHours) || 0,
+      Quoted_Gross_Profit: Number(data?.grossProfitPct) || 0,
+      Quoted_Gross_Profit_Amount: Number(data?.grossProfitAmount) || 0,
+      Amount: Number(data?.bidToCustomer) || 0,
+      Minimum_Bid_to_the_Customer: Number(data?.minimumBidToCustomer) || 0,
+      Est_Perform_Date: DateTime.fromISO(
+        data?.Est_Perform_Date ||
+          dealData?.Est_Perform_Date ||
+          DateTime.now().setZone("utc")
+      )
+        .toISO()
+        .toString()
+        .substring(0, 10),
+      Est_Perform_Date1: DateTime.fromISO(
+        data?.Est_Perform_Date ||
+          dealData?.Est_Perform_Date ||
+          DateTime.now().setZone("utc")
+      )
+        .toISO()
+        .toString()
+        .substring(0, 10),
+      Estimated_Perform_Date: DateTime.fromISO(
+        data?.Est_Perform_Date ||
+          dealData?.Est_Perform_Date ||
+          DateTime.now().setZone("utc")
+      )
+        .toISO()
+        .toString()
+        .substring(0, 10),
+      Quote_Due_Date: DateTime.fromISO(
+        data?.Quote_Due_Date ||
+          dealData?.Quote_Due_Date ||
+          DateTime.now().setZone("utc")
+      )
+        .toISO()
+        .toString()
+        .substring(0, 10),
+      Actual_Materials_Cost: 0,
+      Total_Man_Hours: 0,
+      Actual_Equipment_Cost: 0,
+      Actual_Equipment_Hours: 0,
+      Total_Square_Feet: 0,
+      Change_Order_Manhours: 0,
+      Actual_Change_Order_Cost: 0,
+      Final_Gross_Profit: 0,
+      Final_Total_Cost: 0,
+      Actual_Gross_Profit_Percentage: 0,
+      Clarification20: JSON.stringify({
+        ...data,
+        Est_Perform_Date: DateTime.fromISO(
+          data?.Est_Perform_Date || DateTime.now().setZone("utc")
+        )
+          .toISO()
+          .toString()
+          .substring(0, 10),
+        Quote_Due_Date: DateTime.fromISO(
+          data?.Quote_Due_Date || DateTime.now().setZone("utc")
+        )
+          .toISO()
+          .toString()
+          .substring(0, 10),
+      }),
+      id: dealData?.id,
     };
 
-    ZOHO.CRM.API.insertRecord({
-      Entity: "Tasks",
-      APIData: task_map,
-      Trigger: ["workflow"],
-    })
-      .then(function (data) {
-        console.log(data);
+    // Service: "some",
+    // Vendor_Type1: "some",
+    // Quoting_Notes: "some",
+    // Rate_Per_Sq_Ft: "some",
+    // Bid_to_Customer: "some",
+
+    updateDealAndDisable(updateDealData, dealData);
+
+    if (data?.Sent_for_Review) {
+      let description =
+        "Hello " +
+        dealData?.Owner?.name +
+        ", the Bid Checklist for " +
+        dealData?.Account_Name?.name +
+        " " +
+        dealData?.Deal_Name +
+        " has been submitted to the estimating department.";
+      let task_map = {
+        Subject: "Your Bid Checklist has been submitted.",
+        $se_module: "Deals",
+        Description: description,
+        What_Id: dealData?.id,
+      };
+
+      ZOHO.CRM.API.insertRecord({
+        Entity: "Tasks",
+        APIData: task_map,
+        Trigger: ["workflow"],
       })
-      .catch(function (error) {
-        console.log(error);
-      });
+        .then(function (data) {
+          console.log(data);
+          handleClose();
+        })
+        .catch(function (error) {
+          console.log(error);
+          handleClose();
+        });
+    } else {
+      handleClose();
+    }
   };
 
   return (
