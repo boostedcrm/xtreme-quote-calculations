@@ -265,7 +265,7 @@ const Lodging = ({ control, watch, getValues, register, setValue }) => {
           append({
             crewSize: 0,
             days: 0,
-            costPerRoom: 160,
+            costPerRoom: 180,
             numberOfRooms: 0,
             lodgingSubTotal: 0,
           })
