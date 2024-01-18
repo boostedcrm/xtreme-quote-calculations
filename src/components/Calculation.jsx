@@ -634,13 +634,25 @@ export default function Calculation({
         Add New
       </Button>
       <Box>
-        {renderCheckboxField(
+        <Controller
+          name="Sent_for_Review"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <div style={{ display: "flex" }}>
+              <div >
+                <label>{"Send for Review"}</label>
+              </div>
+              <Checkbox {...field} defaultChecked={field?.value} />
+            </div>
+          )}
+        />
+        {/* {renderCheckboxField(
           "Sent_for_Review", // name of the field
           "Send for Review", // label
-          false, // default value
           control, // form control from react-hook-form
           170 // optional label width, default is 170 if not provided
-        )}
+        )} */}
         {renderMultiTextField("review_note", "Review Note", "", control, 350)}
       </Box>
     </Box>
@@ -693,20 +705,14 @@ const renderMultiTextField = (name, label, defaultValue, control, width) => (
   </Grid>
 );
 
-const renderCheckboxField = (
-  name,
-  label,
-  defaultValue,
-  control,
-  labelWidth = 170
-) => (
+const renderCheckboxField = (name, label, control, labelWidth = 170) => (
   <Grid item xs={6}>
     <FormControlLabel
       control={
         <Controller
           name={name}
           control={control}
-          defaultValue={defaultValue}
+          // defaultValue={defaultValue}
           render={({ field }) => (
             <div style={{ display: "flex" }}>
               <div style={{ width: labelWidth, flexShrink: 0 }}>

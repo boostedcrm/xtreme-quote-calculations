@@ -262,6 +262,7 @@ export default function QuoteCalculation({
 
   const saveQuoteData = () => {
     let data = getValues();
+    console.log({ data });
     let apiData = {
       Clarification20: JSON.stringify({
         ...data,
@@ -284,15 +285,89 @@ export default function QuoteCalculation({
       }),
       id: dealData?.id,
     };
+    if (data?.Sent_for_Review) {
+      apiData["Quote_Status"] = "In Review";
+      // apiData["Pipeline"] = "Open";
+      // apiData["Stage"] = "In Review";
+    } else {
+      apiData["Quote_Status"] = "In Progress";
+      // apiData["Pipeline"] = "Open";
+      // apiData["Stage"] = "In Progress";
+    }
+
     var config = {
       Entity: "Deals",
       APIData: apiData,
       Trigger: ["workflow"], // ["workflow"]
     };
     ZOHO.CRM.API.updateRecord(config)
-      .then(function (data) {
-        console.log({ updateRecord: data });
-        handleClose();
+      .then(function (updatedData) {
+        console.log({ updateRecord: updatedData });
+        if (data?.Sent_for_Review && dealData?.Quote_Status === "In Progress") {
+          let description =
+            "Hello " +
+            dealData?.Owner?.name +
+            ", You have been selected to review the quote for " +
+            dealData?.Account_Name?.name +
+            " " +
+            dealData?.Deal_Name +
+            " has been submitted to the estimating department.";
+
+          description =
+            "Hello " +
+            dealData?.Owner?.name +
+            ", You have been selected to review the quote for " +
+            dealData?.Account_Name?.name +
+            " for " +
+            dealData?.Deal_Name +
+            ". Please review, write comments in the notes section, uncheck the 'Submit For Review' checkbox, and update the quote when finished. Click the subject link in the task to open the quote.";
+
+          let module = "Undefined";
+          if (dealData?.SourceForm == "Concrete") {
+            module = "CustomModule5";
+          } else if (dealData?.SourceForm == "Honing") {
+            module = "CustomModule4";
+          } else if (dealData?.SourceForm == "Coating") {
+            module = "CustomModule3";
+          }
+
+          let se_module = "Deal";
+          if (dealData?.SourceForm == "Concrete") {
+            se_module = "Concrete_Bid_Checklists";
+          } else if (dealData?.SourceForm == "Honing") {
+            se_module = "Honing_Bid_Checklists";
+          } else if (dealData?.SourceForm == "Coating") {
+            se_module = "Coating_Bid_Checklists";
+          }
+
+          let Subject_Link = `https://crmsandbox.zoho.com/crm/boostedcrmsandbox/tab/${module}/${dealData?.BidID}`;
+          let task_map = {
+            Subject: "Quote Review.",
+            $se_module: "Deals",
+            Status: "Not Started",
+            Priority: "High",
+            Send_Notification_Email: true,
+            Subject_Link: Subject_Link,
+            Description: description,
+            What_Id: dealData?.id,
+          };
+
+          ZOHO.CRM.API.insertRecord({
+            Entity: "Tasks",
+            APIData: task_map,
+            Trigger: ["workflow"],
+          })
+            .then(function (data) {
+              console.log(data);
+              handleClose();
+            })
+            .catch(function (error) {
+              console.log(error);
+              handleClose();
+            });
+        } else {
+          handleClose();
+        }
       })
       .catch((error) => {
         console.log({ error: error });
@@ -455,83 +530,20 @@ export default function QuoteCalculation({
     };
 
     data?.Clarifications?.forEach((element, index) => {
-      updateDealData[`Clarification${index+1}`] = element?.name
+      updateDealData[`Clarification${index + 1}`] = element?.name;
     });
     updateDealAndDisable(updateDealData, dealData);
 
     if (data?.Sent_for_Review) {
-      let description =
-        "Hello " +
-        dealData?.Owner?.name +
-        ", You have been selected to review the quote for " +
-        dealData?.Account_Name?.name +
-        " " +
-        dealData?.Deal_Name +
-        " has been submitted to the estimating department.";
-
-      description =
-        "Hello " +
-        dealData?.Owner?.name +
-        ", You have been selected to review the quote for " +
-        dealData?.Account_Name?.name +
-        " for " +
-        dealData?.Deal_Name +
-        ". Please review, write comments in the notes section, uncheck the 'Submit For Review' checkbox, and update the quote when finished. Click the subject link in the task to open the quote.";
-
-      let module = "Undefined";
-      if (dealData?.SourceForm == "Concrete") {
-        module = "CustomModule5";
-      } else if (dealData?.SourceForm == "Honing") {
-        module = "CustomModule4";
-      } else if (dealData?.SourceForm == "Coating") {
-        module = "CustomModule3";
-      }
-
-      let se_module = "Deal";
-      if (dealData?.SourceForm == "Concrete") {
-        se_module = "Concrete_Bid_Checklists";
-      } else if (dealData?.SourceForm == "Honing") {
-        se_module = "Honing_Bid_Checklists";
-      } else if (dealData?.SourceForm == "Coating") {
-        se_module = "Coating_Bid_Checklists";
-      }
-
-      let Subject_Link = `https://crmsandbox.zoho.com/crm/boostedcrmsandbox/tab/${module}/${dealData?.BidID}`;
-      let task_map = {
-        Subject: "Quote Review.",
-        $se_module: "Deals",
-        Status: "Not Started",
-        Priority: "High",
-        Send_Notification_Email: true,
-        Subject_Link: Subject_Link,
-        Description: description,
-        What_Id: dealData?.id,
-      };
-
-      ZOHO.CRM.API.insertRecord({
-        Entity: "Tasks",
-        APIData: task_map,
-        Trigger: ["workflow"],
-      })
-        .then(function (data) {
-          console.log(data);
-          handleClose();
-        })
-        .catch(function (error) {
-          console.log(error);
-          handleClose();
-        });
     } else {
       handleClose();
     }
 
-    
     // Service: "some",
     // Vendor_Type1: "some",
     // Quoting_Notes: "some",
     // Rate_Per_Sq_Ft: "some",
     // Bid_to_Customer: "some",
-    
   };
 
   return (
