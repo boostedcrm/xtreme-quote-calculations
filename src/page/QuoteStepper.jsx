@@ -454,12 +454,9 @@ export default function QuoteCalculation({
       id: dealData?.id,
     };
 
-    // Service: "some",
-    // Vendor_Type1: "some",
-    // Quoting_Notes: "some",
-    // Rate_Per_Sq_Ft: "some",
-    // Bid_to_Customer: "some",
-
+    data?.Clarifications?.forEach((element, index) => {
+      updateDealData[`Clarification${index+1}`] = element?.name
+    });
     updateDealAndDisable(updateDealData, dealData);
 
     if (data?.Sent_for_Review) {
@@ -527,6 +524,14 @@ export default function QuoteCalculation({
     } else {
       handleClose();
     }
+
+    
+    // Service: "some",
+    // Vendor_Type1: "some",
+    // Quoting_Notes: "some",
+    // Rate_Per_Sq_Ft: "some",
+    // Bid_to_Customer: "some",
+    
   };
 
   return (
