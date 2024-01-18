@@ -624,6 +624,7 @@ export default function QuoteCalculation({
             <Calculation
               ZOHO={ZOHO}
               control={control}
+              dealData={dealData}
               watch={watch}
               setValue={setValue}
               getValues={getValues}

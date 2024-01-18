@@ -8,6 +8,8 @@ import {
   Button,
   IconButton,
   Typography,
+  TableRow,
+  TableCell,
 } from "@mui/material";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 
@@ -18,12 +20,18 @@ export default function Calculation({
   control,
   watch,
   getValues,
+  dealData,
   register,
   unregister,
   setValue,
   checklistData,
   quoteType,
 }) {
+  const { fields, append, remove, update } = useFieldArray({
+    control,
+    name: "Clarifications",
+  });
+
   const [clarifications, setClarifications] = useState(null);
   const [typeOfQuote, setQuoteType] = useState(null);
 
@@ -41,21 +49,29 @@ export default function Calculation({
 
         if (clarifications?.data) {
           let firstWordOfQuoteType = quoteType?.split(" ")[0];
-          firstWordOfQuoteType = "Concrete";
           const filteredCarificationsData = clarifications.data.filter(
             (item) => {
               // Handle the specific case for "Concrete"
-              if (firstWordOfQuoteType === "Concrete") {
+              if (
+                dealData?.SourceForm === "Concrete" ||
+                dealData?.SourceForm === "Honing"
+              ) {
                 return item.Type === "Concrete/Honing";
               }
+
               // For other types, perform a regular match
-              return item.Type === firstWordOfQuoteType;
+              return item.Type === dealData?.SourceForm;
             }
           );
 
           console.log({ filteredCarificationsData });
-
-          setClarifications(filteredCarificationsData);
+          setClarifications((prev) => filteredCarificationsData);
+          if (!dealData?.Clarification20) {
+            filteredCarificationsData.forEach((element, index) => {
+              let temp = { name: element?.Description };
+              append(temp);
+            });
+          }
         }
       } catch (clarificationError) {
         console.error({ clarificationError });
@@ -66,7 +82,8 @@ export default function Calculation({
 
   const removeClarification = (index) => {
     const newClarifications = clarifications.filter((_, i) => i !== index);
-    unregister(`Clarifications${index}`);
+
+    // unregister(`Clarifications${index}`);
     setClarifications(newClarifications);
   };
 
@@ -558,7 +575,7 @@ export default function Calculation({
         </Grid> */}
       </Grid>
       <br />
-      {clarifications !== null &&
+      {/* {clarifications !== null &&
         clarifications.length > 0 &&
         clarifications.map((clarification, index) => (
           <Box
@@ -582,7 +599,40 @@ export default function Calculation({
               onClick={() => removeClarification(index)}
             />
           </Box>
-        ))}
+        ))} */}
+      {fields.map((item, index) => (
+        <TableRow key={item.id}>
+          <TableCell>
+            {renderMultiTextField(
+              `Clarifications[${index}].name`,
+              `Clarifications ${index + 1}`,
+              clarifications?.[index]?.Description,
+              control,
+              600
+            )}
+          </TableCell>
+          <TableCell>
+            <Button
+              onClick={() => {
+                remove(index);
+                // calculateTotalRentalEquipmentCost(fields);
+              }}
+            >
+              Delete
+            </Button>
+          </TableCell>
+        </TableRow>
+      ))}
+      <Button
+        // startIcon={<AddCircleOutlineIcon />}
+        onClick={() =>
+          append({
+            name: clarifications[fields?.length]?.Description,
+          })
+        }
+      >
+        Add New
+      </Button>
       <Box>
         {renderCheckboxField(
           "Sent_for_Review", // name of the field
