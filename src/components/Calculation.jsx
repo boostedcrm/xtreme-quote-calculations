@@ -627,7 +627,7 @@ export default function Calculation({
         // startIcon={<AddCircleOutlineIcon />}
         onClick={() =>
           append({
-            name: clarifications[fields?.length]?.Description,
+            name: "",
           })
         }
       >

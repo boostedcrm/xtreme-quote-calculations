@@ -288,11 +288,11 @@ export default function QuoteCalculation({
     if (data?.Sent_for_Review) {
       apiData["Quote_Status"] = "In Review";
       // apiData["Pipeline"] = "Open";
-      // apiData["Stage"] = "In Review";
+      apiData["Stage"] = "In Review";
     } else {
       apiData["Quote_Status"] = "In Progress";
       // apiData["Pipeline"] = "Open";
-      // apiData["Stage"] = "In Progress";
+      apiData["Stage"] = "In Progress";
     }
 
     var config = {
@@ -397,9 +397,11 @@ export default function QuoteCalculation({
     ZOHO.CRM.API.updateBluePrint(config)
       .then(function (data) {
         console.log({ updateBluePrint: data });
+        handleClose();
       })
       .catch(function (error) {
         console.log({ updateBluePrintEerror: error });
+        handleClose();
       });
 
     // var config = {
@@ -529,15 +531,20 @@ export default function QuoteCalculation({
       id: dealData?.id,
     };
 
+    
+    updateDealData["Quote_Status"] = "Completed";
+    // apiData["Pipeline"] = "Open";
+    updateDealData["Stage"] = "Quote Completed";
+
     data?.Clarifications?.forEach((element, index) => {
       updateDealData[`Clarification${index + 1}`] = element?.name;
     });
     updateDealAndDisable(updateDealData, dealData);
 
-    if (data?.Sent_for_Review) {
-    } else {
-      handleClose();
-    }
+    // if (data?.Sent_for_Review) {
+    // } else {
+    //   handleClose();
+    // }
 
     // Service: "some",
     // Vendor_Type1: "some",
