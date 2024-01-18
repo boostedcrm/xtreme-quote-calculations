@@ -20,16 +20,16 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 
 const XtremeQuoteForm = ({ dealData, checklistData, quoteType, control }) => {
-  const [totalSqft, setTotalSqft] = useState(0);
+  // const [totalSqft, setTotalSqft] = useState(0);
 
-  useEffect(() => {
-    if (quoteType != null) {
-      const checklistType = quoteType.split(" ")[1];
-      if (checklistType === "Polish" && checklistData?.Polished_SQFT != null) {
-        setTotalSqft(checklistData?.Polished_SQFT);
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (quoteType != null) {
+  //     const checklistType = quoteType.split(" ")[1];
+  //     if (checklistType === "Polish" && checklistData?.Polished_SQFT != null) {
+  //       setTotalSqft(checklistData?.Polished_SQFT);
+  //     }
+  //   }
+  // }, []);
   // console.log({ dealData: dealData?.Sales_Person?.name });
 
   return (
@@ -100,7 +100,7 @@ const XtremeQuoteForm = ({ dealData, checklistData, quoteType, control }) => {
         {renderTextField(
           "SquareFeet",
           "Total Square Feet",
-          totalSqft,
+          dealData?.SquareFeet,
           control
         )}
       </Grid>
