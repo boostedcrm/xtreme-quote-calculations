@@ -6,6 +6,8 @@ Deal_Id = ifnull(record_resp.get("Deal_Id"),"");
 //////////////////////////////////////////////////////////////////////
 // Check Polish_Deal_Id
 Name = ifnull(record_resp.get("Name"),"");
+owner_id = record_resp.get("Owner").get("id");
+owner_name = record_resp.get("Owner").get("name");
 Contact_Person = ifnull(record_resp.get("Contact_Person"),Map());
 contact_person_name = ifnull(Contact_Person.get("name"),"");
 Account_Name = ifnull(record_resp.get("Account_Name"),Map());
@@ -40,6 +42,16 @@ if(Deal_Id == "")
 	// Terrazzo/VCT & LVT/Tile & Grout
 	deal_map.put("Quote_Type","Honing");
 	// Coating Terrazzo / Coating VCT & LVT / Coating Tile & Grout
+    
+        deal_map.put("Vendor_Type1", ifnull(record_resp.get("Vendor_Type"),""));
+        deal_map.put("SourceForm", "Honing"); // Coating, Concrete, Honing
+        deal_map.put("Bid_Date", Create_Date); // Create_Date1, Create_Date -datetime
+        deal_map.put("SquareFeet", ifnull(record_resp.get("Honing_SQFT"), 0) ); // T_G_SQFT, Terrazzo_SQFT, VCT_LVT_SQFT
+        deal_map.put("Bid_ID1", record_id + "" );
+        deal_map.put("Quote_Status", "New");
+        deal_map.put("Sales_Person", owner_id);
+        deal_map.put("Assigned_To", owner_id);
+        
 	Polish_Deal_resp = zoho.crm.createRecord("Deals",deal_map);
 	info {"Polish_Deal_resp":Polish_Deal_resp};
 	Deal_Id = ifnull(Polish_Deal_resp.get("id"),"");
@@ -72,6 +84,16 @@ else
 	// Terrazzo/VCT & LVT/Tile & Grout
 	deal_map.put("Quote_Type","Honing");
 	// Coating Terrazzo / Coating VCT & LVT / Coating Tile & Grout
+    
+        deal_map.put("Vendor_Type1", ifnull(record_resp.get("Vendor_Type"),""));
+        deal_map.put("SourceForm", "Honing"); // Coating, Concrete, Honing
+        deal_map.put("Bid_Date", Create_Date); // Create_Date1, Create_Date -datetime
+        deal_map.put("SquareFeet", ifnull(record_resp.get("Honing_SQFT"), 0) ); // T_G_SQFT, Terrazzo_SQFT, VCT_LVT_SQFT
+        deal_map.put("Bid_ID1", record_id + "" );
+        deal_map.put("Quote_Status", "New");
+        deal_map.put("Sales_Person", owner_id);
+        deal_map.put("Assigned_To", owner_id);
+
 	Polish_Deal_resp = zoho.crm.updateRecord("Deals",Deal_Id,deal_map);
 }
 return_map = {"Deal_Id":Deal_Id};

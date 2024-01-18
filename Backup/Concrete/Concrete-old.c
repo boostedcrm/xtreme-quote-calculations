@@ -42,6 +42,16 @@ if(Polish)
 		deal_map.put("Job_Street_Address",ifnull(record_resp.get("Job_Street_Address"),""));
 		deal_map.put("Locked__s",ifnull(record_resp.get("Locked__s"),false));
 		deal_map.put("Vendor_Type",ifnull(record_resp.get("Vendor_Type"),""));
+		// Concrete
+		deal_map.put("Deal_Type","Standard");
+		deal_map.put("Vendor_Type",ifnull(record_resp.get("Vendor_Type"),""));
+		deal_map.put("Contact_Name",ifnull(ifnull(record_resp.get("Contact_Person"),Map()).get("id"),""));
+		deal_map.put("Est_Perform_Date1",Est_Perform_Date);
+		deal_map.put("Estimated_Perform_Date",Est_Perform_Date);
+		deal_map.put("Type_of_Service","Polish");
+		// Polish/Striping/Epoxy/Other
+		deal_map.put("Quote_Type","Concrete Polish");
+		// Concrete Polish / Concrete Epoxy / Concrete Striping / Concrete Other
 		Polish_Deal_resp = zoho.crm.createRecord("Deals",deal_map);
 		info {"Polish_Deal_resp":Polish_Deal_resp};
 		Polish_Deal_Id = ifnull(Polish_Deal_resp.get("id"),"");
@@ -66,7 +76,16 @@ if(Polish)
 		deal_map.put("Job_City",ifnull(record_resp.get("Job_City"),""));
 		deal_map.put("Job_Street_Address",ifnull(record_resp.get("Job_Street_Address"),""));
 		deal_map.put("Locked__s",ifnull(record_resp.get("Locked__s"),false));
+		// Concrete
+		deal_map.put("Deal_Type","Standard");
 		deal_map.put("Vendor_Type",ifnull(record_resp.get("Vendor_Type"),""));
+		deal_map.put("Contact_Name",ifnull(ifnull(record_resp.get("Contact_Person"),Map()).get("id"),""));
+		deal_map.put("Est_Perform_Date1",Est_Perform_Date);
+		deal_map.put("Estimated_Perform_Date",Est_Perform_Date);
+		deal_map.put("Type_of_Service","Polish");
+		// Polish/Striping/Epoxy/Other
+		deal_map.put("Quote_Type","Concrete Polish");
+		// Concrete Polish / Concrete Epoxy / Concrete Striping / Concrete Other
 		return_map.put("Polish_Deal_Id",Polish_Deal_Id + "");
 		Polish_Deal_resp = zoho.crm.updateRecord("Deals",Polish_Deal_Id,deal_map);
 	}
@@ -103,7 +122,16 @@ if(Epoxy)
 		deal_map.put("Job_City",ifnull(record_resp.get("Job_City"),""));
 		deal_map.put("Job_Street_Address",ifnull(record_resp.get("Job_Street_Address"),""));
 		deal_map.put("Locked__s",ifnull(record_resp.get("Locked__s"),false));
+		// Concrete
+		deal_map.put("Deal_Type","Standard");
 		deal_map.put("Vendor_Type",ifnull(record_resp.get("Vendor_Type"),""));
+		deal_map.put("Contact_Name",ifnull(ifnull(record_resp.get("Contact_Person"),Map()).get("id"),""));
+		deal_map.put("Est_Perform_Date1",Est_Perform_Date);
+		deal_map.put("Estimated_Perform_Date",Est_Perform_Date);
+		deal_map.put("Type_of_Service","Epoxy");
+		// Polish/Striping/Epoxy/Other
+		deal_map.put("Quote_Type","Concrete Epoxy");
+		// Concrete Polish / Concrete Epoxy / Concrete Striping / Concrete Other
 		Epoxy_Deal_resp = zoho.crm.createRecord("Deals",deal_map);
 		info {"Epoxy_Deal_resp":Epoxy_Deal_resp};
 		Epoxy_Deal_Id = ifnull(Epoxy_Deal_resp.get("id"),"");
@@ -128,7 +156,16 @@ if(Epoxy)
 		deal_map.put("Job_City",ifnull(record_resp.get("Job_City"),""));
 		deal_map.put("Job_Street_Address",ifnull(record_resp.get("Job_Street_Address"),""));
 		deal_map.put("Locked__s",ifnull(record_resp.get("Locked__s"),false));
+		// Concrete
+		deal_map.put("Deal_Type","Standard");
 		deal_map.put("Vendor_Type",ifnull(record_resp.get("Vendor_Type"),""));
+		deal_map.put("Contact_Name",ifnull(ifnull(record_resp.get("Contact_Person"),Map()).get("id"),""));
+		deal_map.put("Est_Perform_Date1",Est_Perform_Date);
+		deal_map.put("Estimated_Perform_Date",Est_Perform_Date);
+		deal_map.put("Type_of_Service","Epoxy");
+		// Polish/Striping/Epoxy/Other
+		deal_map.put("Quote_Type","Concrete Epoxy");
+		// Concrete Polish / Concrete Epoxy / Concrete Striping / Concrete Other
 		return_map.put("Epoxy_Deal_Id",Epoxy_Deal_Id + "");
 		Epoxy_Deal_resp = zoho.crm.updateRecord("Deals",Epoxy_Deal_Id,deal_map);
 	}
@@ -166,7 +203,16 @@ if(Striping)
 		deal_map.put("Job_City",ifnull(record_resp.get("Job_City"),""));
 		deal_map.put("Job_Street_Address",ifnull(record_resp.get("Job_Street_Address"),""));
 		deal_map.put("Locked__s",ifnull(record_resp.get("Locked__s"),false));
+		// Concrete
+		deal_map.put("Deal_Type","Standard");
 		deal_map.put("Vendor_Type",ifnull(record_resp.get("Vendor_Type"),""));
+		deal_map.put("Contact_Name",ifnull(ifnull(record_resp.get("Contact_Person"),Map()).get("id"),""));
+		deal_map.put("Est_Perform_Date1",Est_Perform_Date);
+		deal_map.put("Estimated_Perform_Date",Est_Perform_Date);
+		deal_map.put("Type_of_Service","Striping");
+		// Polish/Striping/Epoxy/Other
+		deal_map.put("Quote_Type","Concrete Striping");
+		// Concrete Polish / Concrete Epoxy / Concrete Striping / Concrete Other
 		Striping_Deal_resp = zoho.crm.createRecord("Deals",deal_map);
 		info {"Striping_Deal_resp":Striping_Deal_resp};
 		Striping_Deal_Id = ifnull(Striping_Deal_resp.get("id"),"");
@@ -191,7 +237,16 @@ if(Striping)
 		deal_map.put("Job_City",ifnull(record_resp.get("Job_City"),""));
 		deal_map.put("Job_Street_Address",ifnull(record_resp.get("Job_Street_Address"),""));
 		deal_map.put("Locked__s",ifnull(record_resp.get("Locked__s"),false));
+		// Concrete
+		deal_map.put("Deal_Type","Standard");
 		deal_map.put("Vendor_Type",ifnull(record_resp.get("Vendor_Type"),""));
+		deal_map.put("Contact_Name",ifnull(ifnull(record_resp.get("Contact_Person"),Map()).get("id"),""));
+		deal_map.put("Est_Perform_Date1",Est_Perform_Date);
+		deal_map.put("Estimated_Perform_Date",Est_Perform_Date);
+		deal_map.put("Type_of_Service","Striping");
+		// Polish/Striping/Epoxy/Other
+		deal_map.put("Quote_Type","Concrete Striping");
+		// Concrete Polish / Concrete Epoxy / Concrete Striping / Concrete Other
 		return_map.put("Striping_Deal_Id",Striping_Deal_Id + "");
 		Striping_Deal_resp = zoho.crm.updateRecord("Deals",Striping_Deal_Id,deal_map);
 	}
@@ -227,7 +282,16 @@ if(Other)
 		deal_map.put("Job_City",ifnull(record_resp.get("Job_City"),""));
 		deal_map.put("Job_Street_Address",ifnull(record_resp.get("Job_Street_Address"),""));
 		deal_map.put("Locked__s",ifnull(record_resp.get("Locked__s"),false));
+		// Concrete
+		deal_map.put("Deal_Type","Standard");
 		deal_map.put("Vendor_Type",ifnull(record_resp.get("Vendor_Type"),""));
+		deal_map.put("Contact_Name",ifnull(ifnull(record_resp.get("Contact_Person"),Map()).get("id"),""));
+		deal_map.put("Est_Perform_Date1",Est_Perform_Date);
+		deal_map.put("Estimated_Perform_Date",Est_Perform_Date);
+		deal_map.put("Type_of_Service","Other");
+		// Polish/Striping/Epoxy/Other
+		deal_map.put("Quote_Type","Concrete Other");
+		// Concrete Polish / Concrete Epoxy / Concrete Striping / Concrete Other
 		Other_Deal_resp = zoho.crm.createRecord("Deals",deal_map);
 		info {"Other_Deal_resp":Other_Deal_resp};
 		Other_Deal_Id = ifnull(Other_Deal_resp.get("id"),"");
@@ -252,7 +316,16 @@ if(Other)
 		deal_map.put("Job_City",ifnull(record_resp.get("Job_City"),""));
 		deal_map.put("Job_Street_Address",ifnull(record_resp.get("Job_Street_Address"),""));
 		deal_map.put("Locked__s",ifnull(record_resp.get("Locked__s"),false));
+		// Concrete
+		deal_map.put("Deal_Type","Standard");
 		deal_map.put("Vendor_Type",ifnull(record_resp.get("Vendor_Type"),""));
+		deal_map.put("Contact_Name",ifnull(ifnull(record_resp.get("Contact_Person"),Map()).get("id"),""));
+		deal_map.put("Est_Perform_Date1",Est_Perform_Date);
+		deal_map.put("Estimated_Perform_Date",Est_Perform_Date);
+		deal_map.put("Type_of_Service","Other");
+		// Polish/Striping/Epoxy/Other
+		deal_map.put("Quote_Type","Concrete Other");
+		// Concrete Polish / Concrete Epoxy / Concrete Striping / Concrete Other
 		return_map.put("Other_Deal_Id",Other_Deal_Id + "");
 		Other_Deal_resp = zoho.crm.updateRecord("Deals",Other_Deal_Id,deal_map);
 	}

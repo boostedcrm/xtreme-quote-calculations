@@ -502,13 +502,13 @@ export default function QuoteCalculation({
       let Subject_Link = `https://crmsandbox.zoho.com/crm/boostedcrmsandbox/tab/${module}/${dealData?.BidID}`;
       let task_map = {
         Subject: "Quote Review.",
-        $se_module: se_module,
+        $se_module: "Deals",
         Status: "Not Started",
         Priority: "High",
         Send_Notification_Email: true,
         Subject_Link: Subject_Link,
         Description: description,
-        What_Id: dealData?.BidID || dealData?.id,
+        What_Id: dealData?.id,
       };
 
       ZOHO.CRM.API.insertRecord({
