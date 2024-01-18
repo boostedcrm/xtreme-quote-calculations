@@ -185,7 +185,7 @@ const VehicleExpense = ({ control, watch, getValues, register, setValue }) => {
         onClick={() =>
           append({
             mileage: 0,
-            rate: 0.59,
+            rate: 0.69,
             vehicleExpenseSubtotal: 0,
           })
         }
