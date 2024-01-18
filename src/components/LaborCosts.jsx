@@ -185,7 +185,6 @@ const LaborCosts = ({ ZOHO, control, getValues, register, setValue }) => {
                       size="small"
                       margin="normal"
                       fullWidth
-                      type="number"
                       onChange={(e) => {
                         
                         field.onChange(e.target.value);
