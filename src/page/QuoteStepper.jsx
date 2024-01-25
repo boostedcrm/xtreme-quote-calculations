@@ -85,7 +85,7 @@ export default function QuoteCalculation({
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const createMaterial = (materials, dealData) => {
+  const createMaterial = async (materials, dealData) => {
     var materialData = materials?.map((material) => {
       return {
         Name: material?.product?.Product_Name,
@@ -345,11 +345,12 @@ export default function QuoteCalculation({
     //   });
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log({ onSubmit: data });
     // Create quote and update deal
 
     //  materialsSubTotal,
+    
     const {
       materials = [],
       labor = [],
@@ -361,8 +362,9 @@ export default function QuoteCalculation({
     } = data;
     // Material_Quote
     if (materials?.length >= 1) {
-      createMaterial(materials, dealData);
+      await createMaterial(materials, dealData);
     }
+    /*
     if (labor?.length >= 1) {
       createLabor(labor, dealData);
     }
@@ -494,6 +496,8 @@ export default function QuoteCalculation({
     } else {
       handleClose();
     }
+    /*
+    */
   };
 
   return (
