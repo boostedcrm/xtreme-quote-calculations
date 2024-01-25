@@ -340,36 +340,80 @@ export default function QuoteCalculation({
     }
   };
 
-  const createPerDiem = (labors, dealData) => {
-    var laborData = labors?.map((labor) => {
+  const createPerDiem = async (labors, dealData) => {
+    var Subform_8= labors?.map((labor) => {
       return {
         Name: labor?.name?.Name,
         Deal_Lookup: dealData?.id,
+        Meal_Type: labor?.name?.Name + "",
+        Crew_Size: Number(labor?.crewSize) || 0,
         Days: Number(labor?.days) || 0,
         Cost_Per_Day: Number(labor?.costPerDay) || 0,
-        Crew_Size: Number(labor?.crewSize) || 0,
-        Meal_Type: labor?.name?.Name + "",
         Total: Number(labor?.perdiemSubtotal) || 0,
       };
     });
 
-    ZOHO.CRM.API.insertRecord({
-      Entity: "Per_Diem",
-      APIData: laborData,
-      Trigger: ["workflow"],
-    })
-      .then(function (data) {
-        console.log({ createPerDiem: data });
+    var laborData = {
+      Name: dealData?.Deal_Name + "-sandbox",
+      Deal_Lookup: dealData?.id + "",
+      Subform_8: Subform_8
+    }
+
+    // ZOHO.CRM.API.insertRecord({
+    //   Entity: "Per_Diem",
+    //   APIData: laborData,
+    //   Trigger: ["workflow"],
+    // })
+    //   .then(function (data) {
+    //     console.log({ createPerDiem: data });
+    //   })
+    //   .catch(function (error) {
+    //     console.log({ createPerDiemError: error });
+    //   });
+      // Per_Diem_ID
+
+      
+    if (dealData?.Per_Diem_ID) {
+      // Update Material_Quote
+      var config = {
+        Entity: "Per_Diem",
+        APIData: {
+          id: dealData?.Per_Diem_ID,
+          ...laborData,
+        },
+        Trigger: ["workflow"],
+      };
+      return ZOHO.CRM.API.updateRecord(config)
+        .then(function (data) {
+          let id = data?.[0]?.details?.id || "";
+          return { id: dealData?.Per_Diem_ID };
+        })
+        .catch((err) => {
+          return { id: dealData?.Per_Diem_ID };
+        });
+    } else {
+      // Create a new one
+
+      return ZOHO.CRM.API.insertRecord({
+        Entity: "Per_Diem",
+        APIData: laborData,
+        Trigger: ["workflow"],
       })
-      .catch(function (error) {
-        console.log({ createPerDiemError: error });
-      });
+        .then(function (data) {
+          let id = data?.data?.[0]?.details?.id || "";
+          return { id: id };
+        })
+        .catch((err) => {
+          return { id: "" };
+        });
+    }
+
   };
 
   const createRentalEquipment = (labors, dealData) => {
-    var laborData = labors?.map((labor) => {
+    var Subform_9= labors?.map((labor) => {
       return {
-        Name: labor?.equipmentName,
+        Name1: labor?.equipmentName,
         Deal_Lookup: dealData?.id,
         Rate: Number(labor?.rate) || 0,
         Total: Number(labor?.rentalEquipmentSubtotal) || 0,
@@ -378,17 +422,59 @@ export default function QuoteCalculation({
       };
     });
 
-    ZOHO.CRM.API.insertRecord({
-      Entity: "Rental_Equipment",
-      APIData: laborData,
-      Trigger: ["workflow"],
-    })
-      .then(function (data) {
-        console.log({ createRentalEquipment: data });
+    var laborData = {
+      Name: dealData?.Deal_Name + "-sandbox",
+      Deal_Lookup: dealData?.id,
+      Subform_9: Subform_9
+    }
+
+    // ZOHO.CRM.API.insertRecord({
+    //   Entity: "Rental_Equipment",
+    //   APIData: laborData,
+    //   Trigger: ["workflow"],
+    // })
+    //   .then(function (data) {
+    //     console.log({ createRentalEquipment: data });
+    //   })
+    //   .catch(function (error) {
+    //     console.log({ createRentalEquipmentError: error });
+    //   });
+
+      
+    if (dealData?.Rental_Equip_ID	) {
+      // Update Material_Quote
+      var config = {
+        Entity: "Rental_Equipment",
+        APIData: {
+          id: dealData?.Rental_Equip_ID	,
+          ...laborData,
+        },
+        Trigger: ["workflow"],
+      };
+      return ZOHO.CRM.API.updateRecord(config)
+        .then(function (data) {
+          let id = data?.[0]?.details?.id || "";
+          return { id: dealData?.Rental_Equip_ID	 };
+        })
+        .catch((err) => {
+          return { id: dealData?.Rental_Equip_ID	 };
+        });
+    } else {
+      // Create a new one
+
+      return ZOHO.CRM.API.insertRecord({
+        Entity: "Rental_Equipment",
+        APIData: laborData,
+        Trigger: ["workflow"],
       })
-      .catch(function (error) {
-        console.log({ createRentalEquipmentError: error });
-      });
+        .then(function (data) {
+          let id = data?.data?.[0]?.details?.id || "";
+          return { id: id };
+        })
+        .catch((err) => {
+          return { id: "" };
+        });
+    }
   };
 
   const createVehicleExpense = (labors, dealData) => {
@@ -413,6 +499,7 @@ export default function QuoteCalculation({
       .catch(function (error) {
         console.log({ createVehicleExpenseError: error });
       });
+      // Vehicle_Exp_ID
   };
 
   const saveQuoteData = () => {
@@ -584,16 +671,30 @@ export default function QuoteCalculation({
       updateDealData["Lodging_ID"] = LabourData?.id || "";
       console.log({ updateDealData });
     }
-    /*
     if (perdiem?.length >= 1) {
-      createPerDiem(perdiem, dealData);
+      
+      
+      const LabourData = await createPerDiem(perdiem, dealData);
+      updateDealData["Per_Diem_ID"] = LabourData?.id || "";
+      console.log({ updateDealData });
     }
+    
     if (rentalequipment?.length >= 1) {
-      createRentalEquipment(rentalequipment, dealData);
+      
+      
+      const LabourData = await createRentalEquipment(rentalequipment, dealData);
+      updateDealData["Rental_Equip_ID"] = LabourData?.id || "";
+      console.log({ updateDealData });
     }
+    
     if (vehicleexpense?.length >= 1) {
+      
       createVehicleExpense(vehicleexpense, dealData);
+      // const LabourData = await createVehicleExpense(vehicleexpense, dealData);
+      // updateDealData["Vehicle_Exp_ID"] = LabourData?.id || "";
+      // console.log({ updateDealData });
     }
+    /*
 */
     updateDealData = {
       ...updateDealData,
