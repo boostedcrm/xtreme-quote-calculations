@@ -643,31 +643,31 @@ export default function QuoteCalculation({
       BlueprintData: BlueprintData,
     };
 
-    // ZOHO.CRM.API.updateBluePrint(config)
-    //   .then(function (data) {
-    //     console.log({ updateBluePrint: data });
-    //   })
-    //   .catch(function (error) {
-    //     console.log({ updateBluePrintEerror: error });
-    //   });
-
-    var config = {
-      Entity: "Deals",
-      APIData: apiData,
-      Trigger: ["workflow"],
-    };
-
-    ZOHO.CRM.API.updateRecord(config)
+    ZOHO.CRM.API.updateBluePrint(config)
       .then(function (data) {
-        console.log({ updateDealAndDisable: data });
-        // ZOHO.CRM.BLUEPRINT.proceed();
-
-        // handleClose();
+        console.log({ updateBluePrint: data });
       })
-      .catch((error) => {
-        console.log({ updateDealAndDisableError: error });
-        // handleClose();
+      .catch(function (error) {
+        console.log({ updateBluePrintEerror: error });
       });
+
+    // var config = {
+    //   Entity: "Deals",
+    //   APIData: apiData,
+    //   Trigger: ["workflow"],
+    // };
+
+    // ZOHO.CRM.API.updateRecord(config)
+    //   .then(function (data) {
+    //     console.log({ updateDealAndDisable: data });
+    //     // ZOHO.CRM.BLUEPRINT.proceed();
+
+    //     // handleClose();
+    //   })
+    //   .catch((error) => {
+    //     console.log({ updateDealAndDisableError: error });
+    //     // handleClose();
+    //   });
   };
 
   const onSubmit = async (data) => {
@@ -812,7 +812,7 @@ export default function QuoteCalculation({
 
     updateDealAndDisable(updateDealData, dealData);
     // tempSave(updateDealData, dealData);
-    /*
+    
     if (data?.Sent_for_Review) {
       let description =
         "Hello " +
