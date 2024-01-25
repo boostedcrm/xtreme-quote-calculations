@@ -143,7 +143,6 @@ export default function QuoteCalculation({
     var Subform_5 = labors?.map((labor) => {
       return {
         Name1: labor?.resourceTitle?.Name,
-        Deal_Name: dealData?.id,
         Time_Frame_Day_Week_Task: labor?.timeFrame || "" + "",
         Days: Number(labor?.days) || 0,
         Hours_Per_Day: Number(labor?.hoursPerDay) || 0,
@@ -208,11 +207,10 @@ export default function QuoteCalculation({
     //   });
   };
 
-  const createEquipment = (labors, dealData) => {
-    var laborData = labors?.map((labor) => {
+  const createEquipment = async (labors, dealData) => {
+    var Subform_6= labors?.map((labor) => {
       return {
-        Name: labor?.name?.Name,
-        Deal_Name: dealData?.id,
+        Name1: labor?.name?.Name,
         Days: Number(labor?.days) || 0,
         Direct_Cost_Per_Hour: Number(labor?.directCostPerHour) || 0,
         Hours_Per_Day: Number(labor?.hoursPerDay) || 0,
@@ -220,24 +218,65 @@ export default function QuoteCalculation({
       };
     });
 
-    ZOHO.CRM.API.insertRecord({
-      Entity: "Equipments_Quote",
-      APIData: laborData,
-      Trigger: ["workflow"],
-    })
-      .then(function (data) {
-        console.log({ createEquipment: data });
+    let laborData = {
+      Name: dealData?.Deal_Name + "-sandbox",
+      Deal_Name: dealData?.id + "",
+      Subform_6: Subform_6
+    }
+
+    // ZOHO.CRM.API.insertRecord({
+    //   Entity: "Equipments_Quote",
+    //   APIData: laborData,
+    //   Trigger: ["workflow"],
+    // })
+    //   .then(function (data) {
+    //     console.log({ createEquipment: data });
+    //   })
+    //   .catch(function (error) {
+    //     console.log({ createEquipmentError: error });
+    //   });
+
+      
+    if (dealData?.Equipment_Quote_ID) {
+      // Update Material_Quote
+      var config = {
+        Entity: "Equipments_Quote",
+        APIData: {
+          id: dealData?.Equipment_Quote_ID,
+          ...laborData,
+        },
+        Trigger: ["workflow"],
+      };
+      return ZOHO.CRM.API.updateRecord(config)
+        .then(function (data) {
+          let id = data?.[0]?.details?.id || "";
+          return { id: dealData?.Equipment_Quote_ID };
+        })
+        .catch((err) => {
+          return { id: dealData?.Equipment_Quote_ID };
+        });
+    } else {
+      // Create a new one
+
+      return ZOHO.CRM.API.insertRecord({
+        Entity: "Equipments_Quote",
+        APIData: laborData,
+        Trigger: ["workflow"],
       })
-      .catch(function (error) {
-        console.log({ createEquipmentError: error });
-      });
+        .then(function (data) {
+          let id = data?.data?.[0]?.details?.id || "";
+          return { id: id };
+        })
+        .catch((err) => {
+          return { id: "" };
+        });
+    }
+      
   };
 
-  const createLodging = (labors, dealData) => {
-    var laborData = labors?.map((labor) => {
+  const createLodging = async (labors, dealData) => {
+    var Subform_7= labors?.map((labor) => {
       return {
-        Name: dealData?.Deal_Name,
-        Deal_Lookup: dealData?.id,
         Days: Number(labor?.days) || 0,
         Crew_Size: Number(labor?.crewSize) || 0,
         Cost_Per_Room: Number(labor?.costPerRoom) || 0,
@@ -246,17 +285,59 @@ export default function QuoteCalculation({
       };
     });
 
-    ZOHO.CRM.API.insertRecord({
-      Entity: "Lodging",
-      APIData: laborData,
-      Trigger: ["workflow"],
-    })
-      .then(function (data) {
-        console.log({ createLodging: data });
+    var laborData = {
+      Name: dealData?.Deal_Name + "-sandbox",
+      Deal_Lookup: dealData?.id + "",
+      Subform_7: Subform_7
+    }
+
+    // ZOHO.CRM.API.insertRecord({
+    //   Entity: "Lodging",
+    //   APIData: laborData,
+    //   Trigger: ["workflow"],
+    // })
+    //   .then(function (data) {
+    //     console.log({ createLodging: data });
+    //   })
+    //   .catch(function (error) {
+    //     console.log({ createLodgingError: error });
+    //   });
+
+      
+    if (dealData?.Lodging_ID) {
+      // Update Material_Quote
+      var config = {
+        Entity: "Lodging",
+        APIData: {
+          id: dealData?.Lodging_ID,
+          ...laborData,
+        },
+        Trigger: ["workflow"],
+      };
+      return ZOHO.CRM.API.updateRecord(config)
+        .then(function (data) {
+          let id = data?.[0]?.details?.id || "";
+          return { id: dealData?.Lodging_ID };
+        })
+        .catch((err) => {
+          return { id: dealData?.Lodging_ID };
+        });
+    } else {
+      // Create a new one
+
+      return ZOHO.CRM.API.insertRecord({
+        Entity: "Lodging",
+        APIData: laborData,
+        Trigger: ["workflow"],
       })
-      .catch(function (error) {
-        console.log({ createLodgingError: error });
-      });
+        .then(function (data) {
+          let id = data?.data?.[0]?.details?.id || "";
+          return { id: id };
+        })
+        .catch((err) => {
+          return { id: "" };
+        });
+    }
   };
 
   const createPerDiem = (labors, dealData) => {
@@ -490,13 +571,20 @@ export default function QuoteCalculation({
       updateDealData["Labour_Quote_ID"] = LabourData?.id || "";
       console.log({ updateDealData });
     }
-    /*
+    
     if (equipment?.length >= 1) {
-      createEquipment(equipment, dealData);
+      
+      const LabourData = await createEquipment(equipment, dealData);
+      updateDealData["Equipment_Quote_ID"] = LabourData?.id || "";
+      console.log({ updateDealData });
     }
     if (lodging?.length >= 1) {
-      createLodging(lodging, dealData);
+      
+      const LabourData = await createLodging(lodging, dealData);
+      updateDealData["Lodging_ID"] = LabourData?.id || "";
+      console.log({ updateDealData });
     }
+    /*
     if (perdiem?.length >= 1) {
       createPerDiem(perdiem, dealData);
     }
