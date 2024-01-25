@@ -477,29 +477,70 @@ export default function QuoteCalculation({
     }
   };
 
-  const createVehicleExpense = (labors, dealData) => {
-    var laborData = labors?.map((labor) => {
+  const createVehicleExpense = async (labors, dealData) => {
+    var Subform_10= labors?.map((labor) => {
       return {
-        Name: dealData?.Deal_Name || "Test",
-        Deal_Name: dealData?.id,
         Mileage: Number(labor?.mileage) || 0,
         Rate: Number(labor?.rate) || 0,
         Total: Number(labor?.vehicleExpenseSubtotal) || 0,
       };
     });
 
-    ZOHO.CRM.API.insertRecord({
-      Entity: "Vehicle_Expense",
-      APIData: laborData,
-      Trigger: ["workflow"],
-    })
-      .then(function (data) {
-        console.log({ createVehicleExpense: data });
+    var laborData = {
+      Name: dealData?.Deal_Name + "-sandbox",
+      Deal_Name: dealData?.id,
+      Subform_10: Subform_10
+    }
+
+    // ZOHO.CRM.API.insertRecord({
+    //   Entity: "Vehicle_Expense",
+    //   APIData: laborData,
+    //   Trigger: ["workflow"],
+    // })
+    //   .then(function (data) {
+    //     console.log({ createVehicleExpense: data });
+    //   })
+    //   .catch(function (error) {
+    //     console.log({ createVehicleExpenseError: error });
+    //   });
+    //   // Vehicle_Exp_ID
+
+      
+      
+    if (dealData?.Vehicle_Exp_ID	) {
+      // Update Material_Quote
+      var config = {
+        Entity: "Vehicle_Expense",
+        APIData: {
+          id: dealData?.Vehicle_Exp_ID	,
+          ...laborData,
+        },
+        Trigger: ["workflow"],
+      };
+      return ZOHO.CRM.API.updateRecord(config)
+        .then(function (data) {
+          let id = data?.[0]?.details?.id || "";
+          return { id: dealData?.Vehicle_Exp_ID	 };
+        })
+        .catch((err) => {
+          return { id: dealData?.Vehicle_Exp_ID	 };
+        });
+    } else {
+      // Create a new one
+
+      return ZOHO.CRM.API.insertRecord({
+        Entity: "Vehicle_Expense",
+        APIData: laborData,
+        Trigger: ["workflow"],
       })
-      .catch(function (error) {
-        console.log({ createVehicleExpenseError: error });
-      });
-      // Vehicle_Exp_ID
+        .then(function (data) {
+          let id = data?.data?.[0]?.details?.id || "";
+          return { id: id };
+        })
+        .catch((err) => {
+          return { id: "" };
+        });
+    }
   };
 
   const saveQuoteData = () => {
@@ -689,10 +730,10 @@ export default function QuoteCalculation({
     
     if (vehicleexpense?.length >= 1) {
       
-      createVehicleExpense(vehicleexpense, dealData);
-      // const LabourData = await createVehicleExpense(vehicleexpense, dealData);
-      // updateDealData["Vehicle_Exp_ID"] = LabourData?.id || "";
-      // console.log({ updateDealData });
+      // createVehicleExpense(vehicleexpense, dealData);
+      const LabourData = await createVehicleExpense(vehicleexpense, dealData);
+      updateDealData["Vehicle_Exp_ID"] = LabourData?.id || "";
+      console.log({ updateDealData });
     }
     /*
 */
