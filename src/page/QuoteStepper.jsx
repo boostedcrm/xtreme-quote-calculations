@@ -624,7 +624,7 @@ export default function QuoteCalculation({
       });
   };
 
-  const updateDealAndDisable = (apiData, dealData) => {
+  const updateDealAndDisable = async (apiData, dealData) => {
     let transition_id = "5031174000000562282";
     var BlueprintData = {
       blueprint: [
@@ -810,7 +810,7 @@ export default function QuoteCalculation({
       id: dealData?.id,
     };
 
-    updateDealAndDisable(updateDealData, dealData);
+    await updateDealAndDisable(updateDealData, dealData);
     // tempSave(updateDealData, dealData);
     
     if (data?.Sent_for_Review) {
