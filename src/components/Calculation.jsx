@@ -92,7 +92,7 @@ export default function Calculation({
 
   return (
     <Box p={2}>
-      <Grid containe style={{ marginBottom: "15px" }}>
+      <Grid container style={{ marginBottom: "15px" }}>
         {/* {renderTextField(
           `miscellaneousCost`,
           "Miscellaneous cost",
@@ -118,8 +118,6 @@ export default function Calculation({
             )}
           />
         </Grid>
-      </Grid>
-      <Grid container spacing={2} style={{ marginBottom: "15px" }}>
         <Grid item xs={6}>
           <Controller
             name="totalCost"
@@ -140,7 +138,7 @@ export default function Calculation({
           />
         </Grid>
       </Grid>
-      <Grid container spacing={2} style={{ marginBottom: "15px" }}>
+      <Grid container style={{ marginBottom: "15px" }}>
         <Grid item xs={6}>
           <Controller
             name="grossProfitGoal"
@@ -159,23 +157,6 @@ export default function Calculation({
               />
             )}
           />
-        </Grid>
-        <Grid item xs={6}>
-          {/* <Controller
-            name="field2"
-            control={control}
-            defaultValue="2242.78"
-            render={({ field }) => (
-              <TextField
-                label=""
-                variant="outlined"
-                {...field}
-                size="small"
-                sx={{ width: 350 }} // Set the width to 300px
-              />
-            )}
-          />
-            */}
         </Grid>
         <Grid item xs={6}>
           <Controller
@@ -215,8 +196,8 @@ export default function Calculation({
         </Grid> */}
         {/* Replace with actual label */}
       </Grid>
-      <Grid container spacing={2}>
-        <Grid item xs={6}>
+      <Grid container sx={{ marginBottom: "15px" }}>
+        <Grid item xs={6} sx={{ padding: "0" }}>
           <Controller
             name={`commissionPercentage`}
             control={control}
@@ -227,7 +208,7 @@ export default function Calculation({
                 label={"Commission Percentage"}
                 variant="outlined"
                 size="small"
-                margin="normal"
+                // margin="normal"
                 type="number"
                 onChange={(e) => {
                   let grossProfitGoal = Number(
@@ -257,6 +238,9 @@ export default function Calculation({
                   );
                   field.onChange(e.target.value);
                 }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
               />
             )}
           />
@@ -280,6 +264,8 @@ export default function Calculation({
             )}
           />
         </Grid>
+      </Grid>
+      <Grid container style={{ marginBottom: "15px" }}>
         <Grid item xs={6}>
           <Controller
             name="Quoted_Rev_Per_Manhour"
@@ -288,232 +274,6 @@ export default function Calculation({
             render={({ field }) => (
               <TextField
                 label="Revenue Per Man Hour"
-                variant="outlined"
-                {...field}
-                size="small"
-                sx={{ width: 350 }} // Set the width to 300px
-                InputProps={{
-                  readOnly: true,
-                  startAdornment: <Typography>$</Typography>,
-                }}
-              />
-            )}
-          />
-        </Grid>
-      </Grid>
-      <Grid container>
-        <Grid item xs={6}>
-          <Controller
-            name="minimumBidToCustomer"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                label="Minimum Bid to Customer"
-                variant="outlined"
-                {...field}
-                size="small"
-                sx={{ width: 350 }} // Set the width to 300px
-                InputProps={{
-                  readOnly: true,
-                  startAdornment: <Typography>$</Typography>,
-                }}
-              />
-            )}
-          />
-        </Grid>
-        {/* <Grid item xs={6}>
-          <Controller
-            name="field4"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <TextField
-                label=""
-                variant="outlined"
-                {...field}
-                size="small"
-                sx={{ width: 350 }} // Set the width to 300px
-              />
-            )}
-          />
-        </Grid> */}
-      </Grid>
-      <br />
-      <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <Controller
-            name="grossProfitAmount"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                label="Gross Profit Amount"
-                variant="outlined"
-                {...field}
-                size="small"
-                sx={{ width: 350 }} // Set the width to 300px
-                InputProps={{
-                  readOnly: true,
-                  startAdornment: <Typography>$</Typography>,
-                }}
-              />
-            )}
-          />
-        </Grid>
-        {/* Replace with actual label */}
-        <Grid item xs={6}>
-          <Controller
-            name="grossProfitPct"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                label="Gross Profit Pct"
-                variant="outlined"
-                {...field}
-                size="small"
-                sx={{ width: 350 }} // Set the width to 300px
-              />
-            )}
-          />
-        </Grid>
-      </Grid>
-      <br />
-      <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <Controller
-            name={`bidToCustomer`}
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                sx={{ width: 350 }} // Set the width to 300px
-                label={"Bid To Customer"}
-                variant="outlined"
-                size="small"
-                margin="normal"
-                type="number"
-                onChange={(e) => {
-                  let totalCost = Number(getValues(`totalCost`) || 5);
-                  let commissionPercentage = Number(
-                    getValues(`commissionPercentage`) || 5
-                  );
-                  let bidToCustomer = Number(e.target.value) || 0;
-
-                  let finalCommission =
-                    (commissionPercentage / 100) * bidToCustomer;
-
-                  let finalTotalCost = totalCost + finalCommission;
-
-                  let finalGrossProfit = bidToCustomer - finalTotalCost;
-                  setValue(`finalTotalCost`, Number(finalTotalCost.toFixed(2)));
-                  setValue(
-                    `finalGrossProfit`,
-                    Number(finalGrossProfit.toFixed(2))
-                  );
-                  setValue(
-                    `finalCommission`,
-                    Number(finalCommission.toFixed(2))
-                  );
-
-                  field.onChange(e.target.value);
-                }}
-              />
-            )}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          {/* <Controller
-            name="commissionPercentageFinal"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <TextField
-                label="Commission Percentage"
-                variant="outlined"
-                {...field}
-                size="small"
-                sx={{ width: 350 }} // Set the width to 300px
-              />
-            )}
-          /> */}
-        </Grid>
-        <Grid item xs={6}>
-          <Controller
-            name="finalCommission"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                label="Final Commission"
-                variant="outlined"
-                {...field}
-                size="small"
-                sx={{ width: 350 }} // Set the width to 300px
-                InputProps={{
-                  readOnly: true,
-                  startAdornment: <Typography>$</Typography>,
-                }}
-              />
-            )}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Controller
-            name="totalCostPercentage"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                label="Total Cost Percentage"
-                variant="outlined"
-                {...field}
-                size="small"
-                sx={{ width: 350 }} // Set the width to 300px
-              />
-            )}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Controller
-            name="finalTotalCost"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                label="Final Total Cost"
-                variant="outlined"
-                {...field}
-                size="small"
-                sx={{ width: 350 }} // Set the width to 300px
-                InputProps={{
-                  readOnly: true,
-                  startAdornment: <Typography>$</Typography>,
-                }}
-              />
-            )}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Controller
-            name="actualGrossProfitPercentage"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                label="Actual Gross Profit Percentage"
-                variant="outlined"
-                {...field}
-                size="small"
-                sx={{ width: 350 }} // Set the width to 300px
-              />
-            )}
-          />
-        </Grid>
-      </Grid>
-      <br />
-      <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <Controller
-            name="finalGrossProfit"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                label="Final Gross Profit"
                 variant="outlined"
                 {...field}
                 size="small"
@@ -546,8 +306,171 @@ export default function Calculation({
             )}
           />
         </Grid>
+        {/* <Grid item xs={6}>
+          <Controller
+            name="field4"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                label=""
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+              />
+            )}
+          />
+        </Grid> */}
       </Grid>
-      <br />
+      <Grid container  style={{ marginBottom: "15px" }}>
+        <Grid xs={6}>
+          <Controller
+            name="minimumBidToCustomer"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                label="Minimum Bid to Customer"
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: <Typography>$</Typography>,
+                }}
+              />
+            )}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Controller
+            name={`bidToCustomer`}
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                sx={{ width: 350 }} // Set the width to 300px
+                label={"Bid To Customer"}
+                variant="outlined"
+                size="small"
+                type="number"
+                onChange={(e) => {
+                  let totalCost = Number(getValues(`totalCost`) || 5);
+                  let commissionPercentage = Number(
+                    getValues(`commissionPercentage`) || 5
+                  );
+                  let bidToCustomer = Number(e.target.value) || 0;
+
+                  let finalCommission =
+                    (commissionPercentage / 100) * bidToCustomer;
+
+                  let finalTotalCost = totalCost + finalCommission;
+
+                  let finalGrossProfit = bidToCustomer - finalTotalCost;
+                  setValue(`finalTotalCost`, Number(finalTotalCost.toFixed(2)));
+                  setValue(
+                    `finalGrossProfit`,
+                    Number(finalGrossProfit.toFixed(2))
+                  );
+                  setValue(
+                    `finalCommission`,
+                    Number(finalCommission.toFixed(2))
+                  );
+
+                  field.onChange(e.target.value);
+                }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            )}
+          />
+        </Grid>
+      </Grid>
+
+      <Grid container style={{ marginBottom: "15px" }}>
+        <Grid item xs={6}>
+          <Controller
+            name="grossProfitAmount"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                label="Gross Profit Amount"
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: <Typography>$</Typography>,
+                }}
+              />
+            )}
+          />
+        </Grid>
+        {/* Replace with actual label */}
+        <Grid item xs={6}>
+          <Controller
+            name="grossProfitPct"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                label="Gross Profit Pct"
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            )}
+          />
+        </Grid>
+      </Grid>
+
+      <Grid container style={{ marginBottom: "15px" }}>
+        <Grid item xs={6}>
+          <Controller
+            name="finalCommission"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                label="Final Commission"
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: <Typography>$</Typography>,
+                }}
+              />
+            )}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Controller
+            name="totalCostPercentage"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                label="Total Cost Percentage"
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            )}
+          />
+        </Grid>
+      </Grid>
+
+
       {/* <Grid container spacing={2}>
         <Grid item xs={6}>
           <Controller
@@ -582,8 +505,70 @@ export default function Calculation({
           />
         </Grid>
       </Grid> */}
-      <br />
-      <Grid container spacing={2}>
+      <Grid container style={{ marginBottom: "15px" }}>
+      <Grid item xs={6}>
+          <Controller
+            name="finalTotalCost"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                label="Final Total Cost"
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: <Typography>$</Typography>,
+                }}
+              />
+            )}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Controller
+            name="actualGrossProfitPercentage"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                label="Actual Gross Profit Percentage"
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            )}
+          />
+        </Grid>
+      </Grid>
+  
+      <Grid container  style={{ marginBottom: "15px" }}>
+        <Grid item xs={6}>
+          <Controller
+            name="finalGrossProfit"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                label="Final Gross Profit"
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: <Typography>$</Typography>,
+                }}
+              />
+            )}
+          />
+        </Grid>
+        <Grid item xs={6}></Grid>
+      </Grid>
+
+      <Grid container>
         <Grid item xs={6}>
           <Controller
             name="serviceOnQuote"
@@ -596,6 +581,9 @@ export default function Calculation({
                 {...field}
                 size="small"
                 sx={{ width: 350 }} // Set the width to 300px
+                InputLabelProps={{
+                  shrink: true,
+                }}
               />
             )}
           />
