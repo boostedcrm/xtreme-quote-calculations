@@ -234,6 +234,26 @@ export default function Calculation({
         </Grid>
         <Grid item xs={6}>
           <Controller
+            name="Quoted_Rev_Per_Manhour"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                label="Revenue Per Man Hour"
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: <Typography>$</Typography>,
+                }}
+              />
+            )}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Controller
             name={`commissionPercentage`}
             control={control}
             render={({ field }) => (
@@ -640,7 +660,7 @@ export default function Calculation({
           rules={{ required: true }}
           render={({ field }) => (
             <div style={{ display: "flex" }}>
-              <div >
+              <div>
                 <label>{"Send for Review"}</label>
               </div>
               <Checkbox {...field} defaultChecked={field?.value} />

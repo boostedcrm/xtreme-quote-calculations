@@ -61,6 +61,13 @@ const Lodging = ({ control, watch, getValues, register, setValue }) => {
 
     let grossProfitGoal = (totalCost - (miscellaneousCost*1.2) ) *2;
     setValue(`grossProfitGoal`, Number(grossProfitGoal.toFixed(2)));
+
+    
+    let totalManHours = Number(
+      getValues(`totalManHours`) || 0
+    );
+    let Quoted_Rev_Per_Manhour = totalCost/totalManHours;
+    setValue(`Quoted_Rev_Per_Manhour`, Number(Quoted_Rev_Per_Manhour.toFixed(2)));
   }
 
   function calculateTotalLoadingCost(fields) {
