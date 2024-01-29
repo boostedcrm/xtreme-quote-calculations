@@ -65,8 +65,8 @@ export default function Calculation({
           );
 
           console.log({ filteredCarificationsData });
-          setClarifications((prev) => filteredCarificationsData);
-          if (!dealData?.Clarification20) {
+          // setClarifications((prev) => filteredCarificationsData);
+          if (!dealData?.Clarification20 && (getValues("Clarifications")?.length == 0) ) {
             filteredCarificationsData.forEach((element, index) => {
               let temp = { name: element?.Description };
               append(temp);
@@ -78,7 +78,7 @@ export default function Calculation({
       }
     }
     getData();
-  }, [ZOHO]);
+  }, []);
 
   const removeClarification = (index) => {
     const newClarifications = clarifications.filter((_, i) => i !== index);
