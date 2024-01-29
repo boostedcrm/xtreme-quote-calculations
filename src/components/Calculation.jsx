@@ -66,7 +66,10 @@ export default function Calculation({
 
           console.log({ filteredCarificationsData });
           // setClarifications((prev) => filteredCarificationsData);
-          if (!dealData?.Clarification20 && (getValues("Clarifications")?.length == 0) ) {
+          if (
+            !dealData?.Clarification20 &&
+            getValues("Clarifications")?.length == 0
+          ) {
             filteredCarificationsData.forEach((element, index) => {
               let temp = { name: element?.Description };
               append(temp);
@@ -213,8 +216,7 @@ export default function Calculation({
         {/* Replace with actual label */}
       </Grid>
       <Grid container spacing={2}>
-        
-      <Grid item xs={6}>
+        <Grid item xs={6}>
           <Controller
             name={`commissionPercentage`}
             control={control}
@@ -658,13 +660,15 @@ export default function Calculation({
         <Controller
           name="Sent_for_Review"
           control={control}
-          rules={{ required: true }}
           render={({ field }) => (
             <div style={{ display: "flex" }}>
               <div>
                 <label>{"Send for Review"}</label>
               </div>
-              <Checkbox {...field} defaultChecked={field?.value} />
+              <Checkbox
+                defaultChecked={field?.value ? true : false}
+                {...field}
+              />
             </div>
           )}
         />

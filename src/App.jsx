@@ -16,6 +16,7 @@ function App() {
   const [quoteDistributions, setQuoteDistributions] = useState([]);
   const [quoteType, setQuoteType] = useState(null);
   const [checklistData, setCheckListData] = useState(null);
+  const [bluprintData, setBluprintData] = useState(null);
 
   useEffect(() => {
     ZOHO.embeddedApp.on("PageLoad", function (data) {
@@ -54,7 +55,15 @@ function App() {
 
             ZOHO.CRM.API.getBluePrint(config).then(function (data) {
               console.log({ getBluePrint: data });
+              let tempData = {
+                id: data?.blueprint?.transitions?.[0]?.id,
+                stage: data?.blueprint?.transitions?.[0]?.next_field_value
+              }
+              console.log({tempData});
+
+              setBluprintData(prev=> tempData)
             });
+
             const dealData = data?.data[0];
             console.log({ dealData });
             let previousData = JSON.parse(dealData?.Clarification20 || "{}");
@@ -166,7 +175,7 @@ function App() {
         </Box>
       </Box>
       {/* <QuoteCalculation setPage={setPage} handleClose={handleClose} /> */}
-      {dealData !== null && (
+      {dealData !== null && bluprintData !== null &&  (
         <QuoteStepper
           setPage={setPage}
           handleClose={handleClose}
@@ -176,6 +185,7 @@ function App() {
           // quoteDistributions={quoteDistributions}
           checklistData={checklistData}
           quoteType={quoteType}
+          bluprintData={bluprintData}
         />
       )}
     </Box>

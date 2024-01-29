@@ -43,6 +43,7 @@ export default function QuoteCalculation({
   ZOHO,
   checklistData,
   quoteType,
+  bluprintData
 }) {
   const {
     control,
@@ -700,14 +701,15 @@ export default function QuoteCalculation({
   };
 
   const updateDealAndDisable = async (apiData, dealData) => {
-    let transition_id = "5031174000000562282";
+    let transition_id = bluprintData?.id;
+    // 5031174000000562343
     var BlueprintData = {
       blueprint: [
         {
           transition_id: transition_id,
           data: {
             ...apiData,
-            Quote_Calculator: "Calculate Quote",
+            Quote_Calculator: bluprintData?.stage,
           },
         },
       ],
@@ -1039,13 +1041,13 @@ export default function QuoteCalculation({
           <Box sx={{ flex: "1 1 auto" }} />
           <Button onClick={handleClose}>Cancel</Button>
 
-          {!dealData?.Quote_Calculator && (
+          {/* {!dealData?.Quote_Calculator && (
             <Button variant="contained" color="success" onClick={saveQuoteData}>
               Save
             </Button>
-          )}
+          )} */}
 
-          {activeStep === steps.length - 1 && !dealData?.Quote_Calculator ? (
+          {activeStep === steps.length - 1  ? (
             <Button variant="contained" type="submit">
               Update Deal
             </Button>
