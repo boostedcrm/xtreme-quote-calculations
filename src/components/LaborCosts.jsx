@@ -21,7 +21,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { useEffect, useState } from "react";
 
-const LaborCosts = ({ ZOHO, control, getValues, register, setValue }) => {
+const LaborCosts = ({ dealData,ZOHO, control, getValues, register, setValue }) => {
   const [labor, SetLabor] = useState([]);
 
   useEffect(() => {
@@ -82,6 +82,15 @@ const LaborCosts = ({ ZOHO, control, getValues, register, setValue }) => {
     );
     let Quoted_Rev_Per_Manhour = totalCost/totalManHours;
     setValue(`Quoted_Rev_Per_Manhour`, Number(Quoted_Rev_Per_Manhour.toFixed(2)));
+
+    
+    let SquareFeet = Number(
+      getValues(`SquareFeet`) || dealData?.SquareFeet || 1
+    );
+    let Revenue_Per_Square_Ft = totalCost/SquareFeet;
+    setValue(`Revenue_Per_Square_Ft`, Number(Revenue_Per_Square_Ft.toFixed(2)));
+
+    
 
     let grossProfitGoal = (totalCost - (miscellaneousCost*1.2) ) *2;
     setValue(`grossProfitGoal`, Number(grossProfitGoal.toFixed(2)));

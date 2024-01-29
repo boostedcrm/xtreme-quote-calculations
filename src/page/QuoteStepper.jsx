@@ -43,7 +43,7 @@ export default function QuoteCalculation({
   ZOHO,
   checklistData,
   quoteType,
-  bluprintData
+  bluprintData,
 }) {
   const {
     control,
@@ -157,9 +157,8 @@ export default function QuoteCalculation({
       Subform_5: Subform_5,
       Name: dealData?.Deal_Name + "-sandbox",
       Deal_Name: dealData?.id + "",
-    }
+    };
 
-    
     if (dealData?.Labour_Quote_ID) {
       // Update Material_Quote
       var config = {
@@ -209,7 +208,7 @@ export default function QuoteCalculation({
   };
 
   const createEquipment = async (labors, dealData) => {
-    var Subform_6= labors?.map((labor) => {
+    var Subform_6 = labors?.map((labor) => {
       return {
         Name1: labor?.name?.Name,
         Days: Number(labor?.days) || 0,
@@ -222,8 +221,8 @@ export default function QuoteCalculation({
     let laborData = {
       Name: dealData?.Deal_Name + "-sandbox",
       Deal_Name: dealData?.id + "",
-      Subform_6: Subform_6
-    }
+      Subform_6: Subform_6,
+    };
 
     // ZOHO.CRM.API.insertRecord({
     //   Entity: "Equipments_Quote",
@@ -237,7 +236,6 @@ export default function QuoteCalculation({
     //     console.log({ createEquipmentError: error });
     //   });
 
-      
     if (dealData?.Equipment_Quote_ID) {
       // Update Material_Quote
       var config = {
@@ -272,11 +270,10 @@ export default function QuoteCalculation({
           return { id: "" };
         });
     }
-      
   };
 
   const createLodging = async (labors, dealData) => {
-    var Subform_7= labors?.map((labor) => {
+    var Subform_7 = labors?.map((labor) => {
       return {
         Days: Number(labor?.days) || 0,
         Crew_Size: Number(labor?.crewSize) || 0,
@@ -289,8 +286,8 @@ export default function QuoteCalculation({
     var laborData = {
       Name: dealData?.Deal_Name + "-sandbox",
       Deal_Lookup: dealData?.id + "",
-      Subform_7: Subform_7
-    }
+      Subform_7: Subform_7,
+    };
 
     // ZOHO.CRM.API.insertRecord({
     //   Entity: "Lodging",
@@ -304,7 +301,6 @@ export default function QuoteCalculation({
     //     console.log({ createLodgingError: error });
     //   });
 
-      
     if (dealData?.Lodging_ID) {
       // Update Material_Quote
       var config = {
@@ -342,7 +338,7 @@ export default function QuoteCalculation({
   };
 
   const createPerDiem = async (labors, dealData) => {
-    var Subform_8= labors?.map((labor) => {
+    var Subform_8 = labors?.map((labor) => {
       return {
         Name: labor?.name?.Name,
         Deal_Lookup: dealData?.id,
@@ -357,8 +353,8 @@ export default function QuoteCalculation({
     var laborData = {
       Name: dealData?.Deal_Name + "-sandbox",
       Deal_Lookup: dealData?.id + "",
-      Subform_8: Subform_8
-    }
+      Subform_8: Subform_8,
+    };
 
     // ZOHO.CRM.API.insertRecord({
     //   Entity: "Per_Diem",
@@ -371,9 +367,8 @@ export default function QuoteCalculation({
     //   .catch(function (error) {
     //     console.log({ createPerDiemError: error });
     //   });
-      // Per_Diem_ID
+    // Per_Diem_ID
 
-      
     if (dealData?.Per_Diem_ID) {
       // Update Material_Quote
       var config = {
@@ -408,11 +403,10 @@ export default function QuoteCalculation({
           return { id: "" };
         });
     }
-
   };
 
   const createRentalEquipment = (labors, dealData) => {
-    var Subform_9= labors?.map((labor) => {
+    var Subform_9 = labors?.map((labor) => {
       return {
         Name1: labor?.equipmentName,
         Deal_Lookup: dealData?.id,
@@ -426,8 +420,8 @@ export default function QuoteCalculation({
     var laborData = {
       Name: dealData?.Deal_Name + "-sandbox",
       Deal_Lookup: dealData?.id,
-      Subform_9: Subform_9
-    }
+      Subform_9: Subform_9,
+    };
 
     // ZOHO.CRM.API.insertRecord({
     //   Entity: "Rental_Equipment",
@@ -441,13 +435,12 @@ export default function QuoteCalculation({
     //     console.log({ createRentalEquipmentError: error });
     //   });
 
-      
-    if (dealData?.Rental_Equip_ID	) {
+    if (dealData?.Rental_Equip_ID) {
       // Update Material_Quote
       var config = {
         Entity: "Rental_Equipment",
         APIData: {
-          id: dealData?.Rental_Equip_ID	,
+          id: dealData?.Rental_Equip_ID,
           ...laborData,
         },
         Trigger: ["workflow"],
@@ -455,10 +448,10 @@ export default function QuoteCalculation({
       return ZOHO.CRM.API.updateRecord(config)
         .then(function (data) {
           let id = data?.[0]?.details?.id || "";
-          return { id: dealData?.Rental_Equip_ID	 };
+          return { id: dealData?.Rental_Equip_ID };
         })
         .catch((err) => {
-          return { id: dealData?.Rental_Equip_ID	 };
+          return { id: dealData?.Rental_Equip_ID };
         });
     } else {
       // Create a new one
@@ -479,7 +472,7 @@ export default function QuoteCalculation({
   };
 
   const createVehicleExpense = async (labors, dealData) => {
-    var Subform_10= labors?.map((labor) => {
+    var Subform_10 = labors?.map((labor) => {
       return {
         Mileage: Number(labor?.mileage) || 0,
         Rate: Number(labor?.rate) || 0,
@@ -490,8 +483,8 @@ export default function QuoteCalculation({
     var laborData = {
       Name: dealData?.Deal_Name + "-sandbox",
       Deal_Name: dealData?.id,
-      Subform_10: Subform_10
-    }
+      Subform_10: Subform_10,
+    };
 
     // ZOHO.CRM.API.insertRecord({
     //   Entity: "Vehicle_Expense",
@@ -506,14 +499,12 @@ export default function QuoteCalculation({
     //   });
     //   // Vehicle_Exp_ID
 
-      
-      
-    if (dealData?.Vehicle_Exp_ID	) {
+    if (dealData?.Vehicle_Exp_ID) {
       // Update Material_Quote
       var config = {
         Entity: "Vehicle_Expense",
         APIData: {
-          id: dealData?.Vehicle_Exp_ID	,
+          id: dealData?.Vehicle_Exp_ID,
           ...laborData,
         },
         Trigger: ["workflow"],
@@ -521,10 +512,10 @@ export default function QuoteCalculation({
       return ZOHO.CRM.API.updateRecord(config)
         .then(function (data) {
           let id = data?.[0]?.details?.id || "";
-          return { id: dealData?.Vehicle_Exp_ID	 };
+          return { id: dealData?.Vehicle_Exp_ID };
         })
         .catch((err) => {
-          return { id: dealData?.Vehicle_Exp_ID	 };
+          return { id: dealData?.Vehicle_Exp_ID };
         });
     } else {
       // Create a new one
@@ -688,7 +679,7 @@ export default function QuoteCalculation({
       APIData: apiData,
       Trigger: ["workflow"], // ["workflow"]
     };
-    console.log({apiData});
+    console.log({ apiData });
     ZOHO.CRM.API.updateRecord(config)
       .then(function (data) {
         console.log({ updateRecord: data });
@@ -770,52 +761,45 @@ export default function QuoteCalculation({
       updateDealData["Material_Quote_ID"] = materialData?.id || "";
       console.log({ updateDealData });
     }
-    
+
     if (labor?.length >= 1) {
       // createLabor(labor, dealData);
-      
+
       const LabourData = await createLabor(labor, dealData);
       updateDealData["Labour_Quote_ID"] = LabourData?.id || "";
       console.log({ updateDealData });
     }
-    
+
     if (equipment?.length >= 1) {
-      
       const LabourData = await createEquipment(equipment, dealData);
       updateDealData["Equipment_Quote_ID"] = LabourData?.id || "";
       console.log({ updateDealData });
     }
     if (lodging?.length >= 1) {
-      
       const LabourData = await createLodging(lodging, dealData);
       updateDealData["Lodging_ID"] = LabourData?.id || "";
       console.log({ updateDealData });
     }
     if (perdiem?.length >= 1) {
-      
-      
       const LabourData = await createPerDiem(perdiem, dealData);
       updateDealData["Per_Diem_ID"] = LabourData?.id || "";
       console.log({ updateDealData });
     }
-    
+
     if (rentalequipment?.length >= 1) {
-      
-      
       const LabourData = await createRentalEquipment(rentalequipment, dealData);
       updateDealData["Rental_Equip_ID"] = LabourData?.id || "";
       console.log({ updateDealData });
     }
-    
+
     if (vehicleexpense?.length >= 1) {
-      
       // createVehicleExpense(vehicleexpense, dealData);
       const LabourData = await createVehicleExpense(vehicleexpense, dealData);
       updateDealData["Vehicle_Exp_ID"] = LabourData?.id || "";
       console.log({ updateDealData });
     }
     /*
-*/
+     */
     updateDealData = {
       ...updateDealData,
       Materials_Cost: Number(data?.materialTotalCost) || 0,
@@ -891,7 +875,7 @@ export default function QuoteCalculation({
 
     await updateDealAndDisable(updateDealData, dealData);
     // tempSave(updateDealData, dealData);
-    
+
     if (data?.Sent_for_Review) {
       let description =
         "Hello " +
@@ -955,6 +939,7 @@ export default function QuoteCalculation({
           )}
           {activeStep === 1 && (
             <MaterialCosts
+              dealData={dealData}
               products={products}
               control={control}
               watch={watch}
@@ -965,6 +950,7 @@ export default function QuoteCalculation({
           )}
           {activeStep === 2 && (
             <LaborCosts
+              dealData={dealData}
               ZOHO={ZOHO}
               control={control}
               watch={watch}
@@ -975,6 +961,7 @@ export default function QuoteCalculation({
           )}
           {activeStep === 3 && (
             <EquipmentCost
+              dealData={dealData}
               ZOHO={ZOHO}
               control={control}
               watch={watch}
@@ -985,6 +972,7 @@ export default function QuoteCalculation({
           )}
           {activeStep === 4 && (
             <Lodging
+              dealData={dealData}
               control={control}
               watch={watch}
               getValues={getValues}
@@ -994,6 +982,7 @@ export default function QuoteCalculation({
           )}
           {activeStep === 5 && (
             <PerDiem
+              dealData={dealData}
               control={control}
               watch={watch}
               getValues={getValues}
@@ -1003,6 +992,7 @@ export default function QuoteCalculation({
           )}
           {activeStep === 6 && (
             <RentalEquipment
+              dealData={dealData}
               control={control}
               watch={watch}
               getValues={getValues}
@@ -1012,6 +1002,7 @@ export default function QuoteCalculation({
           )}
           {activeStep === 7 && (
             <VehicleExpense
+              dealData={dealData}
               control={control}
               watch={watch}
               getValues={getValues}
@@ -1047,7 +1038,7 @@ export default function QuoteCalculation({
             </Button>
           )} */}
 
-          {activeStep === steps.length - 1  ? (
+          {activeStep === steps.length - 1 ? (
             <Button variant="contained" type="submit">
               Update Deal
             </Button>

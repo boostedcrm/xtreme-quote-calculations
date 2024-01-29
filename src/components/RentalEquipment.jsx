@@ -19,7 +19,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
-const RentalEquipment = ({ control, watch, getValues, register, setValue }) => {
+const RentalEquipment = ({ dealData, control, watch, getValues, register, setValue }) => {
   // const { control, handleSubmit, register, getValues } = useForm({
   //   defaultValues: {
   //     materials: [
@@ -67,6 +67,15 @@ const RentalEquipment = ({ control, watch, getValues, register, setValue }) => {
     );
     let Quoted_Rev_Per_Manhour = totalCost/totalManHours;
     setValue(`Quoted_Rev_Per_Manhour`, Number(Quoted_Rev_Per_Manhour.toFixed(2)));
+
+    
+    let SquareFeet = Number(
+      getValues(`SquareFeet`) || dealData?.SquareFeet || 1
+    );
+    let Revenue_Per_Square_Ft = totalCost/SquareFeet;
+    setValue(`Revenue_Per_Square_Ft`, Number(Revenue_Per_Square_Ft.toFixed(2)));
+
+    
   }
 
   function calculateTotalRentalEquipmentCost(fields) {

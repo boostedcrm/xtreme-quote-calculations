@@ -19,7 +19,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
-const VehicleExpense = ({ control, watch, getValues, register, setValue }) => {
+const VehicleExpense = ({ dealData, control, watch, getValues, register, setValue }) => {
   const { fields, append, remove, update } = useFieldArray({
     control,
     name: "vehicleexpense",
@@ -60,6 +60,15 @@ const VehicleExpense = ({ control, watch, getValues, register, setValue }) => {
       `Quoted_Rev_Per_Manhour`,
       Number(Quoted_Rev_Per_Manhour.toFixed(2))
     );
+
+    
+    let SquareFeet = Number(
+      getValues(`SquareFeet`) || dealData?.SquareFeet || 1
+    );
+    let Revenue_Per_Square_Ft = totalCost/SquareFeet;
+    setValue(`Revenue_Per_Square_Ft`, Number(Revenue_Per_Square_Ft.toFixed(2)));
+
+    
   }
 
   function calculateTotalVehicleExpenseCost(fields) {

@@ -22,6 +22,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { useEffect, useState } from "react";
 
 const ExquipmentCost = ({
+  dealData,
   ZOHO,
   control,
   watch,
@@ -86,6 +87,13 @@ const ExquipmentCost = ({
     );
     let Quoted_Rev_Per_Manhour = totalCost/totalManHours;
     setValue(`Quoted_Rev_Per_Manhour`, Number(Quoted_Rev_Per_Manhour.toFixed(2)));
+
+    let SquareFeet = Number(
+      getValues(`SquareFeet`) || dealData?.SquareFeet || 1
+    );
+    let Revenue_Per_Square_Ft = totalCost/SquareFeet;
+    setValue(`Revenue_Per_Square_Ft`, Number(Revenue_Per_Square_Ft.toFixed(2)));
+
     
   }
 

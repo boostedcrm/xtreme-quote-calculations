@@ -526,6 +526,26 @@ export default function Calculation({
             )}
           />
         </Grid>
+        <Grid item xs={6}>
+          <Controller
+            name="Revenue_Per_Square_Ft"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                label="Revenue Per Square Ft"
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: <Typography>$</Typography>,
+                }}
+              />
+            )}
+          />
+        </Grid>
       </Grid>
       <br />
       {/* <Grid container spacing={2}>
