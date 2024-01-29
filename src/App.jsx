@@ -17,6 +17,7 @@ function App() {
   const [quoteType, setQuoteType] = useState(null);
   const [checklistData, setCheckListData] = useState(null);
   const [bluprintData, setBluprintData] = useState(null);
+  const [taskList, setTaskList] = useState([]);
 
   useEffect(() => {
     ZOHO.embeddedApp.on("PageLoad", function (data) {
@@ -45,7 +46,7 @@ function App() {
           approved: "both",
           RecordID: dealID,
         }).then(function (data) {
-          console.log({dealData: data?.data[0]});
+          console.log({ dealData: data?.data[0] });
           setDealData(data?.data[0]);
           if (data?.data[0] !== undefined) {
             var config = {
@@ -57,11 +58,24 @@ function App() {
               console.log({ getBluePrint: data });
               let tempData = {
                 id: data?.blueprint?.transitions?.[0]?.id,
-                stage: data?.blueprint?.transitions?.[0]?.next_field_value
-              }
-              console.log({tempData});
+                stage: data?.blueprint?.transitions?.[0]?.next_field_value,
+              };
+              console.log({ tempData });
 
-              setBluprintData(prev=> tempData)
+              setBluprintData((prev) => tempData);
+            });
+
+            ZOHO.CRM.API.getRelatedRecords({
+              Entity: "Deals",
+              RecordID: dealID,
+              RelatedList: "Tasks",
+              page: 1,
+              per_page: 200,
+            }).then(function (data) {
+              let tempTask = data?.data?.map(task => task?.Subject);
+              console.log({Tasks: tempTask});
+
+              setTaskList(prev=> tempTask)
             });
 
             const dealData = data?.data[0];
@@ -175,9 +189,10 @@ function App() {
         </Box>
       </Box>
       {/* <QuoteCalculation setPage={setPage} handleClose={handleClose} /> */}
-      {dealData !== null && bluprintData !== null &&  (
+      {dealData !== null && bluprintData !== null && (
         <QuoteStepper
           setPage={setPage}
+          taskList={taskList}
           handleClose={handleClose}
           dealData={dealData}
           products={products}

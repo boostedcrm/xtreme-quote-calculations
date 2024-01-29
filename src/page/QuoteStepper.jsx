@@ -36,6 +36,7 @@ function getSteps() {
 }
 
 export default function QuoteCalculation({
+  taskList,
   setPage,
   handleClose,
   dealData,
@@ -714,11 +715,11 @@ export default function QuoteCalculation({
     ZOHO.CRM.API.updateBluePrint(config)
       .then(function (data) {
         console.log({ updateBluePrint: data });
-        handleClose();
+        // handleClose();
       })
       .catch(function (error) {
         console.log({ updateBluePrintEerror: error });
-        handleClose();
+        // handleClose();
       });
 
     // var config = {
@@ -754,6 +755,7 @@ export default function QuoteCalculation({
       perdiem = [],
       rentalequipment = [],
       vehicleexpense = [],
+      Clarifications=[]
     } = data;
     // Material_Quote
     if (materials?.length >= 1) {
@@ -800,8 +802,13 @@ export default function QuoteCalculation({
     }
     /*
      */
+    let clarificationObject = {}
+    Clarifications.forEach((Clarification, index) => {
+      clarificationObject[`Clarification${index+1}`] = Clarification?.name
+    });
     updateDealData = {
       ...updateDealData,
+      ...clarificationObject,
       Materials_Cost: Number(data?.materialTotalCost) || 0,
       Total_Manhours: Number(data?.totalManHours) || 0,
       Labor_Cost: Number(data?.totalLaborCost) || 0,
@@ -873,10 +880,24 @@ export default function QuoteCalculation({
       id: dealData?.id,
     };
 
+    
+    if (data?.Sent_for_Review) {
+      updateDealData["Quote_Status"] = "In Review";
+      // apiData["Pipeline"] = "Open";
+      updateDealData["Stage"] = "In Review";
+    } else {
+      updateDealData["Quote_Status"] = "In Progress";
+      // apiData["Pipeline"] = "Open";
+      updateDealData["Stage"] = "In Progress";
+    }
+
+    console.log({final: updateDealData});
     await updateDealAndDisable(updateDealData, dealData);
     // tempSave(updateDealData, dealData);
 
-    if (data?.Sent_for_Review) {
+    let taskSubject = "Your quote has been submitted for review";
+    let taskFound = taskList.includes(taskSubject);
+    if (data?.Sent_for_Review && !taskFound) {
       let description =
         "Hello " +
         dealData?.Owner?.name +
@@ -886,7 +907,7 @@ export default function QuoteCalculation({
         dealData?.Deal_Name +
         " has been submitted to the estimating department.";
       let task_map = {
-        Subject: "Your Bid Checklist has been submitted.",
+        Subject: taskSubject,
         $se_module: "Deals",
         Description: description,
         What_Id: dealData?.id,
