@@ -4,6 +4,7 @@ import { DateTime } from "luxon";
 import {
   Box,
   Button,
+  CircularProgress,
   Step,
   StepLabel,
   Stepper,
@@ -63,6 +64,8 @@ export default function QuoteCalculation({
   const [activeStep, setActiveStep] = useState(
     JSON.parse(dealData.Clarification20)?.step || 0
   );
+
+  const [loading, setLoading] = useState(false);
   const steps = getSteps();
 
   const handleStep = (step) => () => {
@@ -742,6 +745,7 @@ export default function QuoteCalculation({
   };
 
   const onSubmit = async (data) => {
+    setLoading(true);
     console.log({ onSubmit: data });
     // Create quote and update deal
 
@@ -755,7 +759,7 @@ export default function QuoteCalculation({
       perdiem = [],
       rentalequipment = [],
       vehicleexpense = [],
-      Clarifications=[]
+      Clarifications = [],
     } = data;
     // Material_Quote
     if (materials?.length >= 1) {
@@ -802,9 +806,9 @@ export default function QuoteCalculation({
     }
     /*
      */
-    let clarificationObject = {}
+    let clarificationObject = {};
     Clarifications.forEach((Clarification, index) => {
-      clarificationObject[`Clarification${index+1}`] = Clarification?.name
+      clarificationObject[`Clarification${index + 1}`] = Clarification?.name;
     });
     updateDealData = {
       ...updateDealData,
@@ -880,7 +884,6 @@ export default function QuoteCalculation({
       id: dealData?.id,
     };
 
-    
     if (data?.Sent_for_Review) {
       updateDealData["Quote_Status"] = "In Review";
       // apiData["Pipeline"] = "Open";
@@ -891,7 +894,7 @@ export default function QuoteCalculation({
       updateDealData["Stage"] = "In Progress";
     }
 
-    console.log({final: updateDealData});
+    console.log({ final: updateDealData });
     await updateDealAndDisable(updateDealData, dealData);
     // tempSave(updateDealData, dealData);
 
@@ -1060,9 +1063,36 @@ export default function QuoteCalculation({
           )} */}
 
           {activeStep === steps.length - 1 ? (
-            <Button variant="contained" type="submit">
-              Update Deal
-            </Button>
+            // <Button variant="contained" type="submit">
+            //   {loading ? (
+            //     <div>
+            //       <CircularProgress /> <p>Updating Deal</p>
+            //     </div>
+            //   ) : (
+            //     "Update Deal"
+            //   )}
+            // </Button>
+            <Box sx={{ m: 1, position: "relative" }}>
+              <Button
+                variant="contained"
+                disabled={loading}
+                type="submit"
+              >
+                Accept terms
+              </Button>
+              {loading && (
+                <CircularProgress
+                  size={24}
+                  sx={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    marginTop: "-12px",
+                    marginLeft: "-12px",
+                  }}
+                />
+              )}
+            </Box>
           ) : (
             <></>
           )}
