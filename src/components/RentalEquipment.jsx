@@ -52,13 +52,13 @@ const RentalEquipment = ({ control, watch, getValues, register, setValue }) => {
       totalrentalEquipmenCost +
       totalVehicleExpenseCost;
 
-    setValue(`miscellaneousCost`, Number(miscellaneousCost.toFixed(2)));
-    setValue(`travelAndMisc`, Number(miscellaneousCost.toFixed(2)));
+    setValue(`miscellaneousCost`, Number((miscellaneousCost*1.2).toFixed(2)));
+    setValue(`travelAndMisc`, Number((miscellaneousCost*1.2).toFixed(2)));
     let totalCost =
       miscellaneousCost + materialTotalCost + equipmentTotal + totalLaborCost;
     setValue(`totalCost`, Number(totalCost.toFixed(2)));
 
-    let grossProfitGoal = (totalCost - miscellaneousCost) / (50 / 100);
+    let grossProfitGoal = (totalCost - (miscellaneousCost*1.2) ) *2;
     setValue(`grossProfitGoal`, Number(grossProfitGoal.toFixed(2)));
   }
 
