@@ -31,6 +31,7 @@ const defaultMaterial = {
 };
 
 const MaterialRow = ({
+  dealData,
   fields,
   item,
   control,
@@ -64,30 +65,27 @@ const MaterialRow = ({
       totalrentalEquipmenCost +
       totalVehicleExpenseCost;
 
-    setValue(`miscellaneousCost`, Number((miscellaneousCost*1.2).toFixed(2)) );
-    setValue(`travelAndMisc`, Number((miscellaneousCost*1.2).toFixed(2)));
+    setValue(`miscellaneousCost`, Number((miscellaneousCost * 1.2).toFixed(2)));
+    setValue(`travelAndMisc`, Number((miscellaneousCost * 1.2).toFixed(2)));
     let totalCost =
       miscellaneousCost + materialTotalCost + equipmentTotal + totalLaborCost;
-    setValue(`totalCost`, Number(totalCost.toFixed(2)) );
+    setValue(`totalCost`, Number(totalCost.toFixed(2)));
 
-    let grossProfitGoal = (totalCost - (miscellaneousCost*1.2) ) *2;
-    setValue(`grossProfitGoal`, Number(grossProfitGoal.toFixed(2)) );
+    let grossProfitGoal = (totalCost - miscellaneousCost * 1.2) * 2;
+    setValue(`grossProfitGoal`, Number(grossProfitGoal.toFixed(2)));
 
-    
-    let totalManHours = Number(
-      getValues(`totalManHours`) || 0
+    let totalManHours = Number(getValues(`totalManHours`) || 0);
+    let Quoted_Rev_Per_Manhour = totalCost / totalManHours;
+    setValue(
+      `Quoted_Rev_Per_Manhour`,
+      Number(Quoted_Rev_Per_Manhour.toFixed(2))
     );
-    let Quoted_Rev_Per_Manhour = totalCost/totalManHours;
-    setValue(`Quoted_Rev_Per_Manhour`, Number(Quoted_Rev_Per_Manhour.toFixed(2)));
 
-    
     let SquareFeet = Number(
       getValues(`SquareFeet`) || dealData?.SquareFeet || 1
     );
-    let Revenue_Per_Square_Ft = totalCost/SquareFeet;
+    let Revenue_Per_Square_Ft = totalCost / SquareFeet;
     setValue(`Revenue_Per_Square_Ft`, Number(Revenue_Per_Square_Ft.toFixed(2)));
-
-    
   }
 
   function calculateTotalMaterialCost(fields) {
@@ -114,7 +112,7 @@ const MaterialRow = ({
 
   return (
     <TableRow key={item.id}>
-      <TableCell sx={{ width: "150px",paddingTop: 3 }}>
+      <TableCell sx={{ width: "150px", paddingTop: 3 }}>
         <Grid item sx={4}>
           <Controller
             name={`materials[${index}].product`}
@@ -192,7 +190,10 @@ const MaterialRow = ({
                   let amount = Number(e.target.value) || 0;
 
                   let total = amount * pricePer;
-                  setValue(`materials[${index}].total`, Number(total.toFixed(2)));
+                  setValue(
+                    `materials[${index}].total`,
+                    Number(total.toFixed(2))
+                  );
                   calculateTotalMaterialCost(fields);
                   field.onChange(e.target.value);
                 }}
@@ -221,9 +222,13 @@ const MaterialRow = ({
                 }}
                 onChange={(e) => {
                   let pricePer = Number(e.target.value) || 0;
-                  let amount =  Number(getValues(`materials[${index}].amount`)) || 0;
+                  let amount =
+                    Number(getValues(`materials[${index}].amount`)) || 0;
                   let total = amount * pricePer;
-                  setValue(`materials[${index}].total`, Number(total.toFixed(2)));
+                  setValue(
+                    `materials[${index}].total`,
+                    Number(total.toFixed(2))
+                  );
                   calculateTotalMaterialCost(fields);
                   field.onChange(e.target.value);
                 }}
@@ -322,6 +327,7 @@ const MaterialCosts = ({
         <TableBody>
           {fields.map((item, index) => (
             <MaterialRow
+              dealData={dealData}
               fields={fields}
               key={index}
               item={item}
