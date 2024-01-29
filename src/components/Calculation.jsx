@@ -213,46 +213,8 @@ export default function Calculation({
         {/* Replace with actual label */}
       </Grid>
       <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <Controller
-            name="commission"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                label="Commission"
-                variant="outlined"
-                {...field}
-                size="small"
-                sx={{ width: 350 }} // Set the width to 300px
-                InputProps={{
-                  readOnly: true,
-                  startAdornment: <Typography>$</Typography>,
-                }}
-              />
-            )}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Controller
-            name="Quoted_Rev_Per_Manhour"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <TextField
-                label="Revenue Per Man Hour"
-                variant="outlined"
-                {...field}
-                size="small"
-                sx={{ width: 350 }} // Set the width to 300px
-                InputProps={{
-                  readOnly: true,
-                  startAdornment: <Typography>$</Typography>,
-                }}
-              />
-            )}
-          />
-        </Grid>
-        <Grid item xs={6}>
+        
+      <Grid item xs={6}>
           <Controller
             name={`commissionPercentage`}
             control={control}
@@ -292,6 +254,45 @@ export default function Calculation({
                     Number(grossProfitAmount.toFixed(2))
                   );
                   field.onChange(e.target.value);
+                }}
+              />
+            )}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Controller
+            name="commission"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                label="Commission"
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: <Typography>$</Typography>,
+                }}
+              />
+            )}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Controller
+            name="Quoted_Rev_Per_Manhour"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                label="Revenue Per Man Hour"
+                variant="outlined"
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: <Typography>$</Typography>,
                 }}
               />
             )}

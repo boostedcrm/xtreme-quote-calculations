@@ -25,7 +25,6 @@ const VehicleExpense = ({ control, watch, getValues, register, setValue }) => {
     name: "vehicleexpense",
   });
 
-  
   function calculateTotalCost() {
     let materialTotalCost = Number(getValues(`materialTotalCost`) || 0);
     let equipmentTotal = Number(getValues(`equipmentTotal`) || 0);
@@ -46,21 +45,21 @@ const VehicleExpense = ({ control, watch, getValues, register, setValue }) => {
       totalrentalEquipmenCost +
       totalVehicleExpenseCost;
 
-    setValue(`miscellaneousCost`, Number((miscellaneousCost*1.2).toFixed(2)));
-    setValue(`travelAndMisc`, Number((miscellaneousCost*1.2).toFixed(2)));
+    setValue(`miscellaneousCost`, Number((miscellaneousCost * 1.2).toFixed(2)));
+    setValue(`travelAndMisc`, Number((miscellaneousCost * 1.2).toFixed(2)));
     let totalCost =
       miscellaneousCost + materialTotalCost + equipmentTotal + totalLaborCost;
     setValue(`totalCost`, Number(totalCost.toFixed(2)));
 
-    let grossProfitGoal = (totalCost - (miscellaneousCost*1.2) ) *2;
+    let grossProfitGoal = (totalCost - miscellaneousCost * 1.2) * 2;
     setValue(`grossProfitGoal`, Number(grossProfitGoal.toFixed(2)));
 
-    
-    let totalManHours = Number(
-      getValues(`totalManHours`) || 0
+    let totalManHours = Number(getValues(`totalManHours`) || 0);
+    let Quoted_Rev_Per_Manhour = totalCost / totalManHours;
+    setValue(
+      `Quoted_Rev_Per_Manhour`,
+      Number(Quoted_Rev_Per_Manhour.toFixed(2))
     );
-    let Quoted_Rev_Per_Manhour = totalCost/totalManHours;
-    setValue(`Quoted_Rev_Per_Manhour`, Number(Quoted_Rev_Per_Manhour.toFixed(2)));
   }
 
   function calculateTotalVehicleExpenseCost(fields) {
@@ -71,8 +70,11 @@ const VehicleExpense = ({ control, watch, getValues, register, setValue }) => {
       return acc + (amount || 0);
     }, 0);
 
-    setValue(`totalVehicleExpenseCost`,Number(totalVehicleExpenseCost.toFixed(2)) );
-    calculateTotalCost()
+    setValue(
+      `totalVehicleExpenseCost`,
+      Number(totalVehicleExpenseCost.toFixed(2))
+    );
+    calculateTotalCost();
   }
 
   return (
@@ -121,10 +123,10 @@ const VehicleExpense = ({ control, watch, getValues, register, setValue }) => {
 
                         setValue(
                           `vehicleexpense[${index}].vehicleExpenseSubtotal`,
-                          Number(vehicleExpenseSubtotal.toFixed(2)) 
+                          Number(vehicleExpenseSubtotal.toFixed(2))
                         );
 
-                        calculateTotalVehicleExpenseCost(fields)
+                        calculateTotalVehicleExpenseCost(fields);
 
                         field.onChange(e.target.value);
                       }}
@@ -155,9 +157,9 @@ const VehicleExpense = ({ control, watch, getValues, register, setValue }) => {
 
                         setValue(
                           `vehicleexpense[${index}].vehicleExpenseSubtotal`,
-                          Number(vehicleExpenseSubtotal.toFixed(2)) 
+                          Number(vehicleExpenseSubtotal.toFixed(2))
                         );
-                        calculateTotalVehicleExpenseCost(fields)
+                        calculateTotalVehicleExpenseCost(fields);
 
                         field.onChange(e.target.value);
                       }}
@@ -264,7 +266,16 @@ const renderTextField = (
       control={control}
       defaultValue={defaultValue}
       render={({ field }) => (
-        <TextField label="" variant="outlined" {...field} size={size} />
+        <TextField
+          label=""
+          variant="outlined"
+          {...field}
+          size={size}
+          InputProps={{
+            readOnly: true,
+            startAdornment: <Typography>$</Typography>,
+          }}
+        />
       )}
     />
   </Grid>
