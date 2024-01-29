@@ -52,6 +52,7 @@ const Lodging = ({ control, watch, getValues, register, setValue }) => {
       totalrentalEquipmenCost +
       totalVehicleExpenseCost;
 
+      // comment
     setValue(`miscellaneousCost`, Number((miscellaneousCost*1.2).toFixed(2)));
     setValue(`travelAndMisc`, Number((miscellaneousCost*1.2).toFixed(2)));
     let totalCost =
