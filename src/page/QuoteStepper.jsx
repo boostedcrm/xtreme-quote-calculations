@@ -881,13 +881,20 @@ export default function QuoteCalculation({
           .toString()
           .substring(0, 10),
       }),
-      id: dealData?.id,
+      Is_Quote_Completed: data?.Is_Quote_Completed,
+      id: dealData?.id
     };
 
-    if (data?.Sent_for_Review) {
+    if (data?.Is_Quote_Completed) {
+      updateDealData["Quote_Status"] = "Completed";
+      // apiData["Pipeline"] = "Open";
+      updateDealData["Stage"] = "Open";
+    } else if (data?.Sent_for_Review) {
       updateDealData["Quote_Status"] = "In Review";
       // apiData["Pipeline"] = "Open";
-      updateDealData["Stage"] = "In Review";
+      if (!dealData?.Is_Quote_Completed) {
+        updateDealData["Stage"] = "In Review";
+      }
     } else {
       updateDealData["Quote_Status"] = "In Progress";
       // apiData["Pipeline"] = "Open";
@@ -1063,21 +1070,8 @@ export default function QuoteCalculation({
           )} */}
 
           {activeStep === steps.length - 1 ? (
-            // <Button variant="contained" type="submit">
-            //   {loading ? (
-            //     <div>
-            //       <CircularProgress /> <p>Updating Deal</p>
-            //     </div>
-            //   ) : (
-            //     "Update Deal"
-            //   )}
-            // </Button>
             <Box sx={{ m: 1, position: "relative" }}>
-              <Button
-                variant="contained"
-                disabled={loading}
-                type="submit"
-              >
+              <Button variant="contained" disabled={loading} type="submit">
                 Accept terms
               </Button>
               {loading && (

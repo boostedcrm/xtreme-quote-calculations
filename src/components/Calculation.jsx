@@ -687,6 +687,21 @@ export default function Calculation({
           170 // optional label width, default is 170 if not provided
         )} */}
         {renderMultiTextField("review_note", "Review Note", "", control, 350)}
+        <Controller
+          name="Is_Quote_Completed"
+          control={control}
+          render={({ field }) => (
+            <div style={{ display: "flex" }}>
+              <div>
+                <label>{"Quote Completed"}</label>
+              </div>
+              <Checkbox
+                defaultChecked={field?.value ? true : false}
+                {...field}
+              />
+            </div>
+          )}
+        />
       </Box>
     </Box>
   );
