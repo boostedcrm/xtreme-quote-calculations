@@ -810,6 +810,9 @@ export default function QuoteCalculation({
     Clarifications.forEach((Clarification, index) => {
       clarificationObject[`Clarification${index + 1}`] = Clarification?.name;
     });
+    for (let i = 19; i > Clarifications.length; i-- ){
+      clarificationObject[`Clarification${i}`] = "";
+    }
     updateDealData = {
       ...updateDealData,
       ...clarificationObject,
