@@ -70,10 +70,15 @@ export default function Calculation({
             !dealData?.Clarification20 &&
             getValues("Clarifications")?.length == 0
           ) {
-            filteredCarificationsData.forEach((element, index) => {
+            for (let i = (filteredCarificationsData.length-1); i >= 0; i--) {
+              const element = filteredCarificationsData[i];
               let temp = { name: element?.Description };
               append(temp);
-            });
+            }
+            // filteredCarificationsData.forEach((element, index) => {
+            //   let temp = { name: element?.Description };
+            //   append(temp);
+            // });
           }
         }
       } catch (clarificationError) {
