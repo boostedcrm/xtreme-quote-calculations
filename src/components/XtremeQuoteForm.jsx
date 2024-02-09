@@ -106,7 +106,7 @@ const XtremeQuoteForm = ({ dealData, checklistData, quoteType, control }) => {
       </Grid>
       <br />
       <Grid container gap={12}>
-        {/* {renderDatePicker("EstPerformDate", "Est Perform Date", "", control)} */}
+        {/*
         <LocalizationProvider dateAdapter={AdapterLuxon}>
           <Controller
             control={control}
@@ -148,7 +148,7 @@ const XtremeQuoteForm = ({ dealData, checklistData, quoteType, control }) => {
             }}
           />
         </LocalizationProvider>
-
+        */}
         {/* {renderDatePicker("QuoteDueDate", "Quote Due Date", "", control)} */}
         <LocalizationProvider dateAdapter={AdapterLuxon}>
           <Controller
