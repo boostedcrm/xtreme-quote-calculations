@@ -31,7 +31,14 @@ let meals = [
     costPerDay: 25,
   },
 ];
-const PerDiem = ({ dealData, control, watch, getValues, register, setValue }) => {
+const PerDiem = ({
+  dealData,
+  control,
+  watch,
+  getValues,
+  register,
+  setValue,
+}) => {
   // const { control, handleSubmit, register, getValues } = useForm({
   //   defaultValues: {
   //     materials: [
@@ -59,35 +66,32 @@ const PerDiem = ({ dealData, control, watch, getValues, register, setValue }) =>
     );
 
     let miscellaneousCost =
+      equipmentTotal +
       totallodgingCost +
       totalperdiemCost +
       totalrentalEquipmenCost +
       totalVehicleExpenseCost;
 
-    setValue(`miscellaneousCost`, Number((miscellaneousCost*1.2).toFixed(2)));
-    setValue(`travelAndMisc`, Number((miscellaneousCost*1.2).toFixed(2)));
-    let totalCost =
-      miscellaneousCost + materialTotalCost + equipmentTotal + totalLaborCost;
+    setValue(`miscellaneousCost`, Number((miscellaneousCost * 1.2).toFixed(2)));
+    setValue(`travelAndMisc`, Number((miscellaneousCost * 1.2).toFixed(2)));
+    let totalCost = miscellaneousCost + materialTotalCost + totalLaborCost;
     setValue(`totalCost`, Number(totalCost.toFixed(2)));
 
-    let grossProfitGoal = (totalCost - (miscellaneousCost*1.2) ) *2;
+    let grossProfitGoal = (totalCost - miscellaneousCost * 1.2) * 2;
     setValue(`grossProfitGoal`, Number(grossProfitGoal.toFixed(2)));
 
-    
-    let totalManHours = Number(
-      getValues(`totalManHours`) || 0
+    let totalManHours = Number(getValues(`totalManHours`) || 0);
+    let Quoted_Rev_Per_Manhour = totalCost / totalManHours;
+    setValue(
+      `Quoted_Rev_Per_Manhour`,
+      Number(Quoted_Rev_Per_Manhour.toFixed(2))
     );
-    let Quoted_Rev_Per_Manhour = totalCost/totalManHours;
-    setValue(`Quoted_Rev_Per_Manhour`, Number(Quoted_Rev_Per_Manhour.toFixed(2)));
 
-    
     let SquareFeet = Number(
       getValues(`SquareFeet`) || dealData?.SquareFeet || 1
     );
-    let Revenue_Per_Square_Ft = totalCost/SquareFeet;
+    let Revenue_Per_Square_Ft = totalCost / SquareFeet;
     setValue(`Revenue_Per_Square_Ft`, Number(Revenue_Per_Square_Ft.toFixed(2)));
-
-    
   }
 
   function calculateTotalPerdiemCost(fields) {
@@ -95,8 +99,8 @@ const PerDiem = ({ dealData, control, watch, getValues, register, setValue }) =>
       const amount = getValues(`perdiem[${i}].perdiemSubtotal`);
       return acc + (amount || 0);
     }, 0);
-    setValue(`totalperdiemCost`,Number(totalperdiemCost.toFixed(2)) );
-    calculateTotalCost()
+    setValue(`totalperdiemCost`, Number(totalperdiemCost.toFixed(2)));
+    calculateTotalCost();
   }
 
   return (
@@ -124,7 +128,7 @@ const PerDiem = ({ dealData, control, watch, getValues, register, setValue }) =>
         <TableBody>
           {fields.map((item, index) => (
             <TableRow key={item.id}>
-              <TableCell sx={{ width: "150px",paddingTop: 3  }}>
+              <TableCell sx={{ width: "150px", paddingTop: 3 }}>
                 <Controller
                   name={`perdiem[${index}].name`}
                   control={control}
@@ -202,7 +206,6 @@ const PerDiem = ({ dealData, control, watch, getValues, register, setValue }) =>
                         );
 
                         calculateTotalPerdiemCost(fields);
-
 
                         field.onChange(e.target.value);
                       }}

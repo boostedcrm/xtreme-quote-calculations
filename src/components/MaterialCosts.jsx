@@ -60,6 +60,7 @@ const MaterialRow = ({
     );
 
     let miscellaneousCost =
+      equipmentTotal +
       totallodgingCost +
       totalperdiemCost +
       totalrentalEquipmenCost +
@@ -67,8 +68,7 @@ const MaterialRow = ({
 
     setValue(`miscellaneousCost`, Number((miscellaneousCost * 1.2).toFixed(2)));
     setValue(`travelAndMisc`, Number((miscellaneousCost * 1.2).toFixed(2)));
-    let totalCost =
-      miscellaneousCost + materialTotalCost + equipmentTotal + totalLaborCost;
+    let totalCost = miscellaneousCost + materialTotalCost + totalLaborCost;
     setValue(`totalCost`, Number(totalCost.toFixed(2)));
 
     let grossProfitGoal = (totalCost - miscellaneousCost * 1.2) * 2;

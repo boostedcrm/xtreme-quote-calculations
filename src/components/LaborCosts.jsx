@@ -21,7 +21,14 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { useEffect, useState } from "react";
 
-const LaborCosts = ({ dealData,ZOHO, control, getValues, register, setValue }) => {
+const LaborCosts = ({
+  dealData,
+  ZOHO,
+  control,
+  getValues,
+  register,
+  setValue,
+}) => {
   const [labor, SetLabor] = useState([]);
 
   useEffect(() => {
@@ -65,34 +72,31 @@ const LaborCosts = ({ dealData,ZOHO, control, getValues, register, setValue }) =
     );
 
     let miscellaneousCost =
+      equipmentTotal +
       totallodgingCost +
       totalperdiemCost +
       totalrentalEquipmenCost +
       totalVehicleExpenseCost;
 
-    setValue(`miscellaneousCost`, Number((miscellaneousCost*1.2).toFixed(2)));
-    setValue(`travelAndMisc`, Number((miscellaneousCost*1.2).toFixed(2)));
-    let totalCost =
-      miscellaneousCost + materialTotalCost + equipmentTotal + totalLaborCost;
+    setValue(`miscellaneousCost`, Number((miscellaneousCost * 1.2).toFixed(2)));
+    setValue(`travelAndMisc`, Number((miscellaneousCost * 1.2).toFixed(2)));
+    let totalCost = miscellaneousCost + materialTotalCost + totalLaborCost;
     setValue(`totalCost`, Number(totalCost.toFixed(2)));
 
-    
-    let totalManHours = Number(
-      getValues(`totalManHours`) || 0
+    let totalManHours = Number(getValues(`totalManHours`) || 0);
+    let Quoted_Rev_Per_Manhour = totalCost / totalManHours;
+    setValue(
+      `Quoted_Rev_Per_Manhour`,
+      Number(Quoted_Rev_Per_Manhour.toFixed(2))
     );
-    let Quoted_Rev_Per_Manhour = totalCost/totalManHours;
-    setValue(`Quoted_Rev_Per_Manhour`, Number(Quoted_Rev_Per_Manhour.toFixed(2)));
 
-    
     let SquareFeet = Number(
       getValues(`SquareFeet`) || dealData?.SquareFeet || 1
     );
-    let Revenue_Per_Square_Ft = totalCost/SquareFeet;
+    let Revenue_Per_Square_Ft = totalCost / SquareFeet;
     setValue(`Revenue_Per_Square_Ft`, Number(Revenue_Per_Square_Ft.toFixed(2)));
 
-    
-
-    let grossProfitGoal = (totalCost - (miscellaneousCost*1.2) ) *2;
+    let grossProfitGoal = (totalCost - miscellaneousCost * 1.2) * 2;
     setValue(`grossProfitGoal`, Number(grossProfitGoal.toFixed(2)));
   }
 
@@ -138,7 +142,7 @@ const LaborCosts = ({ dealData,ZOHO, control, getValues, register, setValue }) =
         <TableBody>
           {fields.map((item, index) => (
             <TableRow key={item.id}>
-              <TableCell sx={{ width: "150px",paddingTop: 3  }}>
+              <TableCell sx={{ width: "150px", paddingTop: 3 }}>
                 <Controller
                   name={`labor[${index}].resourceTitle`}
                   control={control}
@@ -202,7 +206,6 @@ const LaborCosts = ({ dealData,ZOHO, control, getValues, register, setValue }) =
                       margin="normal"
                       fullWidth
                       onChange={(e) => {
-                        
                         field.onChange(e.target.value);
                       }}
                     />
@@ -231,7 +234,10 @@ const LaborCosts = ({ dealData,ZOHO, control, getValues, register, setValue }) =
                           Number(getValues(`labor[${index}].men`) || 0) *
                           Number(getValues(`labor[${index}].costPerHour`) || 0);
 
-                        setValue(`labor[${index}].rowTotal`,Number(rowTotal.toFixed(2)) );
+                        setValue(
+                          `labor[${index}].rowTotal`,
+                          Number(rowTotal.toFixed(2))
+                        );
 
                         let totalManHours = 0;
 
@@ -249,13 +255,19 @@ const LaborCosts = ({ dealData,ZOHO, control, getValues, register, setValue }) =
                             totalManHours + men * days * hoursPerDay;
                         });
 
-                        setValue(`totalManHours`,Number(totalManHours.toFixed(2)) );
+                        setValue(
+                          `totalManHours`,
+                          Number(totalManHours.toFixed(2))
+                        );
 
                         let laborTotal = fields.reduce((acc, field, index) => {
                           const amount = getValues(`labor[${index}].rowTotal`);
                           return acc + (amount || 0);
                         }, 0);
-                        setValue(`totalLaborCost`,Number(laborTotal.toFixed(2)) );
+                        setValue(
+                          `totalLaborCost`,
+                          Number(laborTotal.toFixed(2))
+                        );
 
                         calculateTotalCost();
                         field.onChange(e.target.value);
@@ -284,7 +296,10 @@ const LaborCosts = ({ dealData,ZOHO, control, getValues, register, setValue }) =
                           Number(getValues(`labor[${index}].men`) || 0) *
                           Number(getValues(`labor[${index}].costPerHour`) || 0);
 
-                        setValue(`labor[${index}].rowTotal`,Number(rowTotal.toFixed(2)) );
+                        setValue(
+                          `labor[${index}].rowTotal`,
+                          Number(rowTotal.toFixed(2))
+                        );
 
                         let totalManHours = 0;
 
@@ -302,13 +317,19 @@ const LaborCosts = ({ dealData,ZOHO, control, getValues, register, setValue }) =
                             totalManHours + men * days * hoursPerDay;
                         });
 
-                        setValue(`totalManHours`,Number(totalManHours.toFixed(2)) );
+                        setValue(
+                          `totalManHours`,
+                          Number(totalManHours.toFixed(2))
+                        );
 
                         let laborTotal = fields.reduce((acc, field, index) => {
                           const amount = getValues(`labor[${index}].rowTotal`);
                           return acc + (amount || 0);
                         }, 0);
-                        setValue(`totalLaborCost`,Number(laborTotal.toFixed(2)) );
+                        setValue(
+                          `totalLaborCost`,
+                          Number(laborTotal.toFixed(2))
+                        );
 
                         calculateTotalCost();
                         field.onChange(e.target.value);
@@ -339,7 +360,10 @@ const LaborCosts = ({ dealData,ZOHO, control, getValues, register, setValue }) =
                           ) *
                           Number(getValues(`labor[${index}].costPerHour`) || 0);
 
-                        setValue(`labor[${index}].rowTotal`,Number(rowTotal.toFixed(2)) );
+                        setValue(
+                          `labor[${index}].rowTotal`,
+                          Number(rowTotal.toFixed(2))
+                        );
 
                         let totalManHours = 0;
 
@@ -356,13 +380,19 @@ const LaborCosts = ({ dealData,ZOHO, control, getValues, register, setValue }) =
                             totalManHours + men * days * hoursPerDay;
                         });
 
-                        setValue(`totalManHours`,Number(totalManHours.toFixed(2)) );
+                        setValue(
+                          `totalManHours`,
+                          Number(totalManHours.toFixed(2))
+                        );
 
                         let laborTotal = fields.reduce((acc, field, index) => {
                           const amount = getValues(`labor[${index}].rowTotal`);
                           return acc + (amount || 0);
                         }, 0);
-                        setValue(`totalLaborCost`,Number(laborTotal.toFixed(2)) );
+                        setValue(
+                          `totalLaborCost`,
+                          Number(laborTotal.toFixed(2))
+                        );
 
                         calculateTotalCost();
                         field.onChange(e.target.value);
@@ -393,13 +423,19 @@ const LaborCosts = ({ dealData,ZOHO, control, getValues, register, setValue }) =
                           ) *
                           Number(getValues(`labor[${index}].men`) || 0);
 
-                        setValue(`labor[${index}].rowTotal`,Number(rowTotal.toFixed(2)) );
+                        setValue(
+                          `labor[${index}].rowTotal`,
+                          Number(rowTotal.toFixed(2))
+                        );
 
                         let laborTotal = fields.reduce((acc, field, index) => {
                           const amount = getValues(`labor[${index}].rowTotal`);
                           return acc + (amount || 0);
                         }, 0);
-                        setValue(`totalLaborCost`,Number(laborTotal.toFixed(2)) );
+                        setValue(
+                          `totalLaborCost`,
+                          Number(laborTotal.toFixed(2))
+                        );
 
                         calculateTotalCost();
                         field.onChange(e.target.value);

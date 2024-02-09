@@ -19,7 +19,14 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
-const Lodging = ({ dealData, control, watch, getValues, register, setValue }) => {
+const Lodging = ({
+  dealData,
+  control,
+  watch,
+  getValues,
+  register,
+  setValue,
+}) => {
   // const { control, handleSubmit, register, getValues } = useForm({
   //   defaultValues: {
   //     materials: [
@@ -47,36 +54,33 @@ const Lodging = ({ dealData, control, watch, getValues, register, setValue }) =>
     );
 
     let miscellaneousCost =
+      equipmentTotal +
       totallodgingCost +
       totalperdiemCost +
       totalrentalEquipmenCost +
       totalVehicleExpenseCost;
 
-      // comment
-    setValue(`miscellaneousCost`, Number((miscellaneousCost*1.2).toFixed(2)));
-    setValue(`travelAndMisc`, Number((miscellaneousCost*1.2).toFixed(2)));
-    let totalCost =
-      miscellaneousCost + materialTotalCost + equipmentTotal + totalLaborCost;
+    // comment
+    setValue(`miscellaneousCost`, Number((miscellaneousCost * 1.2).toFixed(2)));
+    setValue(`travelAndMisc`, Number((miscellaneousCost * 1.2).toFixed(2)));
+    let totalCost = miscellaneousCost + materialTotalCost + totalLaborCost;
     setValue(`totalCost`, Number(totalCost.toFixed(2)));
 
-    let grossProfitGoal = (totalCost - (miscellaneousCost*1.2) ) *2;
+    let grossProfitGoal = (totalCost - miscellaneousCost * 1.2) * 2;
     setValue(`grossProfitGoal`, Number(grossProfitGoal.toFixed(2)));
 
-    
-    let totalManHours = Number(
-      getValues(`totalManHours`) || 0
+    let totalManHours = Number(getValues(`totalManHours`) || 0);
+    let Quoted_Rev_Per_Manhour = totalCost / totalManHours;
+    setValue(
+      `Quoted_Rev_Per_Manhour`,
+      Number(Quoted_Rev_Per_Manhour.toFixed(2))
     );
-    let Quoted_Rev_Per_Manhour = totalCost/totalManHours;
-    setValue(`Quoted_Rev_Per_Manhour`, Number(Quoted_Rev_Per_Manhour.toFixed(2)));
 
-    
     let SquareFeet = Number(
       getValues(`SquareFeet`) || dealData?.SquareFeet || 1
     );
-    let Revenue_Per_Square_Ft = totalCost/SquareFeet;
+    let Revenue_Per_Square_Ft = totalCost / SquareFeet;
     setValue(`Revenue_Per_Square_Ft`, Number(Revenue_Per_Square_Ft.toFixed(2)));
-
-    
   }
 
   function calculateTotalLoadingCost(fields) {
@@ -84,7 +88,7 @@ const Lodging = ({ dealData, control, watch, getValues, register, setValue }) =>
       const amount = getValues(`lodging[${index}].lodgingSubTotal`);
       return acc + (amount || 0);
     }, 0);
-    setValue(`totallodgingCost`, Number(totallodgingCost.toFixed(2)) );
+    setValue(`totallodgingCost`, Number(totallodgingCost.toFixed(2)));
     calculateTotalCost();
   }
 
@@ -159,7 +163,10 @@ const Lodging = ({ dealData, control, watch, getValues, register, setValue }) =>
                           },
                           0
                         );
-                        setValue(`totallodgingCost`,Number(totallodgingCost.toFixed(2)) );
+                        setValue(
+                          `totallodgingCost`,
+                          Number(totallodgingCost.toFixed(2))
+                        );
                         calculateTotalCost();
 
                         field.onChange(e.target.value);
@@ -238,7 +245,6 @@ const Lodging = ({ dealData, control, watch, getValues, register, setValue }) =>
                         );
 
                         calculateTotalLoadingCost(fields);
-
 
                         field.onChange(e.target.value);
                       }}

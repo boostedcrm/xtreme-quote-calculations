@@ -19,7 +19,14 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
-const RentalEquipment = ({ dealData, control, watch, getValues, register, setValue }) => {
+const RentalEquipment = ({
+  dealData,
+  control,
+  watch,
+  getValues,
+  register,
+  setValue,
+}) => {
   // const { control, handleSubmit, register, getValues } = useForm({
   //   defaultValues: {
   //     materials: [
@@ -47,35 +54,32 @@ const RentalEquipment = ({ dealData, control, watch, getValues, register, setVal
     );
 
     let miscellaneousCost =
+      equipmentTotal +
       totallodgingCost +
       totalperdiemCost +
       totalrentalEquipmenCost +
       totalVehicleExpenseCost;
 
-    setValue(`miscellaneousCost`, Number((miscellaneousCost*1.2).toFixed(2)));
-    setValue(`travelAndMisc`, Number((miscellaneousCost*1.2).toFixed(2)));
-    let totalCost =
-      miscellaneousCost + materialTotalCost + equipmentTotal + totalLaborCost;
+    setValue(`miscellaneousCost`, Number((miscellaneousCost * 1.2).toFixed(2)));
+    setValue(`travelAndMisc`, Number((miscellaneousCost * 1.2).toFixed(2)));
+    let totalCost = miscellaneousCost + materialTotalCost + totalLaborCost;
     setValue(`totalCost`, Number(totalCost.toFixed(2)));
 
-    let grossProfitGoal = (totalCost - (miscellaneousCost*1.2) ) *2;
+    let grossProfitGoal = (totalCost - miscellaneousCost * 1.2) * 2;
     setValue(`grossProfitGoal`, Number(grossProfitGoal.toFixed(2)));
 
-    
-    let totalManHours = Number(
-      getValues(`totalManHours`) || 0
+    let totalManHours = Number(getValues(`totalManHours`) || 0);
+    let Quoted_Rev_Per_Manhour = totalCost / totalManHours;
+    setValue(
+      `Quoted_Rev_Per_Manhour`,
+      Number(Quoted_Rev_Per_Manhour.toFixed(2))
     );
-    let Quoted_Rev_Per_Manhour = totalCost/totalManHours;
-    setValue(`Quoted_Rev_Per_Manhour`, Number(Quoted_Rev_Per_Manhour.toFixed(2)));
 
-    
     let SquareFeet = Number(
       getValues(`SquareFeet`) || dealData?.SquareFeet || 1
     );
-    let Revenue_Per_Square_Ft = totalCost/SquareFeet;
+    let Revenue_Per_Square_Ft = totalCost / SquareFeet;
     setValue(`Revenue_Per_Square_Ft`, Number(Revenue_Per_Square_Ft.toFixed(2)));
-
-    
   }
 
   function calculateTotalRentalEquipmentCost(fields) {
@@ -117,7 +121,7 @@ const RentalEquipment = ({ dealData, control, watch, getValues, register, setVal
         <TableBody>
           {fields.map((item, index) => (
             <TableRow key={item.id}>
-              <TableCell sx={{paddingTop: 3 }}>
+              <TableCell sx={{ paddingTop: 3 }}>
                 {renderTextField(
                   `rentalequipment[${index}].equipmentName`,
                   "Equipment Name",
@@ -277,7 +281,7 @@ const renderTextField = (
           {...field}
           size={size}
           InputProps={{
-            readOnly: readOnly
+            readOnly: readOnly,
           }}
         />
       )}

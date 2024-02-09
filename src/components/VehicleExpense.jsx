@@ -19,7 +19,14 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
-const VehicleExpense = ({ dealData, control, watch, getValues, register, setValue }) => {
+const VehicleExpense = ({
+  dealData,
+  control,
+  watch,
+  getValues,
+  register,
+  setValue,
+}) => {
   const { fields, append, remove, update } = useFieldArray({
     control,
     name: "vehicleexpense",
@@ -40,6 +47,7 @@ const VehicleExpense = ({ dealData, control, watch, getValues, register, setValu
     );
 
     let miscellaneousCost =
+      equipmentTotal +
       totallodgingCost +
       totalperdiemCost +
       totalrentalEquipmenCost +
@@ -47,8 +55,7 @@ const VehicleExpense = ({ dealData, control, watch, getValues, register, setValu
 
     setValue(`miscellaneousCost`, Number((miscellaneousCost * 1.2).toFixed(2)));
     setValue(`travelAndMisc`, Number((miscellaneousCost * 1.2).toFixed(2)));
-    let totalCost =
-      miscellaneousCost + materialTotalCost + equipmentTotal + totalLaborCost;
+    let totalCost = miscellaneousCost + materialTotalCost + totalLaborCost;
     setValue(`totalCost`, Number(totalCost.toFixed(2)));
 
     let grossProfitGoal = (totalCost - miscellaneousCost * 1.2) * 2;
@@ -61,14 +68,11 @@ const VehicleExpense = ({ dealData, control, watch, getValues, register, setValu
       Number(Quoted_Rev_Per_Manhour.toFixed(2))
     );
 
-    
     let SquareFeet = Number(
       getValues(`SquareFeet`) || dealData?.SquareFeet || 1
     );
-    let Revenue_Per_Square_Ft = totalCost/SquareFeet;
+    let Revenue_Per_Square_Ft = totalCost / SquareFeet;
     setValue(`Revenue_Per_Square_Ft`, Number(Revenue_Per_Square_Ft.toFixed(2)));
-
-    
   }
 
   function calculateTotalVehicleExpenseCost(fields) {
