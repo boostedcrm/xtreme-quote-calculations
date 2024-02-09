@@ -19,7 +19,14 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 
-const XtremeQuoteForm = ({ dealData, checklistData, quoteType, control }) => {
+const XtremeQuoteForm = ({
+  dealData,
+  checklistData,
+  quoteType,
+  control,
+  getValues,
+  setValue,
+}) => {
   // const [totalSqft, setTotalSqft] = useState(0);
 
   // useEffect(() => {
@@ -97,13 +104,43 @@ const XtremeQuoteForm = ({ dealData, checklistData, quoteType, control }) => {
           dealData?.Quote_Type || "",
           control
         )}
-        {renderTextField(
+        {/* {renderTextField(
           "SquareFeet",
           "Total Square Feet",
           dealData?.SquareFeet,
           control,
           false
-        )}
+        )} */}
+        <Grid item xs={4}>
+          <Controller
+            name={"SquareFeet"}
+            control={control}
+            defaultValue={dealData?.SquareFeet}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label={"Total Square Feet"}
+                variant="outlined"
+                size="small"
+                margin="normal"
+                type="number"
+                fullWidth
+                InputProps={{ inputProps: { min: 1 } }}
+                onChange={(date) => {
+                  console.log({ date: date?.target?.value });
+                  let SquareFeet = Number(date.target.value) || 1;
+                  if (SquareFeet < 1) {
+                    SquareFeet = 1;
+                  }
+                  let totalCost = Number(getValues("totalCost")) || 0;
+                  let Revenue_Per_Square_Ft =  totalCost/SquareFeet;
+                  setValue(`Revenue_Per_Square_Ft`, Number(Revenue_Per_Square_Ft.toFixed(2)));
+                  field.onChange(SquareFeet);
+                }}
+              />
+            )}
+          />
+        </Grid>
       </Grid>
       <br />
       <Grid container gap={12}>

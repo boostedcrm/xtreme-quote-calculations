@@ -970,6 +970,8 @@ export default function QuoteCalculation({
               watch={watch}
               checklistData={checklistData}
               quoteType={quoteType}
+              getValues={getValues}
+              setValue={setValue}
             />
           )}
           {activeStep === 1 && (
