@@ -816,6 +816,7 @@ export default function QuoteCalculation({
     updateDealData = {
       ...updateDealData,
       ...clarificationObject,
+      SquareFeet: Number(data?.SquareFeet) || 0,
       Materials_Cost: Number(data?.materialTotalCost) || 0,
       Total_Manhours: Number(data?.totalManHours) || 0,
       Labor_Cost: Number(data?.totalLaborCost) || 0,

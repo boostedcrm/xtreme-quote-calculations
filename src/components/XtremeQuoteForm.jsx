@@ -101,7 +101,8 @@ const XtremeQuoteForm = ({ dealData, checklistData, quoteType, control }) => {
           "SquareFeet",
           "Total Square Feet",
           dealData?.SquareFeet,
-          control
+          control,
+          false
         )}
       </Grid>
       <br />
