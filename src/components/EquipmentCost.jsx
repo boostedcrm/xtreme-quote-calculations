@@ -92,6 +92,22 @@ const ExquipmentCost = ({
     );
     let Revenue_Per_Square_Ft = totalCost / SquareFeet;
     setValue(`Revenue_Per_Square_Ft`, Number(Revenue_Per_Square_Ft.toFixed(2)));
+    
+    let commissionPercentage = Number(getValues(`commissionPercentage`) || 0);
+
+    let commission =
+      (commissionPercentage / 100) *
+      (grossProfitGoal + miscellaneousCost * 1.2);
+    let minimumBidToCustomer =
+      grossProfitGoal + miscellaneousCost * 1.2 + commission;
+    let grossProfitAmount = minimumBidToCustomer - (totalCost + commission);
+
+    setValue(`commission`, Number(commission.toFixed(2)));
+    setValue(`minimumBidToCustomer`, Number(minimumBidToCustomer.toFixed(2)));
+    setValue(
+      `grossProfitAmount`,
+      Number(grossProfitAmount.toFixed(2))
+    );
   }
 
   function calculateTotalEquipmentCost(fields) {
