@@ -22,7 +22,8 @@ function App() {
   useEffect(() => {
     ZOHO.embeddedApp.on("PageLoad", function (data) {
       //Custom Bussiness logic goes here
-      setDealID(data.EntityId);
+      console.log({data});
+      setDealID(data.EntityId?.[0]);
     });
     /*
      * initializing the widget.
@@ -142,7 +143,10 @@ function App() {
         });
       }
     }
-    getData();
+    
+    if (zohoLoaded && dealID) {
+      getData();
+    }
   }, [zohoLoaded, dealID]);
 
   const handleClose = async () => {
