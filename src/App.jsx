@@ -23,7 +23,7 @@ function App() {
     ZOHO.embeddedApp.on("PageLoad", function (data) {
       //Custom Bussiness logic goes here
       console.log({data});
-      setDealID(data.EntityId?.[0]);
+      setDealID(data.EntityId);
     });
     /*
      * initializing the widget.

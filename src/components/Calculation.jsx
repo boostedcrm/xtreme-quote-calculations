@@ -209,7 +209,14 @@ export default function Calculation({
             render={({ field }) => (
               <TextField
                 {...field}
-                sx={{ width: 350 }} // Set the width to 300px
+                sx={{
+                  width: 350, // Set the width to 350px
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: 'red', // Change the outline color to red
+                    },
+                  },
+                }} // Set the width to 300px
                 label={"Commission Percentage"}
                 variant="outlined"
                 size="small"
@@ -355,7 +362,14 @@ export default function Calculation({
             render={({ field }) => (
               <TextField
                 {...field}
-                sx={{ width: 350 }} // Set the width to 300px
+                sx={{
+                  width: 350, // Set the width to 350px
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: 'red', // Change the outline color to red
+                    },
+                  },
+                }}// Set the width to 300px
                 label={"Bid To Customer"}
                 variant="outlined"
                 size="small"
