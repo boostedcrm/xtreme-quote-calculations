@@ -170,6 +170,8 @@ function App() {
     );
   }
 
+  console.log({dealData})
+
   return (
     <Box sx={{ width: "100%" }}>
       <Box

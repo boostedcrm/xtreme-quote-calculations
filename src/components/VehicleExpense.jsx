@@ -90,6 +90,13 @@ const VehicleExpense = ({
       `grossProfitAmount`,
       Number(grossProfitAmount.toFixed(2))
     );
+    const bidToCustomer = Number(getValues(`bidToCustomer`) || 0);
+    const finalComission = (commissionPercentage / 100) * bidToCustomer;
+    const finalTotalCost = totalCost + finalComission;
+    const finalGrossProfit = bidToCustomer - finalTotalCost;
+    setValue(`finalCommission`, finalComission);
+    setValue(`finalTotalCost`, finalTotalCost);
+    setValue(`finalGrossProfit`, finalGrossProfit);
   }
 
   function calculateTotalVehicleExpenseCost(fields) {
