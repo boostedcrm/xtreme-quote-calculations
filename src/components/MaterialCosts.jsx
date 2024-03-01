@@ -100,6 +100,7 @@ const MaterialRow = ({
     setValue(`minimumBidToCustomer`, Number(minimumBidToCustomer.toFixed(2)));
     setValue(`grossProfitAmount`, Number(grossProfitAmount.toFixed(2)));
 
+    
     const bidToCustomer = Number(getValues(`bidToCustomer`) || 0);
     const finalComission = (commissionPercentage / 100) * bidToCustomer;
     const finalTotalCost = totalCost + finalComission;
@@ -107,6 +108,12 @@ const MaterialRow = ({
     setValue(`finalCommission`, finalComission);
     setValue(`finalTotalCost`, finalTotalCost);
     setValue(`finalGrossProfit`, finalGrossProfit);
+    let grossProfitPct = grossProfitAmount / minimumBidToCustomer;
+    setValue(`grossProfitPct`, Number(grossProfitPct.toFixed(2)));
+    let totalCostPercentage = finalTotalCost / bidToCustomer;
+    setValue(`totalCostPercentage`, Number(totalCostPercentage.toFixed(2)));
+    let actualGrossProfitPercentage = finalGrossProfit / bidToCustomer;
+    setValue(`actualGrossProfitPercentage`, Number(actualGrossProfitPercentage.toFixed(2)));
   }
 
   function calculateTotalMaterialCost(fields) {

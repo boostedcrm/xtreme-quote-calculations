@@ -116,6 +116,12 @@ const PerDiem = ({
     setValue(`finalCommission`, finalComission);
     setValue(`finalTotalCost`, finalTotalCost);
     setValue(`finalGrossProfit`, finalGrossProfit);
+    let grossProfitPct = grossProfitAmount / minimumBidToCustomer;
+    setValue(`grossProfitPct`, Number(grossProfitPct.toFixed(2)));
+    let totalCostPercentage = finalTotalCost / bidToCustomer;
+    setValue(`totalCostPercentage`, Number(totalCostPercentage.toFixed(2)));
+    let actualGrossProfitPercentage = finalGrossProfit / bidToCustomer;
+    setValue(`actualGrossProfitPercentage`, Number(actualGrossProfitPercentage.toFixed(2)));
   }
 
   function calculateTotalPerdiemCost(fields) {
