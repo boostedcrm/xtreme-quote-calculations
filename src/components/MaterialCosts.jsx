@@ -75,11 +75,15 @@ const MaterialRow = ({
     setValue(`grossProfitGoal`, Number(grossProfitGoal.toFixed(2)));
 
     let totalManHours = Number(getValues(`totalManHours`) || 0);
-    let Quoted_Rev_Per_Manhour = totalCost / totalManHours;
-    setValue(
-      `Quoted_Rev_Per_Manhour`,
-      Number(Quoted_Rev_Per_Manhour.toFixed(2))
-    );
+    if (totalManHours === 0) {
+      setValue("Quoted_Rev_Per_Manhour", 0);
+    } else {
+      let Quoted_Rev_Per_Manhour = totalCost / totalManHours;
+      setValue(
+        "Quoted_Rev_Per_Manhour",
+        Number(Quoted_Rev_Per_Manhour.toFixed(2))
+      );
+    }
 
     let SquareFeet = Number(
       getValues(`SquareFeet`) || dealData?.SquareFeet || 1
@@ -100,20 +104,28 @@ const MaterialRow = ({
     setValue(`minimumBidToCustomer`, Number(minimumBidToCustomer.toFixed(2)));
     setValue(`grossProfitAmount`, Number(grossProfitAmount.toFixed(2)));
 
-    
     const bidToCustomer = Number(getValues(`bidToCustomer`) || 0);
     const finalComission = (commissionPercentage / 100) * bidToCustomer;
     const finalTotalCost = totalCost + finalComission;
     const finalGrossProfit = bidToCustomer - finalTotalCost;
     setValue(`finalCommission`, finalComission);
-    setValue(`finalTotalCost`, finalTotalCost);
-    setValue(`finalGrossProfit`, finalGrossProfit);
+    setValue(`finalTotalCost`, Number(finalTotalCost.toFixed(2)));
+    setValue(`finalGrossProfit`, Number(finalGrossProfit.toFixed(2)));
     let grossProfitPct = grossProfitAmount / minimumBidToCustomer;
     setValue(`grossProfitPct`, Number(grossProfitPct.toFixed(2)));
-    let totalCostPercentage = finalTotalCost / bidToCustomer;
-    setValue(`totalCostPercentage`, Number(totalCostPercentage.toFixed(2)));
-    let actualGrossProfitPercentage = finalGrossProfit / bidToCustomer;
-    setValue(`actualGrossProfitPercentage`, Number(actualGrossProfitPercentage.toFixed(2)));
+    if (bidToCustomer === 0 || bidToCustomer === null) {
+      setValue("totalCostPercentage", 0);
+      setValue("actualGrossProfitPercentage", 0);
+    } else {
+      let totalCostPercentage = finalTotalCost / bidToCustomer;
+      setValue("totalCostPercentage", Number(totalCostPercentage.toFixed(2)));
+
+      let actualGrossProfitPercentage = finalGrossProfit / bidToCustomer;
+      setValue(
+        "actualGrossProfitPercentage",
+        Number(actualGrossProfitPercentage.toFixed(2))
+      );
+    }
   }
 
   function calculateTotalMaterialCost(fields) {
