@@ -78,7 +78,6 @@ const VehicleExpense = ({
     let Revenue_Per_Square_Ft = totalCost / SquareFeet;
     setValue(`Revenue_Per_Square_Ft`, Number(Revenue_Per_Square_Ft.toFixed(2)));
 
-    
     let commissionPercentage = Number(getValues(`commissionPercentage`) || 0);
 
     let commission =
@@ -90,17 +89,14 @@ const VehicleExpense = ({
 
     setValue(`commission`, Number(commission.toFixed(2)));
     setValue(`minimumBidToCustomer`, Number(minimumBidToCustomer.toFixed(2)));
-    setValue(
-      `grossProfitAmount`,
-      Number(grossProfitAmount.toFixed(2))
-    );
+    setValue(`grossProfitAmount`, Number(grossProfitAmount.toFixed(2)));
     const bidToCustomer = Number(getValues(`bidToCustomer`) || 0);
     const finalComission = (commissionPercentage / 100) * bidToCustomer;
     const finalTotalCost = totalCost + finalComission;
     const finalGrossProfit = bidToCustomer - finalTotalCost;
     setValue(`finalCommission`, finalComission);
-    setValue(`finalTotalCost`, finalTotalCost);
-    setValue(`finalGrossProfit`, finalGrossProfit);
+    setValue(`finalTotalCost`, Number(finalTotalCost.toFixed(2)));
+    setValue(`finalGrossProfit`, Number(finalGrossProfit.toFixed(2)));
     let grossProfitPct = grossProfitAmount / minimumBidToCustomer;
     setValue(`grossProfitPct`, Number(grossProfitPct.toFixed(2)));
     if (bidToCustomer === 0 || bidToCustomer === null) {
