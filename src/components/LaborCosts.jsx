@@ -122,15 +122,9 @@ const LaborCosts = ({
     setValue(`finalCommission`, finalComission);
     setValue(`finalTotalCost`, Number(finalTotalCost.toFixed(2)));
     setValue(`finalGrossProfit`, Number(finalGrossProfit.toFixed(2)));
+
+    
     let grossProfitPct = grossProfitAmount / minimumBidToCustomer;
-    console.log({
-      grossProfitAmount: grossProfitAmount,
-      minimumBidToCustomer: minimumBidToCustomer,
-      finalTotalCost: finalTotalCost,
-      bidToCustomer: bidToCustomer,
-      finalGrossProfit: finalGrossProfit,
-      bidToCustomer: bidToCustomer
-    })
     setValue(`grossProfitPct`, Number(grossProfitPct.toFixed(2)));
     if (bidToCustomer === 0 || bidToCustomer === null) {
       setValue('totalCostPercentage', 0);

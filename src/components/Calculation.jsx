@@ -70,7 +70,7 @@ export default function Calculation({
             !dealData?.Clarification20 &&
             getValues("Clarifications")?.length == 0
           ) {
-            for (let i = (filteredCarificationsData.length-1); i >= 0; i--) {
+            for (let i = filteredCarificationsData.length - 1; i >= 0; i--) {
               const element = filteredCarificationsData[i];
               let temp = { name: element?.Description };
               append(temp);
@@ -211,9 +211,9 @@ export default function Calculation({
                 {...field}
                 sx={{
                   width: 350, // Set the width to 350px
-                  '& .MuiOutlinedInput-root': {
-                    '& fieldset': {
-                      borderColor: 'red', // Change the outline color to red
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "red", // Change the outline color to red
                     },
                   },
                 }} // Set the width to 300px
@@ -335,7 +335,7 @@ export default function Calculation({
           />
         </Grid> */}
       </Grid>
-      <Grid container  style={{ marginBottom: "15px" }}>
+      <Grid container style={{ marginBottom: "15px" }}>
         <Grid xs={6}>
           <Controller
             name="minimumBidToCustomer"
@@ -364,12 +364,12 @@ export default function Calculation({
                 {...field}
                 sx={{
                   width: 350, // Set the width to 350px
-                  '& .MuiOutlinedInput-root': {
-                    '& fieldset': {
-                      borderColor: 'red', // Change the outline color to red
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "red", // Change the outline color to red
                     },
                   },
-                }}// Set the width to 300px
+                }} // Set the width to 300px
                 label={"Bid To Customer"}
                 variant="outlined"
                 size="small"
@@ -396,7 +396,25 @@ export default function Calculation({
                     `finalCommission`,
                     Number(finalCommission.toFixed(2))
                   );
+                  
+                  // ------------
+                  if (bidToCustomer === 0 || bidToCustomer === null) {
+                    setValue("totalCostPercentage", 0);
+                    setValue("actualGrossProfitPercentage", 0);
+                  } else {
+                    let totalCostPercentage = finalTotalCost / bidToCustomer;
+                    setValue(
+                      "totalCostPercentage",
+                      Number(totalCostPercentage.toFixed(2))
+                    );
 
+                    let actualGrossProfitPercentage =
+                      finalGrossProfit / bidToCustomer;
+                    setValue(
+                      "actualGrossProfitPercentage",
+                      Number(actualGrossProfitPercentage.toFixed(2))
+                    );
+                  }
                   field.onChange(e.target.value);
                 }}
                 InputLabelProps={{
@@ -489,7 +507,6 @@ export default function Calculation({
         </Grid>
       </Grid>
 
-
       {/* <Grid container spacing={2}>
         <Grid item xs={6}>
           <Controller
@@ -525,7 +542,7 @@ export default function Calculation({
         </Grid>
       </Grid> */}
       <Grid container style={{ marginBottom: "15px" }}>
-      <Grid item xs={6}>
+        <Grid item xs={6}>
           <Controller
             name="finalTotalCost"
             control={control}
@@ -563,8 +580,8 @@ export default function Calculation({
           />
         </Grid>
       </Grid>
-  
-      <Grid container  style={{ marginBottom: "15px" }}>
+
+      <Grid container style={{ marginBottom: "15px" }}>
         <Grid item xs={6}>
           <Controller
             name="finalGrossProfit"
