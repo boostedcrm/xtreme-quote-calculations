@@ -396,20 +396,21 @@ export default function Calculation({
                     `finalCommission`,
                     Number(finalCommission.toFixed(2))
                   );
-                  
+
                   // ------------
                   if (bidToCustomer === 0 || bidToCustomer === null) {
                     setValue("totalCostPercentage", 0);
                     setValue("actualGrossProfitPercentage", 0);
                   } else {
-                    let totalCostPercentage = finalTotalCost / bidToCustomer;
+                    let totalCostPercentage =
+                      (finalTotalCost / bidToCustomer) * 100;
                     setValue(
                       "totalCostPercentage",
                       Number(totalCostPercentage.toFixed(2))
                     );
 
                     let actualGrossProfitPercentage =
-                      finalGrossProfit / bidToCustomer;
+                      (finalGrossProfit / bidToCustomer) * 100;
                     setValue(
                       "actualGrossProfitPercentage",
                       Number(actualGrossProfitPercentage.toFixed(2))

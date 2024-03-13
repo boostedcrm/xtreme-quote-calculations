@@ -124,16 +124,16 @@ const LaborCosts = ({
     setValue(`finalGrossProfit`, Number(finalGrossProfit.toFixed(2)));
 
     
-    let grossProfitPct = grossProfitAmount / minimumBidToCustomer;
+    let grossProfitPct = (grossProfitAmount / minimumBidToCustomer) * 100;
     setValue(`grossProfitPct`, Number(grossProfitPct.toFixed(2)));
     if (bidToCustomer === 0 || bidToCustomer === null) {
       setValue('totalCostPercentage', 0);
       setValue('actualGrossProfitPercentage', 0);
   } else {
-      let totalCostPercentage = finalTotalCost / bidToCustomer;
+      let totalCostPercentage = (finalTotalCost / bidToCustomer) * 100;
       setValue('totalCostPercentage', Number(totalCostPercentage.toFixed(2)));
       
-      let actualGrossProfitPercentage = finalGrossProfit / bidToCustomer;
+      let actualGrossProfitPercentage = (finalGrossProfit / bidToCustomer) * 100;
       setValue('actualGrossProfitPercentage', Number(actualGrossProfitPercentage.toFixed(2)));
   }
   }
