@@ -65,7 +65,7 @@ const VehicleExpense = ({
     if (totalManHours === 0) {
       setValue("Quoted_Rev_Per_Manhour", 0);
     } else {
-      let Quoted_Rev_Per_Manhour = totalCost / totalManHours;
+      let Quoted_Rev_Per_Manhour = minimumBidToCustomer / totalManHours;
       setValue(
         "Quoted_Rev_Per_Manhour",
         Number(Quoted_Rev_Per_Manhour.toFixed(2))
@@ -75,6 +75,8 @@ const VehicleExpense = ({
     let SquareFeet = Number(
       getValues(`SquareFeet`) || dealData?.SquareFeet || 1
     );
+    const bidToCustomer = Number(getValues(`bidToCustomer`) || 0);
+    
     let Revenue_Per_Square_Ft = totalCost / SquareFeet;
     setValue(`Revenue_Per_Square_Ft`, Number(Revenue_Per_Square_Ft.toFixed(2)));
 
@@ -90,7 +92,6 @@ const VehicleExpense = ({
     setValue(`commission`, Number(commission.toFixed(2)));
     setValue(`minimumBidToCustomer`, Number(minimumBidToCustomer.toFixed(2)));
     setValue(`grossProfitAmount`, Number(grossProfitAmount.toFixed(2)));
-    const bidToCustomer = Number(getValues(`bidToCustomer`) || 0);
     const finalComission = (commissionPercentage / 100) * bidToCustomer;
     const finalTotalCost = totalCost + finalComission;
     const finalGrossProfit = bidToCustomer - finalTotalCost;

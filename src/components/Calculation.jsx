@@ -105,12 +105,12 @@ export default function Calculation({
           control
         )} */}
         <Grid item xs={6}>
-          <Controller
-            name="miscellaneousCost"
+        <Controller
+            name="travelAndMisc"
             control={control}
             render={({ field }) => (
               <TextField
-                label="Miscellaneous cost"
+                label="Travel and Misc"
                 variant="outlined"
                 {...field}
                 size="small"
@@ -163,25 +163,9 @@ export default function Calculation({
             )}
           />
         </Grid>
-        <Grid item xs={6}>
-          <Controller
-            name="travelAndMisc"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                label="Travel and Misc"
-                variant="outlined"
-                {...field}
-                size="small"
-                sx={{ width: 350 }} // Set the width to 300px
-                InputProps={{
-                  readOnly: true,
-                  startAdornment: <Typography>$</Typography>,
-                }}
-              />
-            )}
-          />
-        </Grid>
+        {/* <Grid item xs={6}>
+
+        </Grid> */}
         {/* Replace with actual label */}
         {/* <Grid item xs={6}>
           <Controller
