@@ -74,17 +74,6 @@ const MaterialRow = ({
     let grossProfitGoal = (totalCost - miscellaneousCost * 1.2) * 2;
     setValue(`grossProfitGoal`, Number(grossProfitGoal.toFixed(2)));
 
-    let totalManHours = Number(getValues(`totalManHours`) || 0);
-    if (totalManHours === 0) {
-      setValue("Quoted_Rev_Per_Manhour", 0);
-    } else {
-      let Quoted_Rev_Per_Manhour = minimumBidToCustomer / totalManHours;
-      setValue(
-        "Quoted_Rev_Per_Manhour",
-        Number(Quoted_Rev_Per_Manhour.toFixed(2))
-      );
-    }
-
     let SquareFeet = Number(
       getValues(`SquareFeet`) || dealData?.SquareFeet || 1
     );
@@ -101,6 +90,17 @@ const MaterialRow = ({
     let minimumBidToCustomer =
       grossProfitGoal + miscellaneousCost * 1.2 + commission;
     let grossProfitAmount = minimumBidToCustomer - (totalCost + commission);
+
+    let totalManHours = Number(getValues(`totalManHours`) || 0);
+    if (totalManHours === 0) {
+      setValue("Quoted_Rev_Per_Manhour", 0);
+    } else {
+      let Quoted_Rev_Per_Manhour = minimumBidToCustomer / totalManHours;
+      setValue(
+        "Quoted_Rev_Per_Manhour",
+        Number(Quoted_Rev_Per_Manhour.toFixed(2))
+      );
+    }
 
     setValue(`commission`, Number(commission.toFixed(2)));
     setValue(`minimumBidToCustomer`, Number(minimumBidToCustomer.toFixed(2)));
@@ -121,7 +121,8 @@ const MaterialRow = ({
       let totalCostPercentage = (finalTotalCost / bidToCustomer) * 100;
       setValue("totalCostPercentage", Number(totalCostPercentage.toFixed(2)));
 
-      let actualGrossProfitPercentage = (finalGrossProfit / bidToCustomer) * 100;
+      let actualGrossProfitPercentage =
+        (finalGrossProfit / bidToCustomer) * 100;
       setValue(
         "actualGrossProfitPercentage",
         Number(actualGrossProfitPercentage.toFixed(2))
@@ -235,8 +236,8 @@ const MaterialRow = ({
                     `materials[${index}].total`,
                     Number(total.toFixed(2))
                   );
-                  calculateTotalMaterialCost(fields);
                   field.onChange(e.target.value);
+                  calculateTotalMaterialCost(fields);
                 }}
               />
             )}

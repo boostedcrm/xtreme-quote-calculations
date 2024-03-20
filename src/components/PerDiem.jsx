@@ -80,17 +80,6 @@ const PerDiem = ({
     let grossProfitGoal = (totalCost - miscellaneousCost * 1.2) * 2;
     setValue(`grossProfitGoal`, Number(grossProfitGoal.toFixed(2)));
 
-    let totalManHours = Number(getValues(`totalManHours`) || 0);
-    if (totalManHours === 0) {
-      setValue("Quoted_Rev_Per_Manhour", 0);
-    } else {
-      let Quoted_Rev_Per_Manhour = minimumBidToCustomer / totalManHours;
-      setValue(
-        "Quoted_Rev_Per_Manhour",
-        Number(Quoted_Rev_Per_Manhour.toFixed(2))
-      );
-    }
-
     let SquareFeet = Number(
       getValues(`SquareFeet`) || dealData?.SquareFeet || 1
     );
@@ -108,6 +97,17 @@ const PerDiem = ({
     let minimumBidToCustomer =
       grossProfitGoal + miscellaneousCost * 1.2 + commission;
     let grossProfitAmount = minimumBidToCustomer - (totalCost + commission);
+
+    let totalManHours = Number(getValues(`totalManHours`) || 0);
+    if (totalManHours === 0) {
+      setValue("Quoted_Rev_Per_Manhour", 0);
+    } else {
+      let Quoted_Rev_Per_Manhour = minimumBidToCustomer / totalManHours;
+      setValue(
+        "Quoted_Rev_Per_Manhour",
+        Number(Quoted_Rev_Per_Manhour.toFixed(2))
+      );
+    }
 
     setValue(`commission`, Number(commission.toFixed(2)));
     setValue(`minimumBidToCustomer`, Number(minimumBidToCustomer.toFixed(2)));
