@@ -22,7 +22,7 @@ function App() {
   useEffect(() => {
     ZOHO.embeddedApp.on("PageLoad", function (data) {
       //Custom Bussiness logic goes here
-      console.log({data});
+      console.log({ data });
       setDealID(data.EntityId);
     });
     /*
@@ -73,10 +73,10 @@ function App() {
               page: 1,
               per_page: 200,
             }).then(function (data) {
-              let tempTask = data?.data?.map(task => task?.Subject);
-              console.log({Tasks: tempTask});
+              let tempTask = data?.data?.map((task) => task?.Subject);
+              console.log({ Tasks: tempTask });
 
-              setTaskList(prev=> tempTask)
+              setTaskList((prev) => tempTask);
             });
 
             const dealData = data?.data[0];
@@ -143,7 +143,7 @@ function App() {
         });
       }
     }
-    
+
     if (zohoLoaded && dealID) {
       getData();
     }
@@ -170,9 +170,7 @@ function App() {
     );
   }
 
-  console.log({dealData})
-
-  
+  console.log({ dealData });
 
   return (
     <Box sx={{ width: "100%" }}>

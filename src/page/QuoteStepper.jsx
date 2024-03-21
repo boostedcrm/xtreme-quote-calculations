@@ -810,7 +810,7 @@ export default function QuoteCalculation({
     Clarifications.forEach((Clarification, index) => {
       clarificationObject[`Clarification${index + 1}`] = Clarification?.name;
     });
-    for (let i = 19; i > Clarifications.length; i-- ){
+    for (let i = 19; i > Clarifications.length; i--) {
       clarificationObject[`Clarification${i}`] = "";
     }
     updateDealData = {
@@ -886,7 +886,7 @@ export default function QuoteCalculation({
           .substring(0, 10),
       }),
       Is_Quote_Completed: data?.Is_Quote_Completed,
-      id: dealData?.id
+      id: dealData?.id,
     };
 
     if (data?.Is_Quote_Completed) {

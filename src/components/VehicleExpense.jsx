@@ -66,7 +66,7 @@ const VehicleExpense = ({
     );
     const bidToCustomer = Number(getValues(`bidToCustomer`) || 0);
 
-    let Revenue_Per_Square_Ft = totalCost / SquareFeet;
+    let Revenue_Per_Square_Ft = bidToCustomer / SquareFeet;
     setValue(`Revenue_Per_Square_Ft`, Number(Revenue_Per_Square_Ft.toFixed(2)));
 
     let commissionPercentage = Number(getValues(`commissionPercentage`) || 0);

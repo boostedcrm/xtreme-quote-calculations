@@ -132,9 +132,14 @@ const XtremeQuoteForm = ({
                   if (SquareFeet < 1) {
                     SquareFeet = 1;
                   }
-                  let totalCost = Number(getValues("totalCost")) || 0;
-                  let Revenue_Per_Square_Ft =  totalCost/SquareFeet;
-                  setValue(`Revenue_Per_Square_Ft`, Number(Revenue_Per_Square_Ft.toFixed(2)));
+                  //prev code
+                  // let totalCost = Number(getValues("totalCost")) || 0;
+                  const bidToCustomer = Number(getValues(`bidToCustomer`) || 0);
+                  let Revenue_Per_Square_Ft = bidToCustomer / SquareFeet;
+                  setValue(
+                    `Revenue_Per_Square_Ft`,
+                    Number(Revenue_Per_Square_Ft.toFixed(2))
+                  );
                   field.onChange(SquareFeet);
                 }}
               />
