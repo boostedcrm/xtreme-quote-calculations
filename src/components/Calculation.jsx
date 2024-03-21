@@ -414,6 +414,16 @@ export default function Calculation({
                   );
                   let bidToCustomer = Number(e.target.value) || 0;
 
+                  let SquareFeet = Number(
+                    getValues(`SquareFeet`) || dealData?.SquareFeet || 1
+                  );
+
+                  let Revenue_Per_Square_Ft = bidToCustomer / SquareFeet;
+                  setValue(
+                    `Revenue_Per_Square_Ft`,
+                    Number(Revenue_Per_Square_Ft.toFixed(2))
+                  );
+
                   let finalCommission =
                     (commissionPercentage / 100) * bidToCustomer;
 
