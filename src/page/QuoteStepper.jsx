@@ -910,7 +910,7 @@ export default function QuoteCalculation({
     // tempSave(updateDealData, dealData);
 
     let taskSubject = "Your quote has been submitted for review";
-    let taskFound = taskList.includes(taskSubject);
+    let taskFound = taskList?.includes(taskSubject);
     if (data?.Sent_for_Review && !taskFound) {
       let description =
         "Hello " +
