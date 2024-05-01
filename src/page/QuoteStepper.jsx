@@ -562,9 +562,7 @@ export default function QuoteCalculation({
           .toString()
           .substring(0, 10),
       }),
-      id: dealData?.id,
-      Bid_to_Customer: Number(data?.bidToCustomer) || 0,
-      Service	: data?.serviceOnQuote || ""
+      id: dealData?.id
 
     };
     if (data?.Sent_for_Review) {
@@ -830,6 +828,8 @@ export default function QuoteCalculation({
       Quoted_Gross_Profit: Number(data?.grossProfitPct) || 0,
       Quoted_Gross_Profit_Amount: Number(data?.grossProfitAmount) || 0,
       Amount: Number(data?.bidToCustomer) || 0,
+      Bid_to_Customer: Number(data?.bidToCustomer) || 0,
+      Service	: data?.serviceOnQuote || "",
       Minimum_Bid_to_the_Customer: Number(data?.minimumBidToCustomer) || 0,
       Est_Perform_Date: DateTime.fromISO(
         data?.Est_Perform_Date ||
