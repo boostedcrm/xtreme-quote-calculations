@@ -563,6 +563,9 @@ export default function QuoteCalculation({
           .substring(0, 10),
       }),
       id: dealData?.id,
+      Bid_to_Customer: Number(data?.bidToCustomer) || 0,
+      Service	: data?.serviceOnQuote || ""
+
     };
     if (data?.Sent_for_Review) {
       apiData["Quote_Status"] = "In Review";
