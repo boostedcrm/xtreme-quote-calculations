@@ -726,6 +726,10 @@ export default function QuoteCalculation({
         },
       ],
     };
+
+
+
+    return;
     var config = {
       Entity: "Deals",
       RecordID: dealData?.id,
@@ -926,7 +930,6 @@ export default function QuoteCalculation({
     }
 
     console.log({ final: updateDealData });
-    return;
     await updateDealAndDisable(updateDealData, dealData);
     
     // tempSave(updateDealData, dealData);
