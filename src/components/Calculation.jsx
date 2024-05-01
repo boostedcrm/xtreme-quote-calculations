@@ -689,7 +689,7 @@ export default function Calculation({
           <Controller
             name="serviceOnQuote"
             control={control}
-            defaultValue=""
+            defaultValue={dealData?.Service || ""}
             render={({ field }) => (
               <TextField
                 label="Service (appears on quote)"
