@@ -154,7 +154,7 @@ const MaterialRow = ({
 
   return (
     <TableRow key={item.id}>
-      <TableCell sx={{ width: "150px", paddingTop: 3 }}>
+      <TableCell sx={{ width: "250px", paddingTop: 3 }}>
         <Grid item sx={4}>
           <Controller
             name={`materials[${index}].product`}

@@ -149,14 +149,17 @@ export default function Calculation({
             }
           );
 
-          console.log({ filteredCarificationsData });
+          let sorted_filteredCarificationsData =
+            filteredCarificationsData?.sort(
+              (a, b) => a.Sequence_Number - b.Sequence_Number
+            );
           // setClarifications((prev) => filteredCarificationsData);
           if (
             !dealData?.Clarification20 &&
             getValues("Clarifications")?.length == 0
           ) {
-            for (let i = filteredCarificationsData.length - 1; i >= 0; i--) {
-              const element = filteredCarificationsData[i];
+            for (let i = 0; i < sorted_filteredCarificationsData?.length; i++) {
+              const element = sorted_filteredCarificationsData[i];
               let temp = { name: element?.Description };
               append(temp);
             }
@@ -525,7 +528,6 @@ export default function Calculation({
           />
         </Grid>
       </Grid>
-
       <Grid container style={{ marginBottom: "15px" }}>
         <Grid item xs={6}>
           <Controller
@@ -566,7 +568,6 @@ export default function Calculation({
         </Grid>
         {/* Replace with actual label */}
       </Grid>
-
       <Grid container style={{ marginBottom: "15px" }}>
         <Grid item xs={6}>
           <Controller
@@ -606,7 +607,6 @@ export default function Calculation({
           />
         </Grid>
       </Grid>
-
       {/* <Grid container spacing={2}>
         <Grid item xs={6}>
           <Controller
@@ -662,7 +662,6 @@ export default function Calculation({
           />
         </Grid>
       </Grid>
-
       <Grid container style={{ marginBottom: "15px" }}>
         <Grid item xs={6}>
           <Controller
@@ -685,7 +684,6 @@ export default function Calculation({
         </Grid>
         <Grid item xs={6}></Grid>
       </Grid>
-
       <Grid container>
         <Grid item xs={6}>
           <Controller
@@ -749,6 +747,7 @@ export default function Calculation({
             />
           </Box>
         ))} */}
+
       {fields.map((item, index) => (
         <TableRow key={item.id}>
           <TableCell>
