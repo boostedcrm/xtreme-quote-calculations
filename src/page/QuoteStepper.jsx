@@ -699,6 +699,22 @@ export default function QuoteCalculation({
   const updateDealAndDisable = async (apiData, dealData) => {
     let transition_id = bluprintData?.id;
     // 5031174000000562343
+
+    // Added
+    var config = {
+      Entity: "Deals",
+      APIData: apiData,
+      Trigger: ["workflow"],
+    };
+
+    ZOHO.CRM.API.updateRecord(config)
+      .then(function (data) {
+        console.log({ updateDealAndDisable: data });
+      })
+      .catch((error) => {
+        console.log({ updateDealAndDisableError: error });
+      });
+      // End of Adding
     var BlueprintData = {
       blueprint: [
         {
