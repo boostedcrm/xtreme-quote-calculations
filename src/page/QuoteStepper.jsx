@@ -700,7 +700,7 @@ export default function QuoteCalculation({
     let transition_id = bluprintData?.id;
     // 5031174000000562343
 
-    // Added
+    // Added by Emran
     var config = {
       Entity: "Deals",
       APIData: apiData,
@@ -764,6 +764,7 @@ export default function QuoteCalculation({
   const onSubmit = async (data) => {
     setLoading(true);
     console.log({ onSubmit: data });
+    
     // Create quote and update deal
 
     //  materialsSubTotal,
@@ -925,7 +926,9 @@ export default function QuoteCalculation({
     }
 
     console.log({ final: updateDealData });
+    return;
     await updateDealAndDisable(updateDealData, dealData);
+    
     // tempSave(updateDealData, dealData);
 
     let taskSubject = "Your quote has been submitted for review";
