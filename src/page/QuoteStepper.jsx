@@ -700,20 +700,7 @@ export default function QuoteCalculation({
     let transition_id = bluprintData?.id;
     // 5031174000000562343
 
-    // Added by Emran
-    var config = {
-      Entity: "Deals",
-      APIData: apiData,
-      Trigger: ["workflow"],
-    };
-
-    ZOHO.CRM.API.updateRecord(config)
-      .then(function (data) {
-        console.log({ updateDealAndDisable: data });
-      })
-      .catch((error) => {
-        console.log({ updateDealAndDisableError: error });
-      });
+    
       // End of Adding
     var BlueprintData = {
       blueprint: [
@@ -729,7 +716,7 @@ export default function QuoteCalculation({
 
 
 
-    return;
+    
     var config = {
       Entity: "Deals",
       RecordID: dealData?.id,
@@ -913,6 +900,22 @@ export default function QuoteCalculation({
       id: dealData?.id,
     };
 
+    // Added by Emran
+    var config = {
+      Entity: "Deals",
+      APIData: updateDealData,
+      Trigger: ["workflow"],
+    };
+
+    ZOHO.CRM.API.updateRecord(config)
+      .then(function (data) {
+        console.log({ updateDealAndDisable: data });
+      })
+      .catch((error) => {
+        console.log({ updateDealAndDisableError: error });
+      });
+      return ;
+
     if (data?.Is_Quote_Completed) {
       updateDealData["Quote_Status"] = "Completed";
       // apiData["Pipeline"] = "Open";
@@ -930,6 +933,7 @@ export default function QuoteCalculation({
     }
 
     console.log({ final: updateDealData });
+    
     await updateDealAndDisable(updateDealData, dealData);
     
     // tempSave(updateDealData, dealData);
