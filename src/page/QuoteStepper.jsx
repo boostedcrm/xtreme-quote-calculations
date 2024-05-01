@@ -903,7 +903,11 @@ export default function QuoteCalculation({
     // Added by Emran
     var config = {
       Entity: "Deals",
-      APIData: updateDealData,
+      APIData: {
+        Bid_to_Customer: Number(data?.bidToCustomer) || 0,
+        Service	: data?.serviceOnQuote || "",
+        id: dealData?.id
+      },
       Trigger: ["workflow"],
     };
 
@@ -914,7 +918,7 @@ export default function QuoteCalculation({
       .catch((error) => {
         console.log({ updateDealAndDisableError: error });
       });
-      return ;
+      
 
     if (data?.Is_Quote_Completed) {
       updateDealData["Quote_Status"] = "Completed";
