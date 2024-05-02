@@ -562,8 +562,7 @@ export default function QuoteCalculation({
           .toString()
           .substring(0, 10),
       }),
-      id: dealData?.id
-
+      id: dealData?.id,
     };
     if (data?.Sent_for_Review) {
       apiData["Quote_Status"] = "In Review";
@@ -700,8 +699,7 @@ export default function QuoteCalculation({
     let transition_id = bluprintData?.id;
     // 5031174000000562343
 
-    
-      // End of Adding
+    // End of Adding
     var BlueprintData = {
       blueprint: [
         {
@@ -714,9 +712,6 @@ export default function QuoteCalculation({
       ],
     };
 
-
-
-    
     var config = {
       Entity: "Deals",
       RecordID: dealData?.id,
@@ -755,7 +750,7 @@ export default function QuoteCalculation({
   const onSubmit = async (data) => {
     setLoading(true);
     console.log({ onSubmit: data });
-    
+
     // Create quote and update deal
 
     //  materialsSubTotal,
@@ -837,7 +832,7 @@ export default function QuoteCalculation({
       Quoted_Gross_Profit_Amount: Number(data?.grossProfitAmount) || 0,
       Amount: Number(data?.bidToCustomer) || 0,
       Bid_to_Customer: Number(data?.bidToCustomer) || 0,
-      Service	: data?.serviceOnQuote || "",
+      Service: data?.serviceOnQuote || "",
       Minimum_Bid_to_the_Customer: Number(data?.minimumBidToCustomer) || 0,
       Est_Perform_Date: DateTime.fromISO(
         data?.Est_Perform_Date ||
@@ -905,8 +900,9 @@ export default function QuoteCalculation({
       Entity: "Deals",
       APIData: {
         Bid_to_Customer: Number(data?.bidToCustomer) || 0,
-        Service	: data?.serviceOnQuote || "",
-        id: dealData?.id
+        Service: data?.serviceOnQuote || "",
+        ServiceDescription: data?.ServiceDescription || "",
+        id: dealData?.id,
       },
       Trigger: ["workflow"],
     };
@@ -918,7 +914,6 @@ export default function QuoteCalculation({
       .catch((error) => {
         console.log({ updateDealAndDisableError: error });
       });
-      
 
     if (data?.Is_Quote_Completed) {
       updateDealData["Quote_Status"] = "Completed";
@@ -937,9 +932,9 @@ export default function QuoteCalculation({
     }
 
     console.log({ final: updateDealData });
-    
+
     await updateDealAndDisable(updateDealData, dealData);
-    
+
     // tempSave(updateDealData, dealData);
 
     let taskSubject = "Your quote has been submitted for review";

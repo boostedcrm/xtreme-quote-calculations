@@ -32,6 +32,8 @@ export default function Calculation({
     name: "Clarifications",
   });
 
+  const watchAllFields = watch();
+
   const [clarifications, setClarifications] = useState(null);
   const [typeOfQuote, setQuoteType] = useState(null);
 
@@ -704,6 +706,27 @@ export default function Calculation({
             )}
           />
         </Grid>
+        <Grid item xs={12} sx={{ mt: 2 }}>
+          <Controller
+            name="ServiceDescription"
+            control={control}
+            defaultValue={dealData?.ServiceDescription || ""}
+            render={({ field }) => (
+              <TextField
+                label="Service Description"
+                variant="outlined"
+                multiline
+                minRows={3}
+                {...field}
+                size="small"
+                sx={{ width: 350 }} // Set the width to 300px
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            )}
+          />
+        </Grid>
         {/* <Grid item xs={6}>
           <Controller
             name="ratePerSquareFootCurrency"
@@ -771,16 +794,18 @@ export default function Calculation({
           </TableCell>
         </TableRow>
       ))}
-      <Button
-        // startIcon={<AddCircleOutlineIcon />}
-        onClick={() =>
-          append({
-            name: "",
-          })
-        }
-      >
-        Add New
-      </Button>
+      {watchAllFields?.Clarifications?.length !== 19 && (
+        <Button
+          // startIcon={<AddCircleOutlineIcon />}
+          onClick={() =>
+            append({
+              name: "",
+            })
+          }
+        >
+          Add New
+        </Button>
+      )}
       <Box>
         <Controller
           name="Sent_for_Review"
