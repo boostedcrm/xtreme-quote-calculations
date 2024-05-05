@@ -879,13 +879,17 @@ export default function QuoteCalculation({
       Clarification20: JSON.stringify({
         ...data,
         Est_Perform_Date: DateTime.fromISO(
-          data?.Est_Perform_Date || DateTime.now().setZone("utc")
+          data?.Est_Perform_Date ||
+            dealData?.Est_Perform_Date ||
+            DateTime.now().setZone("utc")
         )
           .toISO()
           .toString()
           .substring(0, 10),
         Quote_Due_Date: DateTime.fromISO(
-          data?.Quote_Due_Date || DateTime.now().setZone("utc")
+          data?.Quote_Due_Date ||
+            dealData?.Quote_Due_Date ||
+            DateTime.now().setZone("utc")
         )
           .toISO()
           .toString()
