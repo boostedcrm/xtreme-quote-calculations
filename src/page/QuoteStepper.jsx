@@ -834,30 +834,30 @@ export default function QuoteCalculation({
       Bid_to_Customer: Number(data?.bidToCustomer) || 0,
       Service: data?.serviceOnQuote || "",
       Minimum_Bid_to_the_Customer: Number(data?.minimumBidToCustomer) || 0,
-      Est_Perform_Date: DateTime.fromISO(
-        data?.Est_Perform_Date ||
-          dealData?.Est_Perform_Date ||
-          DateTime.now().setZone("utc")
-      )
-        .toISO()
-        .toString()
-        .substring(0, 10),
-      Est_Perform_Date1: DateTime.fromISO(
-        data?.Est_Perform_Date ||
-          dealData?.Est_Perform_Date ||
-          DateTime.now().setZone("utc")
-      )
-        .toISO()
-        .toString()
-        .substring(0, 10),
-      Estimated_Perform_Date: DateTime.fromISO(
-        data?.Est_Perform_Date ||
-          dealData?.Est_Perform_Date ||
-          DateTime.now().setZone("utc")
-      )
-        .toISO()
-        .toString()
-        .substring(0, 10),
+      // Est_Perform_Date: DateTime.fromISO(
+      //   data?.Est_Perform_Date ||
+      //     dealData?.Est_Perform_Date ||
+      //     DateTime.now().setZone("utc")
+      // )
+      //   .toISO()
+      //   .toString()
+      //   .substring(0, 10),
+      // Est_Perform_Date1: DateTime.fromISO(
+      //   data?.Est_Perform_Date ||
+      //     dealData?.Est_Perform_Date ||
+      //     DateTime.now().setZone("utc")
+      // )
+      //   .toISO()
+      //   .toString()
+      //   .substring(0, 10),
+      // Estimated_Perform_Date: DateTime.fromISO(
+      //   data?.Est_Perform_Date ||
+      //     dealData?.Est_Perform_Date ||
+      //     DateTime.now().setZone("utc")
+      // )
+      //   .toISO()
+      //   .toString()
+      //   .substring(0, 10),
       Quote_Due_Date: DateTime.fromISO(
         data?.Quote_Due_Date ||
           dealData?.Quote_Due_Date ||
@@ -878,14 +878,14 @@ export default function QuoteCalculation({
       Actual_Gross_Profit_Percentage: 0,
       Clarification20: JSON.stringify({
         ...data,
-        Est_Perform_Date: DateTime.fromISO(
-          data?.Est_Perform_Date ||
-            dealData?.Est_Perform_Date ||
-            DateTime.now().setZone("utc")
-        )
-          .toISO()
-          .toString()
-          .substring(0, 10),
+        // Est_Perform_Date: DateTime.fromISO(
+        //   data?.Est_Perform_Date ||
+        //     dealData?.Est_Perform_Date ||
+        //     DateTime.now().setZone("utc")
+        // )
+        //   .toISO()
+        //   .toString()
+        //   .substring(0, 10),
         Quote_Due_Date: DateTime.fromISO(
           data?.Quote_Due_Date ||
             dealData?.Quote_Due_Date ||
