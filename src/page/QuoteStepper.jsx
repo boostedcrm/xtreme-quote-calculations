@@ -875,7 +875,7 @@ export default function QuoteCalculation({
       Actual_Change_Order_Cost: 0,
       Final_Gross_Profit: 0,
       Final_Total_Cost: 0,
-      Actual_Gross_Profit_Percentage: 0,
+      Actual_Gross_Profit_Percentage: data?.actualGrossProfitPercentage,
       Clarification20: JSON.stringify({
         ...data,
         // Est_Perform_Date: DateTime.fromISO(
@@ -906,6 +906,7 @@ export default function QuoteCalculation({
         Bid_to_Customer: Number(data?.bidToCustomer) || 0,
         Service: data?.serviceOnQuote || "",
         ServiceDescription: data?.ServiceDescription || "",
+        Actual_Gross_Profit_Percentage: data?.actualGrossProfitPercentage,
         id: dealData?.id,
       },
       Trigger: ["workflow"],
