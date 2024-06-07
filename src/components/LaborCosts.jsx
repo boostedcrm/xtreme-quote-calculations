@@ -72,27 +72,16 @@ const LaborCosts = ({
     );
 
     let miscellaneousCost =
-      (equipmentTotal + totalVehicleExpenseCost) * 1.2 +
+      equipmentTotal +
       totallodgingCost +
       totalperdiemCost +
-      totalrentalEquipmenCost;
+      totalrentalEquipmenCost +
+      totalVehicleExpenseCost;
 
-    setValue(`miscellaneousCost`, Number(miscellaneousCost.toFixed(2)));
-    setValue(`travelAndMisc`, Number(miscellaneousCost.toFixed(2)));
+    setValue(`miscellaneousCost`, Number((miscellaneousCost * 1.2).toFixed(2)));
+    setValue(`travelAndMisc`, Number((miscellaneousCost * 1.2).toFixed(2)));
     let totalCost = miscellaneousCost + materialTotalCost + totalLaborCost;
     setValue(`totalCost`, Number(totalCost.toFixed(2)));
-
-    // let miscellaneousCost =
-    //   equipmentTotal +
-    //   totallodgingCost +
-    //   totalperdiemCost +
-    //   totalrentalEquipmenCost +
-    //   totalVehicleExpenseCost;
-
-    // setValue(`miscellaneousCost`, Number((miscellaneousCost * 1.2).toFixed(2)));
-    // setValue(`travelAndMisc`, Number((miscellaneousCost * 1.2).toFixed(2)));
-    // let totalCost = miscellaneousCost + materialTotalCost + totalLaborCost;
-    // setValue(`totalCost`, Number(totalCost.toFixed(2)));
 
     let SquareFeet = Number(
       getValues(`SquareFeet`) || dealData?.SquareFeet || 1
