@@ -75,7 +75,15 @@ const PerDiem = ({
     setValue(`miscellaneousCost`, Number((miscellaneousCost * 1.2).toFixed(2)));
     setValue(`travelAndMisc`, Number((miscellaneousCost * 1.2).toFixed(2)));
     let totalCost = miscellaneousCost + materialTotalCost + totalLaborCost;
-    setValue(`totalCost`, Number(totalCost.toFixed(2)));
+    let onlytotalCost =
+      materialTotalCost +
+      totalLaborCost +
+      totallodgingCost +
+      totalperdiemCost +
+      totalrentalEquipmenCost +
+      (equipmentTotal + totalVehicleExpenseCost) * 1.2;
+
+    setValue(`totalCost`, Number(onlytotalCost.toFixed(2)));
 
     let grossProfitGoal = (totalCost - miscellaneousCost * 1.2) * 2;
     setValue(`grossProfitGoal`, Number(grossProfitGoal.toFixed(2)));
