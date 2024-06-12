@@ -53,26 +53,29 @@ const Lodging = ({
       getValues(`totalVehicleExpenseCost`) || 0
     );
 
+    // let miscellaneousCost1 =
+    //   equipmentTotal +
+    //   totallodgingCost +
+    //   totalperdiemCost +
+    //   totalrentalEquipmenCost +
+    //   totalVehicleExpenseCost;
+
     let miscellaneousCost =
-      equipmentTotal +
-      totallodgingCost +
-      totalperdiemCost +
-      totalrentalEquipmenCost +
-      totalVehicleExpenseCost;
+      (equipmentTotal + totalVehicleExpenseCost) * 1.2 +
+      (totallodgingCost + totalperdiemCost + totalrentalEquipmenCost);
 
-    // comment
-    setValue(`miscellaneousCost`, Number((miscellaneousCost * 1.2).toFixed(2)));
-    setValue(`travelAndMisc`, Number((miscellaneousCost * 1.2).toFixed(2)));
+    setValue(`miscellaneousCost`, Number(miscellaneousCost.toFixed(2)));
+    setValue(`travelAndMisc`, Number(miscellaneousCost.toFixed(2)));
     let totalCost = miscellaneousCost + materialTotalCost + totalLaborCost;
-    let onlytotalCost =
-      materialTotalCost +
-      totalLaborCost +
-      totallodgingCost +
-      totalperdiemCost +
-      totalrentalEquipmenCost +
-      (equipmentTotal + totalVehicleExpenseCost) * 1.2;
+    // let onlytotalCost =
+    //   materialTotalCost +
+    //   totalLaborCost +
+    //   totallodgingCost +
+    //   totalperdiemCost +
+    //   totalrentalEquipmenCost +
+    //   (equipmentTotal + totalVehicleExpenseCost) * 1.2;
 
-    setValue(`totalCost`, Number(onlytotalCost.toFixed(2)));
+    setValue(`totalCost`, Number(totalCost.toFixed(2)));
 
     let grossProfitGoal = (totalCost - miscellaneousCost * 1.2) * 2;
     setValue(`grossProfitGoal`, Number(grossProfitGoal.toFixed(2)));
