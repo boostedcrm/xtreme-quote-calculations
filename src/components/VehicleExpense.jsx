@@ -111,6 +111,8 @@ const VehicleExpense = ({
     setValue(`finalTotalCost`, Number(finalTotalCost.toFixed(2)));
     setValue(`finalGrossProfit`, Number(finalGrossProfit.toFixed(2)));
     let grossProfitPct = (grossProfitAmount / minimumBidToCustomer) * 100;
+    console.log({ grossProfitAmount, minimumBidToCustomer, grossProfitPct });
+
     setValue(`grossProfitPct`, Number(grossProfitPct.toFixed(2)));
     if (bidToCustomer === 0 || bidToCustomer === null) {
       setValue("totalCostPercentage", 0);

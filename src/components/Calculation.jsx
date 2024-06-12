@@ -105,7 +105,7 @@ export default function Calculation({
         Number(Quoted_Rev_Per_Manhour.toFixed(2))
       );
     }
-
+    console.log({ minimumBidToCustomer });
     setValue(`commission`, Number(commission.toFixed(2)));
     setValue(`minimumBidToCustomer`, Number(minimumBidToCustomer.toFixed(2)));
     setValue(`grossProfitAmount`, Number(grossProfitAmount.toFixed(2)));
@@ -116,6 +116,7 @@ export default function Calculation({
     setValue(`finalTotalCost`, Number(finalTotalCost.toFixed(2)));
     setValue(`finalGrossProfit`, Number(finalGrossProfit.toFixed(2)));
     let grossProfitPct = (grossProfitAmount / minimumBidToCustomer) * 100;
+    console.log({ grossProfitAmount, minimumBidToCustomer, grossProfitPct });
     setValue(`grossProfitPct`, Number(grossProfitPct.toFixed(2)));
     if (bidToCustomer === 0 || bidToCustomer === null) {
       setValue("totalCostPercentage", 0);
@@ -353,6 +354,9 @@ export default function Calculation({
                     `grossProfitAmount`,
                     Number(grossProfitAmount.toFixed(2))
                   );
+                  let grossProfitPct =
+                    (grossProfitAmount / minimumBidToCustomer) * 100;
+                  setValue(`grossProfitPct`, Number(grossProfitPct.toFixed(2)));
                   field.onChange(e.target.value);
                 }}
                 InputLabelProps={{
